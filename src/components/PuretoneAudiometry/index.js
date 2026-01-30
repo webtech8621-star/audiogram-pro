@@ -251,7 +251,7 @@ function PureToneAudiometry() {
         resetAllStates();
       }
     }
-  }, [location.state]);
+  }, [location.state, fetchSessionData]);
 
   const resetAllStates = () => {
     setFormData(frequencies.map((freq) => ({

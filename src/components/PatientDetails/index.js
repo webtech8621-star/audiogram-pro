@@ -22,9 +22,9 @@ const PatientDetails = ({ onClose, sessionType = "puretone" }) => {
   const [showSessionList, setShowSessionList] = useState(false);
   const [existingPatient, setExistingPatient] = useState(null);
   const [patientSessions, setPatientSessions] = useState([]);
-  const [newPatientCreated, setNewPatientCreated] = useState(false);
-  const [newPatientId, setNewPatientId] = useState(null);
-  const [newSessionId, setNewSessionId] = useState(null);
+  const [newPatientCreated] = useState(false);
+  const [newPatientId] = useState(null);
+  const [newSessionId] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
