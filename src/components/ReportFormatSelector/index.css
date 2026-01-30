@@ -1,0 +1,498 @@
+/* src/components/index.css */
+
+/* Overlay & Modal */
+.FR-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.FR-modal {
+    width: 92vw;
+    max-width: 1200px;
+    height: 90vh;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+}
+
+/* ── MODERN LEFT PANEL ── */
+.FR-left-panel {
+    background: transparent;
+    color: #f5f5f5;
+    width: 280px;
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: 100%;
+    overflow-y: auto;
+
+    /* Important for proper nested scrolling */
+    min-height: 0;
+    flex: 1 1 auto;
+    box-shadow: inset -4px 0 12px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Title */
+.FR-title {
+    font-size: 15px;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 0.5px;
+    color: #905823;
+    margin: 0 0 12px;
+    font-family: Montserrat;
+}
+
+/* Section titles */
+.FR-section-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: #4f4f4f;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin: 8px 0 4px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* Format input */
+.FR-format-input {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 13px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(192, 148, 38, 0.18);
+    border-radius: 8px;
+    color: rgb(50, 50, 50);
+    transition: all 0.2s ease;
+}
+
+.FR-format-input:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.18);
+    border-color: #000000;
+    box-shadow: 0 0 0 3px rgba(224, 201, 166, 0.25);
+}
+
+/* Toggle grid */
+.FR-toggle-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.FR-toggle-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+}
+
+.FR-toggle-label {
+    font-weight: 500;
+    color: #121212;
+}
+
+/* Modern toggle buttons */
+.FR-toggle-btn {
+    min-width: 54px;
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.FR-on {
+    background: #8b6549;
+    color: #ffffff;
+}
+
+.FR-off {
+    background: rgba(255, 255, 255, 0.15);
+    color: #000000;
+}
+
+.FR-toggle-btn:hover {
+    transform: translateY(-1px);
+}
+
+/* Action buttons */
+.FR-action-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    gap: 5px;
+    margin-top: auto;
+    /* ← pushes to bottom */
+    margin-bottom: 16px;
+    padding-top: 12px;
+}
+
+.FR-apply-btn,
+.FR-save-btn,
+.FR-cancel-btn {
+    padding: 10px;
+    font-size: 10px;
+    font-weight: 600;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    width: 100%;
+}
+
+.FR-apply-btn {
+    background: #8b5e3c;
+    color: #ffffff;
+    box-shadow: 0 3px 10px rgba(224, 201, 166, 0.4);
+}
+
+.FR-save-btn {
+    background: white;
+    border: #8b5e3c solid 1px;
+    color: #8b5e3c;
+}
+
+.FR-cancel-btn {
+    background: rgba(255, 255, 255, 0.15);
+    color: red;
+    border: 1px solid #8b5e3c;
+}
+
+.FR-apply-btn:hover,
+.FR-save-btn:hover {
+    transform: translateY(-2px);
+}
+
+.FR-save-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Saved formats section */
+.FR-saved-section {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    min-height: 300px;
+    height: auto;
+    /* critical for scroll */
+}
+
+.FR-saved-list {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-right: 6px;
+    margin-bottom: 20px;
+    /* reduced from 80px */
+}
+
+/* Individual saved format */
+.FR-saved-item {
+    padding: 10px 12px;
+    background: #ffffff;
+    border-radius: 10px;
+    font-size: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    border: 1px solid rgba(139, 94, 60, 0.25);
+    transition: all 0.25s ease;
+}
+
+/* Hover + Active */
+.FR-saved-item:hover {
+    background: rgba(139, 94, 60, 0.08);
+    border-color: #8b5e3c;
+    transform: translateX(3px);
+}
+
+.FR-saved-item.FR-active {
+    background: rgba(139, 94, 60, 0.15);
+    border-color: #8b5e3c;
+    box-shadow: inset 3px 0 0 #8b5e3c;
+}
+
+/* Format name text */
+.FR-format-name {
+    font-weight: 600;
+    color: #3a2a1a;
+    letter-spacing: 0.3px;
+}
+
+/* Delete button */
+.FR-delete-btn {
+    background: none;
+    border: none;
+    font-size: 11px;
+    font-weight: 600;
+    color: #b94a4a;
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.FR-delete-btn:hover {
+    background: rgba(185, 74, 74, 0.12);
+    color: #8b1f1f;
+}
+
+/* Error message */
+.FR-error {
+    background: rgba(220, 53, 69, 0.25);
+    color: #ffcccc;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    text-align: center;
+    border: 1px solid rgba(220, 53, 69, 0.4);
+}
+
+/* ── RIGHT PANEL ── (unchanged parts below) ── */
+
+.FR-right-panel {
+    width: 65%;
+    padding: 24px 32px;
+    background: white;
+    overflow-y: auto;
+}
+
+.FR-report-title {
+    text-align: center;
+    color: #a05f1a;
+    margin: 0 0 24px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.FR-ears-container {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 15px;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.FR-ear-box {
+    border: 1px solid #4a4a4a;
+    width: 200px;
+    height: 200px;
+    border-radius: 8px;
+    padding: 16px;
+    background: white;
+    transition: opacity 0.4s;
+}
+
+.FR-blurred {
+    opacity: 0.4;
+}
+
+.FR-ear-title {
+    margin: 0 0 12px;
+    text-align: center;
+    font-size: 10px;
+}
+
+.FR-right-ear .FR-ear-title {
+    color: #d32f2f;
+}
+
+.FR-left-ear .FR-ear-title {
+    color: #1976d2;
+}
+
+.FR-audiogram-placeholder {
+    height: 150px;
+    background: #fafafa;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    font-size: 14px;
+}
+
+.FR-symbols-legend {
+    margin-top: 8px;
+    font-size: 12px;
+    text-align: center;
+}
+
+.FR-pta-value {
+    margin-top: 8px;
+    font-size: 10px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.FR-bottom-panels {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.FR-panel {
+    border-radius: 8px;
+    padding: 16px;
+    transition: opacity 0.4s;
+    height: 150px;
+    width: 250px
+}
+
+.FR-provisional-panel,
+.FR-speech-panel,
+.FR-weber-panel {
+    background: transparent;
+    border: 1px solid #626262;
+}
+
+.FR-panel-title {
+    margin: 0 0 12px;
+    text-align: center;
+    font-size: 12px;
+    color: #8b5e3c;
+}
+
+.FR-panel-content {
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.FR-speech-table,
+.FR-weber-table {
+    width: 100%;
+    font-size: 12px;
+    border-collapse: collapse;
+    margin-top: 8px;
+}
+
+.FR-speech-table th,
+.FR-weber-table th,
+.FR-speech-table td,
+.FR-weber-table td {
+    padding: 8px;
+    text-align: left;
+    font-size: 10px;
+}
+
+.FR-audiologist {
+    margin-top: 20px;
+    padding: 12px;
+    background: transparent;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-align: center;
+    width: 200px;
+    margin-left: auto;
+}
+
+.FR-audiologist-content {
+    font-size: 10px;
+    line-height: 1.6;
+}
+
+.FR-patient-row {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    width: 100%;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.FR-patient-details {
+    display: flex;
+    width: 650px;
+    flex-direction: row;
+    padding: 10px;
+    border: solid 1px #4e4d4d;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.para-pt-detail {
+    font-size: 12px;
+}
+
+.pt-header-details {
+    color: #8b5e3c;
+}
+
+.recomm-audiolo-main-rf {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.FR-recommendations-panel {
+    border: #7c7c7c;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.FR-page-heading {
+    font-size: 15px;
+    color: #8b5e3c;
+    margin: 0 0 16px;
+    text-align: center;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+}
+
+.FR-front-page-preview {
+    margin-bottom: 32px;
+    padding: 16px;
+    background: rgba(245, 245, 245, 0.4);
+    border-radius: 8px;
+    border: 1px dashed #c19a5e;
+}
+
+.FR-main-page-preview {
+    padding-top: 16px;
+}
+
+.FR-page-separator {
+    text-align: center;
+    color: #777;
+    font-size: 12px;
+    margin: 32px 0;
+    letter-spacing: 1px;
+}
+
+.FR-front-compact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin: 16px 0;
+}
+
+.FR-panel-title-R {
+    margin: 0 10 12px;
+    text-align: center;
+    font-size: 11px;
+    color: #8b5e3c;
+    margin-top: 20px;
+}

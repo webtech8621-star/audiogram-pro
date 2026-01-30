@@ -1,0 +1,1007 @@
+/* Full wrapper */
+.pta-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+  background: transparent;
+  overflow: hidden;
+}
+
+.pta-wrapper-loader {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.para-loader-pta {
+  color: #8b5e3c;
+  font-weight: 600;
+}
+
+.animate-spin-pt {
+  color: #8d6242;
+  animation: spin 1s linear infinite;
+}
+
+.loader-containerpta {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 90vh;
+  gap: 20px;
+}
+
+/* === Navbar === */
+.pta-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #8b5e3c;
+  padding: 0 20px;
+  color: #fff;
+  height: 45px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+
+}
+
+.pta-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.pta-logo {
+  display: flex;
+  font-size: 15px;
+  font-weight: 700;
+  transition: transform 0.2s ease;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.pta-logo:hover {
+  transform: scale(1.05);
+}
+
+.pta-logo-icon {
+  margin-right: 6px;
+  font-size: 17px;
+  text-align: center;
+}
+
+.pta-right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.icon-wrapper {
+  cursor: pointer;
+  position: relative;
+}
+
+.navbar-icon {
+  font-size: 20px;
+  color: white;
+  transition: transform 0.2s ease;
+}
+
+.navbar-icon:hover {
+  transform: scale(1.2);
+  color: #ffd700;
+}
+
+/* Profile picture */
+.profile-pic {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.profile-pic:hover {
+  transform: scale(1.1);
+}
+
+.pta-menu-toggle {
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.pta-menu-toggle:hover {
+  transform: scale(1.2);
+}
+
+/* === Sidebar / Drawer === */
+.pta-sidebar {
+  position: fixed;
+  top: 60px;
+  /* below navbar */
+  left: -240px;
+  width: 220px;
+  height: calc(100% - 60px);
+  background: #ffffff;
+  border-right: 1px solid #ddd;
+  padding: 15px;
+  transition: left 0.3s ease;
+  overflow-y: auto;
+  z-index: 100;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.pta-sidebar.open {
+  left: 0;
+}
+
+.pta-menu-item {
+  display: flex;
+  align-items: center;
+  margin: 12px 0;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pta-menu-item:hover {
+  color: #8b5e3c;
+  transform: translateX(5px);
+}
+
+.pta-menu-icon {
+  margin-right: 8px;
+}
+
+.pta-dropdown {
+  justify-content: space-between;
+}
+
+.pta-submenu {
+  margin-left: 25px;
+  font-size: 13px;
+  color: #555;
+}
+
+.pta-submenu p {
+  margin: 6px 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pta-submenu p:hover {
+  color: #8b5e3c;
+  transform: scale(1.05);
+}
+
+/* Active state for current page */
+.pta-submenu p.active {
+  color: #8b5e3c;
+  font-weight: 700;
+}
+
+/* === Main Content === */
+.pta-main {
+  /* space for sidebar */
+  margin-top: 0px;
+  /* space for navbar */
+  padding: 20px;
+  flex: 1;
+  background: #f9f9f9;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.pta-title {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: #636060;
+}
+
+/* === Content Row: Table + Graph side by side === */
+.pta-content-row {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+/* --- Table Card --- */
+.pta-table-card {
+  background: #fff;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 450px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.card-heading {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #000000;
+  font-family: Montserrat;
+
+}
+
+
+
+.DualEar-total-cont {
+  width: 100%;
+  height: 100px;
+  background-color: #e5e4e4;
+  width: 100%;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: hsl(0, 0%, 95%);
+  margin-bottom: 20px;
+}
+
+.FrequencyDataTable-total-cont {
+  height: 100px;
+  background-color: #e5e4e4;
+  width: 100%;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: hsl(0, 0%, 95%);
+  margin-bottom: 20px;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.pta-input-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  height: 300px;
+  border: solid 1px black;
+}
+
+.pta-input-table thead th {
+  background: #f2f2f2;
+  padding: 2px;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+  font-weight: 600;
+  border: solid 1px black;
+}
+
+.pta-input-table tbody td {
+  border-bottom: 1px solid #eee;
+  text-align: center;
+  padding: 2px;
+  border: solid 1px black;
+}
+
+.pta-input-table .freq-cell {
+  font-weight: 700;
+  color: #333;
+  background: #fafafa;
+  border: solid 1px black;
+}
+
+.pta-input-table input[type="number"] {
+  width: 35px;
+  height: 17px;
+  padding: 4px;
+  font-size: 12px;
+  border: 0px solid #9a9a9a;
+  color: #392a1e;
+  border-radius: 2px;
+}
+
+.pta-input-table input[type="number"]:focus {
+  border-color: #8b5e3c;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(139, 94, 60, 0.15);
+
+}
+
+/* --- Graph Card --- */
+.pta-graph-card {
+  background: #fff;
+  border-radius: 6px;
+  padding: 0px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  display: flex;
+  width: auto;
+  flex-direction: column;
+}
+
+.graphs-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.graph-box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-top: 70px;
+}
+
+.graph-title {
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 6px;
+  font-size: 10px;
+  font-family: Roboto;
+}
+
+.chart-container {
+  height: 400px;
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 6px;
+  padding: 4px;
+  width: 300px;
+
+}
+
+/* .line-Right{
+font-size: 5px;
+width:100px;
+} */
+/* --- PTA Summary under graphs --- */
+.pta-summary {
+  display: flex;
+  justify-content: space-around;
+  gap: 10px;
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+.pta-summary-item {
+  background: #f7f7f7;
+  padding: 8px 14px;
+  text-align: center;
+  width: 200px;
+  border: solid 1px rgb(63, 63, 63);
+  display: flex;
+  flex-direction: column;
+}
+
+.summary-label {
+  font-size: 12px;
+  color: #1d1c1c;
+}
+
+.summary-value {
+  font-size: 15px;
+  font-weight: 700;
+  color: #222;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1100px) {
+  .pta-content-row {
+    flex-direction: column;
+  }
+
+  .pta-table-card,
+  .pta-graph-card {
+    width: 100%;
+  }
+}
+
+/* --------------- */
+/* --- Zoom overlay & panel --- */
+.pta-zoom-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  /* blur backdrop */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+/* centered panel */
+.pta-zoomed-panel {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 900px;
+  max-width: 900px;
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* header contains title + symbol palette */
+.pta-zoom-header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+  font-family: 'Montserrat',
+}
+
+
+/* symbol palette (row of buttons) */
+.symbol-palette {
+  display: flex;
+  gap: 8px;
+  height: 350px;
+  flex-wrap: wrap;
+  flex-direction: column;
+  margin-top: 100px;
+  justify-content: space-around;
+}
+
+.symbol-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 0px solid #ddd;
+  background: #fff;
+  padding: 4px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  transition: all .15s ease;
+  width: 70px;
+  height: 25px;
+  margin-top: 3px;
+  margin-bottom: 2px;
+}
+
+.symbol-btn .symbol-char {
+  font-size: 18px;
+}
+
+.symbol-btn.active {
+  background: #8b5e3c;
+  color: #fff;
+  border-color: #8b5e3c;
+  transform: translateY(-2px);
+}
+
+/* zoom graphs layout */
+.pta-zoom-graphs {
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+  justify-content: center;
+}
+
+.zoom-graph-box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.zoom-chart-wrapper {
+  height: 420px;
+  /* larger zoomed chart */
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 6px;
+  padding: 8px;
+  height: 500px;
+  width: 400px;
+}
+
+/* footer actions inside zoom */
+.pta-zoom-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.btn-primary {
+  padding: 8px 12px;
+  background: #8b5e3c;
+  color: #fff;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-secondary {
+  padding: 6px 10px;
+  background: #f2f2f2;
+  color: #333;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+/* subtle blurred-behind effect for page when zoom open */
+.blurred-behind {
+  filter: blur(3px) saturate(0.95);
+  transition: filter 180ms ease;
+}
+
+/* smaller UI adjustments */
+.dual-audiogram-container {
+  cursor: zoom-in;
+}
+
+.dual-audiogram-container.zoomed {
+  cursor: zoom-out;
+}
+
+/* small responsive adjustments for zoom panel */
+@media (max-width: 900px) {
+  .pta-zoomed-panel {
+    padding: 12px;
+  }
+
+  .pta-zoom-graphs {
+    flex-direction: column;
+  }
+
+  .zoom-chart-wrapper {
+    height: 320px;
+  }
+}
+
+.zoom-graph-title {
+  font-size: 10px;
+  font-family: Roboto;
+  font-weight: Bold;
+  text-align: center;
+}
+
+.span-ear {
+  font-size: 10px;
+  font-family: Roboto;
+  font-weight: Bold;
+  margin-left: 8px;
+}
+
+.pta-DualEar-header {
+  color: rgb(65, 65, 65);
+  font-weight: Bold;
+  text-align: center !important;
+  font-size: 13px !important;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* .new-patient-button {
+  background-color: transparent;
+  color: rgb(0, 0, 0);
+  padding: 7px 14px;
+  border: solid 1px rgb(79, 79, 79);
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 20px;
+  font-size: 10px;
+} */
+
+.new-patient-button:hover {
+  background-color: #704214;
+}
+
+/* ############################## */
+/* PureToneAudiometry/index.css (add to existing file) */
+.pta-header-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  width: 100%;
+  background-color: #ffffff;
+}
+
+.pta-title-header {
+  /* margin: 0px; */
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center !important;
+  color: #666565;
+}
+
+/* .make-report-button {
+  padding: 8px 16px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+} */
+
+.make-report-button:hover {
+  background-color: #218838;
+}
+
+/* Container styling */
+.pta-diagnosis-card {
+  width: 100%;
+  max-width: 600px;
+  background-color: #ffffff;
+  border-radius: 0px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  border: 1px solid #a2a2a2;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-top: 3px;
+}
+
+/* Header Section */
+.pta-header {
+  background-color: #eeeeee;
+  padding: 12px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 8px;
+}
+
+.pta-title {
+  margin: 0;
+  font-size: 10px;
+  font-weight: 700;
+  color: #444444;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* Toggle Switch */
+.pta-switch-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pta-switch-label {
+  font-size: 08px;
+  font-weight: 600;
+  color: #5b6770;
+  text-transform: uppercase;
+}
+
+.pta-toggle {
+  width: 44px;
+  height: 20px;
+  background-color: #cccccc;
+  border-radius: 20px;
+  position: relative;
+  cursor: pointer;
+  transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pta-toggle.pta-active {
+  background-color: #8d6242;
+  width: 45px;
+  height: 20px;
+  /* Image specific brown */
+}
+
+.pta-toggle-handle {
+  width: 17px;
+  height: 15px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 3px;
+
+  transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pta-toggle.pta-active .pta-toggle-handle {
+  transform: translateX(26px);
+}
+
+/* Input Rows */
+.pta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.pta-row-last {
+  border-bottom: none;
+}
+
+.pta-disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.pta-label {
+  font-weight: 700;
+  color: #333333;
+  font-size: 10px;
+}
+
+.pta-input {
+  border: none;
+  text-align: right;
+  color: #555555;
+  font-size: 12px;
+  outline: none;
+  width: 100%;
+  background: transparent;
+}
+
+.pta-input::placeholder {
+  color: #666666;
+}
+
+/* The container holding the buttons */
+.button-sidebar {
+  display: flex;
+  flex-direction: row;
+  /*8008783587 */
+  gap: 12px;
+  /* Space between buttons */
+  width: 680px;
+  /* Adjust as needed */
+  padding: 5px;
+  margin: 0px;
+}
+
+/* Base style for all buttons */
+.nav-button {
+  background: rgb(225, 226, 225);
+  /* Remove background */
+  border: none;
+  /* Remove border */
+  padding: 10px 15px;
+  text-align: left;
+  /* Align text to the left */
+  font-size: 11px;
+  font-family: 'Segoe UI', sans-serif;
+  color: #784e2e;
+  /* Professional dark grey */
+  cursor: pointer;
+  font-weight: 500;
+  border-radius: 6px;
+  /* Smooth corners for the hover effect */
+  transition: all 0.2s ease-in-out;
+}
+
+/* Hover effect: Subtle background and text color change */
+.nav-button:hover {
+  background-color: #f0f4f8;
+  color: #000000;
+  /* Modern blue highlight */
+  padding-left: 13.5px;
+  /* Slight shift effect */
+}
+
+/* Active/Focus state for accessibility */
+.nav-button:focus {
+  outline: 2px solid #007bff22;
+  background-color: #eef2f6;
+}
+
+/* Specific styling for the "New Patient" button if you want it to pop */
+.space-cont {
+  width: 300px;
+}
+
+.save-session-btn {
+  transition: all 0.25s ease;
+  font-weight: 500;
+}
+
+/* Default / idle state */
+.save-session-btn.idle {
+  background-color: rgb(225, 226, 225);
+  /* indigo */
+  color: #784e2e;
+  border: none;
+}
+
+.save-session-btn.idle:hover {
+  background-color: #f0f4f8;
+  color: #000000;
+}
+
+/* Saving */
+.save-session-btn.saving {
+  background-color: #f0f4f8;
+  /* gray */
+  color: rgb(2, 2, 2);
+  cursor: not-allowed;
+}
+
+/* Success! */
+.save-session-btn.success {
+  background-color: #10b981;
+  /* emerald green */
+  color: white;
+  transform: scale(1.04);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.3);
+}
+
+.switch-label {
+  font-size: 12px;
+  color: #64748b;
+  margin-right: 10px;
+}
+
+.diagnosis-row {
+  display: flex;
+  padding: 10px 10px;
+  border-bottom: 1px solid #e2e8f0;
+  height: 14px;
+  align-items: center;
+  flex-direction: row;
+  gap: -20px;
+}
+
+.diagnosis-row:last-child {
+  border-bottom: none;
+}
+
+.diagnosis-label {
+  font-weight: 500;
+  color: #1e293b;
+  min-width: 140px;
+  font-size: 10px;
+}
+
+.diagnosis-value {
+  background-color: transparent;
+  /* border-radius: 20px; */
+  width: 100%;
+  margin-left: -50px;
+}
+
+.weber-dual-input {
+  display: flex;
+  align-items: center;
+  gap: 0px;
+  justify-content: flex-end;
+  margin-left: -20px;
+}
+
+.weber-side {
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.pta-input.small {
+  width: 70px;
+  text-align: center;
+}
+
+.pta-disabled .diagnosis-row {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.speech-table-container {}
+
+.pta-diagnosis-card-sppech-audio {
+
+  width: 200px;
+  background-color: #ffffff;
+  border-radius: 0px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  border: 1px solid #a2a2a2;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-top: 3px;
+}
+
+.switch-label-su {
+  font-size: 8px;
+}
+
+.pta-input-su {
+  background-color: transparent;
+  width: 300px;
+}
+
+.pta-diagnosis-card-webertest {
+  width: 245px;
+  background-color: #ffffff;
+  border-radius: 0px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  border: 1px solid #a2a2a2;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-top: 3px;
+}
+
+.speechaud-weber-row-cont {
+  width: auto;
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+}
+
+.symbol-legend-container {
+  width: 140px;
+  background: #f9fafb;
+  border-radius: 5px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  height: fit-content;
+}
+
+.symbol-legend-header {
+
+  background-color: #e5e4e4;
+  width: 100%;
+  height: 50px;
+  color: hsl(0, 0%, 95%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #000000;
+  font-family: Montserrat;
+}
+
+.symbol-legend-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-left: 10px;
+}
+
+.symbol-legend-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: white;
+  border: 1px solid #f3f4f6;
+}
+
+.symbol-preview {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Segoe UI Symbol", Arial, sans-serif;
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.symbol-text-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.symbol-key {
+  font-weight: 600;
+  font-size: 10px;
+  color: #646565;
+  display: block;
+}
+
+.symbol-label {
+  font-size: 12px;
+  color: #6b7280;
+  line-height: 1.25;
+}

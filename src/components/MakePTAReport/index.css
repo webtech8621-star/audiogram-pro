@@ -1,0 +1,511 @@
+.MR-PTA-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000;
+}
+
+.MR-PTA-container {
+    background: white;
+    width: 950px;
+    height: 90vh;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.MR-PTA-header-popup {
+    background-color: #8b5e3c;
+    /* Brown Header matching IA */
+    padding: 15px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.MR-PTA-logo-cont {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.MR-PTA-logo-icon {
+    color: white;
+    font-size: 22px;
+}
+
+.MR-PTA-logo-text {
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.MR-PTA-close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.MR-PTA-pdf-content {
+    flex: 1;
+    background: #525659;
+}
+
+/* Styles for PDF Generation */
+.MR-PTA-patient-info {
+    display: flex;
+    justify-content: space-around;
+    background: #f0f7ff;
+    border-radius: 8px;
+    border-left: 5px solid #1976d2;
+    height: 40px;
+    margin-top: 0px;
+    padding: 10px;
+}
+
+.ptdt-para {
+    font-size: 12px;
+}
+
+.MR-PTA-graphs-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.MR-PTA-graph-box {
+    flex: 1;
+    border: 1px solid #282727;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    background: white;
+}
+
+.MR-PTA-chart-container {
+    height: 500px;
+    /* Large Graph */
+    width: 350px;
+    margin-bottom: 10px;
+    border: 1px solid #eee;
+}
+
+
+
+.MR-PTA-ear-title {
+    font-size: 16px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.MR-PTA-ear-title.red {
+    color: #d32f2f;
+}
+
+.MR-PTA-ear-title.blue {
+    color: #1976d2;
+}
+
+.MR-PTA-value-label {
+    font-weight: bold;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.MR-PTA-table-card {
+    overflow: hidden;
+    margin-bottom: 30px;
+    width: 300px;
+}
+
+.PTA-tables-header {
+    background: linear-gradient(135deg, #417fbe, #429be4);
+    color: white;
+    padding: 10px;
+    margin: 0;
+    font-size: 13px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.MR-PTA-text-content {
+    padding: 10px;
+    font-size: 13px;
+    line-height: 1.6;
+    border: 1px solid rgb(201, 195, 195);
+    border-radius: 0px;
+    margin-top: 10px;
+    height: auto;
+
+}
+
+.MR-PTA-loading {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 18px;
+}
+
+.header-pta {
+    font-size: 20px;
+}
+
+.para-details {
+    font-size: 12px;
+}
+
+/* Symbols Legend Container */
+.PTA-symbols-legend-container {
+    margin: 20px auto;
+    padding: 15px;
+    border: 1px solid #919191;
+    border-radius: 8px;
+    width: auto;
+    background: #ffffff;
+}
+
+.legend-title {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #555;
+    margin-bottom: 10px;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+}
+
+.symbols-grid {
+    display: flex;
+    flex-direction: row;
+
+    gap: 15px;
+    justify-content: space-around;
+}
+
+.symbol-item {
+    display: flex;
+    flex-direction: row;
+    width: 60px;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.symbol-abbr {
+    font-size: 10px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 2px;
+}
+
+.symbol-visual {
+    font-size: 17px;
+    /* Large symbols for clarity */
+    line-height: 1;
+    font-family: Arial, sans-serif;
+}
+
+/* Ensure report containers look professional */
+.MR-PTA-table-card {
+    margin-top: 20px;
+    /* Full width for diagnosis */
+}
+
+/* Audiologist styles matching IA */
+.audiologist-details-main-cont-pta-fp {
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-top: auto;
+    margin-bottom: 0px;
+}
+
+.audiologist-details-main-cont-pta {
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.audiologist-details-container {
+    width: 320px;
+    text-align: center;
+    padding: 12px 16px;
+
+    font-size: 13px;
+    line-height: 1.35;
+}
+
+.audiologist-header {
+    font-size: 15px;
+    font-weight: bold;
+    margin: 0 0 8px 0;
+    color: #1a3c6d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.audiologist-name {
+    font-size: 15px;
+    font-weight: 700;
+    margin: 0 0 4px 0;
+    color: #000;
+}
+
+.audiologist-qual-reg {
+    display: flex;
+    justify-content: space-between;
+    margin: 2px 0 8px 0;
+    color: #333;
+}
+
+.qualification {
+    font-weight: 500;
+}
+
+.reg-no {
+    font-weight: 500;
+}
+
+.audiologist-address,
+.audiologist-phone {
+    margin: 3px 0;
+    color: #444;
+}
+
+/* Container for the three tables side by side */
+.report-tables-row {
+    display: flex;
+    gap: 20px;
+    margin: 30px 0;
+    flex-wrap: wrap;
+    /* responsive fallback */
+}
+
+.report-tables-row .MR-PTA-table-card {
+    flex: 1;
+    min-width: 280px;
+    /* prevents tables from becoming too narrow */
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+/* Table headers */
+.MR-PTA-table-card h3.PTA-tables-header {
+    margin: 0;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #417fbe, #429be4);
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 600;
+    text-align: center;
+    border-bottom: 1px solid #cbd5e1;
+}
+
+/* Common table styling */
+.MR-PTA-table-card table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    color: #334155;
+}
+
+.MR-PTA-table-card th,
+.MR-PTA-table-card td {
+    padding: 10px 12px;
+    text-align: center;
+    border: 1px solid #e2e8f0;
+}
+
+/* Header row of tables */
+.MR-PTA-table-card thead th {
+    background: #ffffff;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+/* First column (labels) - slightly bolder/lighter bg */
+.MR-PTA-table-card td:first-child {
+    font-weight: 500;
+    background: #ffffff;
+    text-align: left;
+}
+
+/* Provisional Diagnosis - text style override */
+.MR-PTA-table-card.provisional-diagnosis .MR-PTA-text-content {
+    padding: 16px;
+}
+
+.MR-PTA-table-card.provisional-diagnosis p {
+    margin: 8px 0;
+    font-size: 13.5px;
+}
+
+.MR-PTA-table-card.provisional-diagnosis strong {
+    color: #1e40af;
+}
+
+/* Speech & Weber specific tweaks */
+.MR-PTA-table-card table tr:nth-child(even) {
+    background-color: white;
+}
+
+/* Responsive - stack tables on smaller screens */
+@media (max-width: 1100px) {
+    .report-tables-row {
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .report-tables-row .MR-PTA-table-card {
+        min-width: auto;
+    }
+}
+
+.PTA-tables-header {
+    background-color: transparent;
+    color: #1e40af;
+}
+
+.save-ear-icon-report {
+    color: #ffffff;
+    animation: spin 1s linear infinite;
+    font-size: 18px;
+}
+
+.para-makereport {
+    font-size: 12px;
+    color: #ffffff;
+}
+
+.fp-pvd {
+    margin-top: 50px;
+}
+
+.fp-headers {
+    color: #1976d2 !important;
+    font-size: 17px !important;
+}
+
+.weber-speech-fp-main-cont {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.web-speech-header {
+    text-align: center;
+}
+
+.report-section-content {
+    gap: 30px;
+
+}
+
+/* Container for the section */
+.fp-pvd-container {
+    margin-bottom: 10px;
+    margin-top: 15px;
+}
+
+/* Header styling */
+.fp-headers-table {
+    color: #1976d2;
+    margin-bottom: 12px;
+    margin-top: 20px;
+    font-size: 17px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 5px;
+    text-transform: uppercase;
+}
+
+/* Container spacing */
+.fp-pvd-container {
+    margin-bottom: 25px;
+}
+
+/* Title styling */
+.fp-pvd-title {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    padding-bottom: 5px;
+}
+
+/* Table layout */
+.fp-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ccc;
+}
+
+/* Cell padding and borders */
+.fp-table td {
+    padding: 12px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+/* Left column (Labels) */
+.fp-label {
+    font-weight: bold;
+    background-color: #f5f5f5;
+    /* Light gray background */
+    width: 30%;
+}
+
+/* Right column (Actual Diagnosis) */
+.fp-content {
+    background-color: #ffffff;
+    width: 70%;
+}
+
+.main-backpage {
+    height: 170vh;
+    background-color: #ffffff;
+}
+
+.audiologist-details-main-cont-pta-main-page {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.MAIN-CONT-pvd-sa-weber {
+    width: 800px;
+    height: 27. 0px;
+}
+
+.recommendations-card {
+    margin-top: 0px;
+    height: 100%;
+}
+
+.recomm-audiologist-main-cont {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 300px;
+    margin-top: -30px;
+}
+
+.space-cont {
+    width: 100px;
+}

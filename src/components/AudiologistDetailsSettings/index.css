@@ -1,0 +1,190 @@
+/* Reuse the exact same styles as PatientDetails */
+.patient-details-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.patient-details-container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.pt-logo {
+    width: 100%;
+    height: 40px;
+    font-size: 12px;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.pt-logo-icon {
+    color: #8B4513;
+    font-weight: bold;
+    vertical-align: middle;
+}
+
+.logo-text {
+    color: #8B4513;
+    font-weight: bold;
+    vertical-align: middle;
+    margin-left: 6px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #232222;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.form-group input {
+    background-color: #e4e4e4;
+    color: #171616;
+}
+
+.save-button {
+    background-color: #8B4513;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.save-button:hover {
+    background-color: #704214;
+}
+
+.save-button:disabled {
+    background-color: #a07a52;
+    cursor: not-allowed;
+}
+
+.ptd-inputs {
+    border: solid 0px black !important;
+    background-color: #e4e4e4 !important;
+    text-align: center !important;
+    font-size: 10px !important;
+}
+
+.error-message {
+    color: red;
+    font-size: 12px;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.para-successfull {
+    color: #5b974c !important;
+    text-align: center;
+    font-size: 14px;
+}
+
+.success-box {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    padding: 20px 0;
+}
+
+.success-container {
+    text-align: center;
+    padding: 35px 20px;
+}
+
+.success-circle {
+    width: 70px;
+    height: 70px;
+    background: #dcfce7;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    box-shadow: 0 2px 8px rgba(22, 163, 74, 0.15);
+}
+
+.success-circle svg {
+    color: #16a34a;
+    font-size: 42px;
+}
+
+.success-container p {
+    margin: 0;
+    color: #1e293b;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.success-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70%;
+    /* or min-height: 200px */
+    padding: 2rem;
+}
+
+.success-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: rgba(240, 255, 240, 0.9);
+    padding: 1.5rem 2.5rem;
+    border-radius: 16px;
+    border: 1px solid #d4f4d4;
+    box-shadow: 0 4px 15px rgba(0, 128, 0, 0.1);
+    flex-direction: column;
+}
+
+.success-icon {
+    color: #22c55e;
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+}
+
+.success-text {
+    text-align: left;
+}
+
+.success-text strong {
+    display: block;
+    font-size: 15px;
+    color: #166534;
+    margin-bottom: 0.35rem;
+}
+
+.success-text p {
+    margin: 0;
+    font-size: 15;
+    color: #374151;
+}

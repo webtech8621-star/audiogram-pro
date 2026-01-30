@@ -1,0 +1,193 @@
+.patient-details-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.patient-details-container {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 300px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.patient-details-container h2 {
+  margin: 0 0 10px;
+  font-size: 15px;
+  color: #333;
+  text-align: center;
+}
+
+.patient-details-container p {
+  margin: 0 0 20px;
+  color: #666;
+  font-size: 0.9em;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #232222;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  outline: none;
+  /* Remove default outline */
+  border-bottom: none;
+  /* Remove underdotted line */
+}
+
+.form-group input {
+  background-color: #e4e4e4;
+  color: #171616;
+}
+
+.save-button {
+  background-color: #8B4513;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.save-button:hover {
+  background-color: #704214;
+}
+
+.ptd-inputs {
+  border: solid 0px black !important;
+  background-color: #e4e4e4 !important;
+  text-align: center !important;
+  font-size: 10px !important;
+}
+
+.pt-logo {
+  width: 100%;
+  height: 40px;
+  font-size: 12px;
+}
+
+.pt-logo-icon {
+  color: #8B4513;
+  font-weight: bold;
+}
+
+.pt-logo-text {
+  color: #8B4513;
+  font-weight: bold;
+}
+
+.para-successfull {
+  color: #5b974c !important;
+}
+
+/* ===============================
+   Existing Patient – Sessions UI
+   =============================== */
+
+.existing-patient-view {
+  margin-top: 10px;
+}
+
+.existing-patient-view h3 {
+  font-size: 13px;
+  color: #333;
+  margin-bottom: 4px;
+  text-align: center;
+}
+
+.existing-patient-view p {
+  font-size: 10px;
+  color: #666;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.existing-patient-view h4 {
+  font-size: 11px;
+  margin: 8px 0 6px;
+  color: #8B4513;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 4px;
+}
+
+/* Session list container */
+.session-list {
+  max-height: 180px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+/* Individual session card */
+.session-item {
+  background: #f7f7f7;
+  border-left: 4px solid #8B4513;
+  padding: 8px 10px;
+  margin-bottom: 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Hover effect */
+.session-item:hover {
+  background: #fff;
+  transform: translateX(2px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Session title */
+.session-item strong {
+  font-size: 11px;
+  color: #333;
+}
+
+/* Meta text */
+.session-item small {
+  font-size: 9px;
+  color: #666;
+  line-height: 1.4;
+  display: block;
+  margin-top: 2px;
+}
+
+/* Scrollbar styling (optional but nice) */
+.session-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.session-list::-webkit-scrollbar-thumb {
+  background-color: #c4a484;
+  border-radius: 4px;
+}
+
+.session-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.save-ear-icon {
+  animation: spin 1s linear infinite;
+  font-size: 18px;
+}

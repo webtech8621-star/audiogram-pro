@@ -1,0 +1,113 @@
+/* Wrapper */
+.su-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #dadada;
+  height: 100vh;
+}
+
+/* Card */
+.su-card {
+  background: #ffffff;
+  border: 0px solid #b0a599;
+  padding: 30px;
+  border-radius: 6px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  width: 320px;
+  height: 400px;
+  text-align: center;
+}
+
+/* Title */
+.su-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #2c2c2c;
+}
+
+.su-logo-icon {
+  font-size: 20px;
+  margin-right: 8px;
+}
+
+/* Subtext */
+.su-subtext {
+  font-size: 12px;
+  color: #555;
+  margin-bottom: 25px;
+}
+
+/* Form */
+.su-form-group {
+  text-align: left;
+  margin-bottom: 18px;
+}
+
+.su-form-group label {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 6px;
+  color: #333;
+}
+
+/* Input */
+.su-input-box {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 6px 8px;
+}
+
+.su-input-icon {
+  margin-right: 8px;
+  color: #666;
+}
+
+.su-input-box input {
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: 11px;
+}
+
+/* Button */
+.su-btn-signup {
+  width: 300px;
+  background: #8b5e3c;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.su-btn-signup:hover {
+  background: #7a5030;
+}
+
+/* Link */
+.su-signin-link {
+  margin-top: 15px;
+  font-size: 10px;
+  color: #444;
+}
+
+.su-signin-link a {
+  color: #8b5e3c;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.su-signin-link a:hover {
+  text-decoration: underline;
+}

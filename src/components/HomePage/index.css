@@ -1,0 +1,194 @@
+/* Full wrapper */
+.hp-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+  background: #f9f9f9;
+  overflow: hidden;
+}
+
+/* === Navbar === */
+
+
+.hp-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.hp-logo {
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  font-weight: 700;
+  transition: transform 0.2s ease;
+}
+
+.hp-logo:hover {
+  transform: scale(1.05);
+}
+
+.hp-logo-icon {
+  margin-right: 6px;
+  font-size: 22px;
+}
+
+.hp-menu-toggle {
+  font-size: 22px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.hp-menu-toggle:hover {
+  transform: scale(1.2);
+}
+
+/* Auth buttons */
+.hp-auth-buttons a {
+  margin-left: 12px;
+  padding: 6px 14px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.hp-btn-login {
+  background: #fff;
+  color: #8b5e3c;
+  font-weight: 600;
+}
+
+.hp-btn-login:hover {
+  background: #f0e2d8;
+  transform: scale(1.05);
+}
+
+.hp-btn-signup {
+  background: #333;
+  color: #fff;
+  font-weight: 600;
+}
+
+.hp-btn-signup:hover {
+  background: #111;
+  transform: scale(1.05);
+}
+
+/* === Sidebar / Drawer === */
+
+
+.hp-menu-item {
+  display: flex;
+  align-items: center;
+  margin: 12px 0;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.hp-menu-item:hover {
+  color: #8b5e3c;
+  transform: translateX(5px);
+}
+
+.hp-menu-icon {
+  margin-right: 8px;
+}
+
+.hp-dropdown {
+  justify-content: space-between;
+}
+
+.hp-submenu {
+  margin-left: 25px;
+  font-size: 13px;
+  color: #555;
+}
+
+.hp-submenu p {
+  margin: 6px 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hp-submenu p:hover {
+  color: #8b5e3c;
+  transform: scale(1.05);
+}
+
+/* === Main Content === */
+.hp-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  overflow: auto;
+}
+
+/* Hero */
+.hp-hero {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 40px;
+}
+
+.hp-hero-text {
+  max-width: 50%;
+}
+
+.hp-hero-text h2 {
+  font-size: 32px;
+  margin-bottom: 16px;
+  color: #2c2c2c;
+}
+
+.hp-hero-text p {
+  font-size: 15px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  color: #555;
+}
+
+.hp-hero-buttons button {
+  margin-right: 12px;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.hp-hero-buttons button:hover {
+  transform: scale(1.1);
+}
+
+.hp-btn-start {
+  background: #8b5e3c;
+  color: #fff;
+}
+
+.hp-btn-start:hover {
+  background: #7a5030;
+}
+
+.hp-btn-learn {
+  background: #eee;
+  color: #333;
+}
+
+.hp-btn-learn:hover {
+  background: #ddd;
+}
+
+.hp-hero-image {
+  width: 40%;
+  height: 300px;
+  background: #f0f0f0;
+  border-radius: 8px;
+}
