@@ -323,7 +323,7 @@ function ReportFormatSelector({
                             onClick={handleApply}
                         >
                             {applyStatus === 'applied' ? 'Applied!' : 'Apply'}
-                        </button>
+                        </button>     v
 
                         <button
                             className="FR-save-btn"

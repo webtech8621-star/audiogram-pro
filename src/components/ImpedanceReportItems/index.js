@@ -98,7 +98,7 @@ const ImpedanceReportItems = forwardRef(({ rightEar, leftEar, formData, ptaValue
         type_re: type,
       },
     }));
-  }, [rightEar?.pressure, rightEar?.compliance, rightEar?.volume]);
+  }, [rightEar?.pressure, rightEar?.compliance, rightEar?.volume, rightEar]);
 
   // ALWAYS sync Left Ear from top inputs
   useEffect(() => {
@@ -120,7 +120,7 @@ const ImpedanceReportItems = forwardRef(({ rightEar, leftEar, formData, ptaValue
         type_le: type,
       },
     }));
-  }, [leftEar?.pressure, leftEar?.compliance, leftEar?.volume]);
+  }, [leftEar?.pressure, leftEar?.compliance, leftEar?.volume, leftEar]);
 
   // Auto-update Interpretation from Type
   useEffect(() => {

@@ -1,9 +1,8 @@
 // src/components/PuretoneAudiometry/index.js
 
-import React, { useState, useEffect, useMemo, useRef } from "react";
+import React, { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./index.css";
-// Removed unused imports: LuEar, FaCog, FaFileAlt, FaChevronDown, FaFolder, FaBars, FaBell, FaQuestionCircle, IoLogOutSharp
 import { supabase } from "../../supabaseClient";
 import { LuEar } from "react-icons/lu";
 import Navbar from "../Navbar";
@@ -139,19 +138,19 @@ function PureToneAudiometry() {
   const [weberEnabled, setWeberEnabled] = useState(true);
 
   const [speechData, setSpeechData] = useState({
-    right: { pta: '', srt: '', sds: '' },
-    left: { pta: '', srt: '', sds: '' }
+    right: { pta: "", srt: "", sds: "" },
+    left: { pta: "", srt: "", sds: "" },
   });
 
   const [weberData, setWeberData] = useState({
-    250: { right: '', left: '' },
-    500: { right: '', left: '' },
-    1000: { right: '', left: '' },
-    2000: { right: '', left: '' }
+    250: { right: "", left: "" },
+    500: { right: "", left: "" },
+    1000: { right: "", left: "" },
+    2000: { right: "", left: "" },
   });
 
   const [zoomed, setZoomed] = useState(false);
-  const [saveStatus, setSaveStatus] = useState('idle');
+  const [saveStatus, setSaveStatus] = useState("idle");
   const [activeSymbolKey, setActiveSymbolKey] = useState(null);
   const [showPatientDetails, setShowPatientDetails] = useState(true);
   const [sessionSaved, setSessionSaved] = useState(false);
@@ -168,7 +167,7 @@ function PureToneAudiometry() {
     speech_audiometry: true,
     weber_test: true,
     audiologist_details: true,
-    front_recommendations: true, // Add this
+    front_recommendations: true,
     recommendations: true,
     front_audiologist_details: true,
   });
@@ -178,11 +177,10 @@ function PureToneAudiometry() {
   const leftChartRef = useRef(null);
   const zoomedRightChartRef = useRef(null);
   const zoomedLeftChartRef = useRef(null);
-  const [user, setUser] = useState(null);
   const [currentPatientId, setCurrentPatientId] = useState(null);
   const [currentSessionId, setCurrentSessionId] = useState(null);
   const [isEnabled, setIsEnabled] = useState(true);
-  const [diagnosis, setDiagnosis] = useState({ re: '', le: '' });
+  const [diagnosis, setDiagnosis] = useState({ re: "", le: "" });
 
   const [manualDiagnosisEdit, setManualDiagnosisEdit] = useState({
     re: false,
@@ -203,11 +201,11 @@ function PureToneAudiometry() {
     }))
   );
 
-  const [currentFormatName, setCurrentFormatName] = useState('Default (Full)');
+  const [currentFormatName, setCurrentFormatName] = useState("Default (Full)");
   const [recommendations, setRecommendations] = useState("");
   const [recommendationsEnabled, setRecommendationsEnabled] = useState(true);
 
-  // Load latest format on mount
+  // Load latest report format on mount
   useEffect(() => {
     const loadLatestReportFormat = async () => {
       try {
@@ -215,15 +213,15 @@ function PureToneAudiometry() {
         if (!session?.user?.id) return;
 
         const { data, error } = await supabase
-          .from('report_formats')
-          .select('name, sections')
-          .eq('user_id', session.user.id)
-          .order('created_at', { ascending: false })
+          .from("report_formats")
+          .select("name, sections")
+          .eq("user_id", session.user.id)
+          .order("created_at", { ascending: false })
           .limit(1)
           .single();
 
-        if (error && error.code !== 'PGRST116') { // PGRST116 = no rows
-          console.error(error);
+        if (error && error.code !== "PGRST116") {
+          console.error("Error loading report format:", error);
           return;
         }
 
@@ -231,63 +229,148 @@ function PureToneAudiometry() {
           setReportSections(data.sections);
           setCurrentFormatName(data.name);
         }
-        // else keep default
       } catch (err) {
-        console.error('Cannot load latest format', err);
+        console.error("Cannot load latest format", err);
       }
     };
+
     loadLatestReportFormat();
   }, []);
 
+  // Handle location state changes (new/existing session)
   useEffect(() => {
     const state = location.state;
-    if (state) {
-      setCurrentPatientId(state.patientId || null);
-      setCurrentSessionId(state.sessionId || null);
-      setShowPatientDetails(!state.sessionId);
-      if (state.loadExistingData && state.sessionId) {
-        fetchSessionData(state.sessionId);
-      } else {
-        resetAllStates();
-      }
+    if (!state) return;
+
+    setCurrentPatientId(state.patientId || null);
+    setCurrentSessionId(state.sessionId || null);
+    setShowPatientDetails(!state.sessionId);
+
+    if (state.loadExistingData && state.sessionId) {
+      const loadSession = async () => {
+        setLoadingSession(true);
+        try {
+          const { data, error } = await supabase
+            .from("sessions")
+            .select(`
+              audiometry_data,
+              pta_right,
+              pta_left,
+              provisional_diagnosis,
+              speech_audiometry,
+              weber_test,
+              session_type,
+              report_sections,
+              recommendations,
+              recommendations_enabled
+            `)
+            .eq("id", state.sessionId)
+            .single();
+
+          if (error) throw error;
+
+          if (data.session_type?.includes("impedance") && !data.session_type?.includes("puretone")) {
+            navigate("/impedanceaudiometry", {
+              state: { patientId: state.patientId, sessionId: state.sessionId, loadExistingData: true },
+            });
+            return;
+          }
+
+          if (data?.audiometry_data) {
+            setFormData(data.audiometry_data);
+          }
+
+          const savedDiag = data?.provisional_diagnosis || {};
+
+          const rightSaved = savedDiag.right && savedDiag.right.trim() !== "" && savedDiag.right !== "Insufficient Data";
+          const leftSaved = savedDiag.left && savedDiag.left.trim() !== "" && savedDiag.left !== "Insufficient Data";
+
+          setDiagnosis({
+            re: rightSaved ? savedDiag.right.trim() : "",
+            le: leftSaved ? savedDiag.left.trim() : "",
+          });
+
+          setManualDiagnosisEdit({
+            re: rightSaved,
+            le: leftSaved,
+          });
+
+          if (data?.speech_audiometry) {
+            setSpeechData({
+              right: { pta: "", srt: "", sds: "", ...data.speech_audiometry.right },
+              left: { pta: "", srt: "", sds: "", ...data.speech_audiometry.left },
+            });
+          }
+
+          if (data?.weber_test) {
+            setWeberData(data.weber_test);
+          }
+
+          if (data?.report_sections) {
+            setReportSections(data.report_sections);
+          }
+
+          if (data?.recommendations) {
+            setRecommendations(data.recommendations);
+          }
+
+          setRecommendationsEnabled(data?.recommendations_enabled !== false);
+        } catch (err) {
+          console.error("Error loading saved session data:", err);
+        } finally {
+          setLoadingSession(false);
+        }
+      };
+
+      loadSession();
+    } else {
+      resetAllStates();
     }
-  }, [location.state, fetchSessionData]);
+  }, [location.state, navigate]);
 
   const resetAllStates = () => {
-    setFormData(frequencies.map((freq) => ({
-      freq,
-      ACR: "", ACR_M: "", BCR: "", BCR_M: "",
-      ACL: "", ACL_M: "", BCL: "", BCL_M: "",
-    })));
+    setFormData(
+      frequencies.map((freq) => ({
+        freq,
+        ACR: "",
+        ACR_M: "",
+        BCR: "",
+        BCR_M: "",
+        ACL: "",
+        ACL_M: "",
+        BCL: "",
+        BCL_M: "",
+      }))
+    );
     setDiagnosis({ re: "", le: "" });
     setManualDiagnosisEdit({ re: false, le: false });
     setSpeechData({
-      right: { pta: '', srt: '', sds: '' },
-      left: { pta: '', srt: '', sds: '' }
+      right: { pta: "", srt: "", sds: "" },
+      left: { pta: "", srt: "", sds: "" },
     });
     setWeberData({
-      250: { right: '', left: '' },
-      500: { right: '', left: '' },
-      1000: { right: '', left: '' },
-      2000: { right: '', left: '' }
+      250: { right: "", left: "" },
+      500: { right: "", left: "" },
+      1000: { right: "", left: "" },
+      2000: { right: "", left: "" },
     });
     setSessionSaved(false);
     setActiveSymbolKey(null);
     setZoomed(false);
   };
 
+  // Check authentication
   useEffect(() => {
     const checkSession = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
         navigate("/");
-      } else {
-        setUser(session.user);
       }
     };
     checkSession();
   }, [navigate]);
 
+  // Fetch patient info when patient ID changes
   useEffect(() => {
     const fetchPatientInfo = async () => {
       if (!currentPatientId) {
@@ -310,125 +393,55 @@ function PureToneAudiometry() {
     fetchPatientInfo();
   }, [currentPatientId]);
 
+  // Auto-update Weber data based on bone conduction presence
   useEffect(() => {
-    const hasBCR = formData.some(row => row.BCR !== '' && row.BCR !== null);
-    const hasBCL = formData.some(row => row.BCL !== '' && row.BCL !== null);
+    const hasBCR = formData.some((row) => row.BCR !== "" && row.BCR !== null);
+    const hasBCL = formData.some((row) => row.BCL !== "" && row.BCL !== null);
 
     if (hasBCR && !hasBCL) {
       setWeberData({
-        250: { right: '→', left: '' },
-        500: { right: '→', left: '' },
-        1000: { right: '→', left: '' },
-        2000: { right: '→', left: '' }
+        250: { right: "→", left: "" },
+        500: { right: "→", left: "" },
+        1000: { right: "→", left: "" },
+        2000: { right: "→", left: "" },
       });
     } else if (hasBCL && !hasBCR) {
       setWeberData({
-        250: { right: '', left: '→' },
-        500: { right: '', left: '→' },
-        1000: { right: '', left: '→' },
-        2000: { right: '', left: '→' }
+        250: { right: "", left: "→" },
+        500: { right: "", left: "→" },
+        1000: { right: "", left: "→" },
+        2000: { right: "", left: "→" },
       });
     } else if (hasBCR && hasBCL) {
       setWeberData({
-        250: { right: '', left: '' },
-        500: { right: '', left: '' },
-        1000: { right: '', left: '' },
-        2000: { right: '', left: '' }
+        250: { right: "", left: "" },
+        500: { right: "", left: "" },
+        1000: { right: "", left: "" },
+        2000: { right: "", left: "" },
       });
     }
   }, [formData]);
 
-  const fetchSessionData = async (sessionId) => {
-    setLoadingSession(true);
-    try {
-      const { data, error } = await supabase
-        .from("sessions")
-        .select(`
-          audiometry_data,
-          pta_right,
-          pta_left,
-          provisional_diagnosis,
-          speech_audiometry,
-          weber_test,
-          session_type,
-          report_sections
-        `)
-        .eq("id", sessionId)
-        .single();
-
-      if (error) throw error;
-
-      if (data.session_type?.includes("impedance") && !data.session_type?.includes("puretone")) {
-        navigate("/impedanceaudiometry", {
-          state: { patientId: currentPatientId, sessionId, loadExistingData: true }
-        });
-        return;
-      }
-
-      if (data?.audiometry_data) {
-        setFormData(data.audiometry_data);
-      }
-
-      const savedDiag = data?.provisional_diagnosis || {};
-
-      const rightSaved = savedDiag.right && savedDiag.right.trim() !== "" && savedDiag.right !== "Insufficient Data";
-      const leftSaved = savedDiag.left && savedDiag.left.trim() !== "" && savedDiag.left !== "Insufficient Data";
-
-      setDiagnosis({
-        re: rightSaved ? savedDiag.right.trim() : "",
-        le: leftSaved ? savedDiag.left.trim() : "",
-      });
-
-      setManualDiagnosisEdit({
-        re: rightSaved,
-        le: leftSaved,
-      });
-
-      if (data?.speech_audiometry) {
-        setSpeechData({
-          right: { pta: '', srt: '', sds: '', ...data.speech_audiometry.right },
-          left: { pta: '', srt: '', sds: '', ...data.speech_audiometry.left }
-        });
-      } else {
-        setSpeechData({
-          right: { pta: '', srt: '', sds: '' },
-          left: { pta: '', srt: '', sds: '' }
-        });
-      }
-
-      if (data?.weber_test) {
-        setWeberData(data.weber_test);
-      }
-
-      if (data?.report_sections) {
-        setReportSections(data.report_sections);
-      }
-      if (data?.recommendations) {
-        setRecommendations(data.recommendations);
-      }
-      setRecommendationsEnabled(data?.recommendations_enabled !== false);
-
-    } catch (err) {
-      console.error("Error loading saved session:", err);
-      // Changed alert to console.log to avoid blocking UI
-      console.log("Failed to load saved session data.");
-    } finally {
-      setLoadingSession(false);
-    }
-  };
-
+  // Fetch patient ID from session if missing
   useEffect(() => {
-    if (currentSessionId && !currentPatientId) {
-      const fetchPatientFromSession = async () => {
+    if (!currentSessionId || currentPatientId) return;
+
+    const fetchPatientFromSession = async () => {
+      try {
         const { data } = await supabase
           .from("sessions")
           .select("patient_id")
           .eq("id", currentSessionId)
           .single();
-        if (data?.patient_id) setCurrentPatientId(data.patient_id);
-      };
-      fetchPatientFromSession();
-    }
+        if (data?.patient_id) {
+          setCurrentPatientId(data.patient_id);
+        }
+      } catch (err) {
+        console.error("Error fetching patient from session:", err);
+      }
+    };
+
+    fetchPatientFromSession();
   }, [currentSessionId, currentPatientId]);
 
   const handleChange = (index, field, value) => {
@@ -441,6 +454,7 @@ function PureToneAudiometry() {
     const inputFields = document.querySelectorAll(".pta-input-table input[type='number']");
     const currentInputIndex = Array.from(inputFields).findIndex((input) => input === e.target);
     if (currentInputIndex === -1) return;
+
     switch (e.key) {
       case "ArrowUp":
         e.preventDefault();
@@ -464,40 +478,49 @@ function PureToneAudiometry() {
     }
   };
 
-  const parseData = (val) => (val === "" ? null : parseFloat(val));
 
-  const generateDataset = (label, field, borderColor, pointStyle) => ({
-    label,
-    data: formData.map((row) => parseData(row[field])),
-    borderColor,
-    pointBorderColor: borderColor,
-    pointBackgroundColor: "transparent",
-    pointStyle,
-    pointRadius: 0,
-    pointBorderWidth: 2,
-    borderWidth: 1,
-    spanGaps: true,
-  });
 
-  const rightEarData = {
-    labels: frequencies,
-    datasets: [
-      generateDataset("ACR", "ACR", "red", pointStyleMap.ACR),
-      generateDataset("ACR_M", "ACR_M", "brown", pointStyleMap.ACR_M),
-      generateDataset("BCR", "BCR", "red", pointStyleMap.BCR),
-      generateDataset("BCR_M", "BCR_M", "brown", pointStyleMap.BCR_M),
-    ],
-  };
+  const generateDataset = useCallback(
+    (label, field, borderColor, pointStyle) => ({
+      label,
+      data: formData.map((row) => (row[field] === "" ? null : parseFloat(row[field]))),
+      borderColor,
+      pointBorderColor: borderColor,
+      pointBackgroundColor: "transparent",
+      pointStyle,
+      pointRadius: 0,
+      pointBorderWidth: 2,
+      borderWidth: 1,
+      spanGaps: true,
+    }),
+    [formData]
+  );
 
-  const leftEarData = {
-    labels: frequencies,
-    datasets: [
-      generateDataset("ACL", "ACL", "blue", pointStyleMap.ACL),
-      generateDataset("ACL_M", "ACL_M", "navy", pointStyleMap.ACL_M),
-      generateDataset("BCL", "BCL", "blue", pointStyleMap.BCL),
-      generateDataset("BCL_M", "BCL_M", "navy", pointStyleMap.BCL_M),
-    ],
-  };
+  const rightEarData = useMemo(
+    () => ({
+      labels: frequencies,
+      datasets: [
+        generateDataset("ACR", "ACR", "red", pointStyleMap.ACR),
+        generateDataset("ACR_M", "ACR_M", "brown", pointStyleMap.ACR_M),
+        generateDataset("BCR", "BCR", "red", pointStyleMap.BCR),
+        generateDataset("BCR_M", "BCR_M", "brown", pointStyleMap.BCR_M),
+      ],
+    }),
+    [generateDataset]
+  );
+
+  const leftEarData = useMemo(
+    () => ({
+      labels: frequencies,
+      datasets: [
+        generateDataset("ACL", "ACL", "blue", pointStyleMap.ACL),
+        generateDataset("ACL_M", "ACL_M", "navy", pointStyleMap.ACL_M),
+        generateDataset("BCL", "BCL", "blue", pointStyleMap.BCL),
+        generateDataset("BCL_M", "BCL_M", "navy", pointStyleMap.BCL_M),
+      ],
+    }),
+    [generateDataset]
+  );
 
   const options = {
     responsive: true,
@@ -524,13 +547,13 @@ function PureToneAudiometry() {
     plugins: { legend: { display: false } },
     animation: false,
   };
+
   const [initialLoading, setInitialLoading] = useState(true);
+
   useEffect(() => {
-    // Simulate page initialization delay
     const timer = setTimeout(() => {
       setInitialLoading(false);
-    }, 400); // adjust timing if needed
-
+    }, 400);
     return () => clearTimeout(timer);
   }, []);
 
@@ -556,16 +579,11 @@ function PureToneAudiometry() {
 
     const result = calculateProvisionalDiagnosis(formData, ptaValues);
 
-    setDiagnosis(prev => ({
-      re: manualDiagnosisEdit.re
-        ? prev.re
-        : (result?.right?.severity ?? ""),
-
-      le: manualDiagnosisEdit.le
-        ? prev.le
-        : (result?.left?.severity ?? ""),
+    setDiagnosis((prev) => ({
+      re: manualDiagnosisEdit.re ? prev.re : (result?.right?.severity ?? ""),
+      le: manualDiagnosisEdit.le ? prev.le : (result?.left?.severity ?? ""),
     }));
-  }, [formData, ptaValues, manualDiagnosisEdit.re, manualDiagnosisEdit.le]);
+  }, [formData, ptaValues, manualDiagnosisEdit]);
 
   const findNearestFrequencyIndexForChart = (chartInstance, clickX) => {
     if (!chartInstance) return 0;
@@ -584,8 +602,7 @@ function PureToneAudiometry() {
   };
 
   const handleChartDoubleClick = (evt, chartInstance) => {
-    if (!activeSymbolKey) return;
-    if (!chartInstance) return;
+    if (!activeSymbolKey || !chartInstance) return;
 
     const canvasRect = chartInstance.canvas.getBoundingClientRect();
     const xPixel = evt.nativeEvent.clientX - canvasRect.left;
@@ -645,7 +662,7 @@ function PureToneAudiometry() {
 
   useEffect(() => {
     const setCursor = (chartRef, cursorStyle) => {
-      if (chartRef && chartRef.current && chartRef.current.canvas) {
+      if (chartRef?.current?.canvas) {
         chartRef.current.canvas.style.cursor = cursorStyle;
       }
     };
@@ -665,7 +682,7 @@ function PureToneAudiometry() {
   };
 
   const handleSymbolClick = (key) => {
-    setActiveSymbolKey(prev => prev === key ? null : key);
+    setActiveSymbolKey((prev) => (prev === key ? null : key));
   };
 
   const handleLogout = async () => {
@@ -681,16 +698,14 @@ function PureToneAudiometry() {
     }
   };
 
-
-
   const handleSaveSession = async () => {
     if (!currentSessionId) {
-      setSaveStatus('error');
-      setTimeout(() => setSaveStatus('idle'), 2200);
+      setSaveStatus("error");
+      setTimeout(() => setSaveStatus("idle"), 2200);
       return;
     }
 
-    setSaveStatus('saving');
+    setSaveStatus("saving");
 
     try {
       const { error } = await supabase
@@ -701,12 +716,12 @@ function PureToneAudiometry() {
           pta_left: ptaValues.left ? parseFloat(ptaValues.left) : null,
           provisional_diagnosis: {
             right: diagnosis.re?.trim() || null,
-            left: diagnosis.le?.trim() || null
+            left: diagnosis.le?.trim() || null,
           },
           speech_audiometry: speechData,
           weber_test: weberData,
           report_sections: reportSections,
-          recommendations: recommendations.trim() || null,           // ← added
+          recommendations: recommendations.trim() || null,
           recommendations_enabled: recommendationsEnabled,
           status: "completed",
           updated_at: new Date().toISOString(),
@@ -715,13 +730,13 @@ function PureToneAudiometry() {
 
       if (error) throw error;
 
-      setSaveStatus('success');
+      setSaveStatus("success");
       setSessionSaved(true);
-      setTimeout(() => setSaveStatus('idle'), 2800);
+      setTimeout(() => setSaveStatus("idle"), 2800);
     } catch (err) {
       console.error("Error saving session:", err);
-      setSaveStatus('error');
-      setTimeout(() => setSaveStatus('idle'), 3200);
+      setSaveStatus("error");
+      setTimeout(() => setSaveStatus("idle"), 3200);
     }
   };
 
@@ -745,46 +760,41 @@ function PureToneAudiometry() {
   };
 
   const handleSpeechChange = (ear, field, value) => {
-    setSpeechData(prev => ({
+    setSpeechData((prev) => ({
       ...prev,
       [ear]: {
         ...prev[ear],
-        [field]: value
-      }
+        [field]: value,
+      },
     }));
   };
 
   const handleWeberChange = (freq, side, value) => {
-    setWeberData(prev => ({
+    setWeberData((prev) => ({
       ...prev,
       [freq]: {
         ...prev[freq],
-        [side]: value
-      }
+        [side]: value,
+      },
     }));
   };
 
   if (initialLoading) {
     return (
       <div className="pta-wrapper-loader">
-        <Navbar
-          onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
-          onNavigateHome={handleNavigateHome}
-        />
-        <Sidebar isOpen={isSidebarOpen} onLogout={handleLogout} loading={loading} />\
-        <div className="loader-containerpta"> <LuEar className="animate-spin-pt" size={30} />
-          <p className="para-loader-pta">Loading ...</p></div>
-
+        <Navbar onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} onNavigateHome={handleNavigateHome} />
+        <Sidebar isOpen={isSidebarOpen} onLogout={handleLogout} loading={loading} />
+        <div className="loader-containerpta">
+          <LuEar className="animate-spin-pt" size={30} />
+          <p className="para-loader-pta">Loading ...</p>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="pta-wrapper">
-      <Navbar
-        onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
-        onNavigateHome={handleNavigateHome}
-      />
+      <Navbar onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} onNavigateHome={handleNavigateHome} />
       <Sidebar isOpen={isSidebarOpen} onLogout={handleLogout} loading={loading} />
 
       <div className={`pta-main ${zoomed ? "blurred-behind" : ""}`}>
@@ -800,16 +810,16 @@ function PureToneAudiometry() {
               className="nav-button"
               onClick={() => setShowFormatSelector(true)}
               style={{
-                position: 'relative',
-                minWidth: '180px',
-                whiteSpace: 'nowrap',
-                background: currentFormatName === 'Default (Full)' ? '' : '#e8f5e9',
-                border: currentFormatName === 'Default (Full)' ? '' : '1px solid #81c784',
-                color: currentFormatName === 'Default (Full)' ? '' : '#2e7d32'
+                position: "relative",
+                minWidth: "180px",
+                whiteSpace: "nowrap",
+                background: currentFormatName === "Default (Full)" ? "" : "#e8f5e9",
+                border: currentFormatName === "Default (Full)" ? "" : "1px solid #81c784",
+                color: currentFormatName === "Default (Full)" ? "" : "#2e7d32",
               }}
             >
-              {currentFormatName === 'Default (Full)'
-                ? 'Report Format (Default)'
+              {currentFormatName === "Default (Full)"
+                ? "Report Format (Default)"
                 : `Using: ${currentFormatName}`}
             </button>
 
@@ -820,12 +830,12 @@ function PureToneAudiometry() {
             <button
               className={`nav-button save-session-btn ${saveStatus}`}
               onClick={handleSaveSession}
-              disabled={saveStatus === 'saving' || loadingSession}
+              disabled={saveStatus === "saving" || loadingSession}
             >
-              {saveStatus === 'saving' && <>Saving...</>}
-              {saveStatus === 'success' && <>Saved! ✓</>}
-              {saveStatus === 'error' && <>Failed ×</>}
-              {saveStatus === 'idle' && <>Save Session</>}
+              {saveStatus === "saving" && <>Saving...</>}
+              {saveStatus === "success" && <>Saved! ✓</>}
+              {saveStatus === "error" && <>Failed ×</>}
+              {saveStatus === "idle" && <>Save Session</>}
             </button>
 
             {sessionSaved && (
@@ -880,7 +890,7 @@ function PureToneAudiometry() {
                 <h3 className="pta-title">Provisional Diagnosis</h3>
                 <div className="pta-switch-container">
                   <div
-                    className={`pta-toggle ${isEnabled ? 'pta-active' : ''}`}
+                    className={`pta-toggle ${isEnabled ? "pta-active" : ""}`}
                     onClick={() => setIsEnabled(!isEnabled)}
                   >
                     <div className="pta-toggle-handle"></div>
@@ -889,7 +899,7 @@ function PureToneAudiometry() {
                 </div>
               </div>
 
-              <div className={!isEnabled ? 'pta-disabled' : ''}>
+              <div className={!isEnabled ? "pta-disabled" : ""}>
                 <div className="pta-row">
                   <span className="pta-label">RE:</span>
                   <input
@@ -899,8 +909,8 @@ function PureToneAudiometry() {
                     value={diagnosis.re}
                     placeholder="Unable to Determine"
                     onChange={(e) => {
-                      setDiagnosis(prev => ({ ...prev, re: e.target.value }));
-                      setManualDiagnosisEdit(prev => ({ ...prev, re: true }));
+                      setDiagnosis((prev) => ({ ...prev, re: e.target.value }));
+                      setManualDiagnosisEdit((prev) => ({ ...prev, re: true }));
                     }}
                     disabled={loadingSession}
                   />
@@ -914,8 +924,8 @@ function PureToneAudiometry() {
                     value={diagnosis.le}
                     placeholder="Unable to Determine"
                     onChange={(e) => {
-                      setDiagnosis(prev => ({ ...prev, le: e.target.value }));
-                      setManualDiagnosisEdit(prev => ({ ...prev, le: true }));
+                      setDiagnosis((prev) => ({ ...prev, le: e.target.value }));
+                      setManualDiagnosisEdit((prev) => ({ ...prev, le: true }));
                     }}
                     disabled={loadingSession}
                   />
@@ -929,7 +939,7 @@ function PureToneAudiometry() {
                   <h3 className="pta-title">SPEECH AUDIOMETRY</h3>
                   <div className="pta-switch-container">
                     <div
-                      className={`pta-toggle ${speechEnabled ? 'pta-active' : ''}`}
+                      className={`pta-toggle ${speechEnabled ? "pta-active" : ""}`}
                       onClick={() => setSpeechEnabled(!speechEnabled)}
                     >
                       <div className="pta-toggle-handle"></div>
@@ -937,7 +947,7 @@ function PureToneAudiometry() {
                   </div>
                 </div>
 
-                <div className={`speech-table-container ${!speechEnabled ? 'pta-disabled' : ''}`}>
+                <div className={`speech-table-container ${!speechEnabled ? "pta-disabled" : ""}`}>
                   <div className="diagnosis-row">
                     <div className="diagnosis-label">RIGHT EAR</div>
                     <div className="diagnosis-value">
@@ -945,8 +955,8 @@ function PureToneAudiometry() {
                         type="text"
                         className="pta-input-su"
                         placeholder="Unable to Determine"
-                        value={ptaValues?.right + " " + "dBHL" || ''}
-                        onChange={(e) => handleSpeechChange('right', 'pta', e.target.value)}
+                        value={`${ptaValues?.right || ""} dBHL`}
+                        onChange={(e) => handleSpeechChange("right", "pta", e.target.value)}
                       />
                     </div>
                   </div>
@@ -958,8 +968,8 @@ function PureToneAudiometry() {
                         type="text"
                         className="pta-input"
                         placeholder="-"
-                        value={speechData?.right?.srt || ''}
-                        onChange={(e) => handleSpeechChange('right', 'srt', e.target.value)}
+                        value={speechData?.right?.srt || ""}
+                        onChange={(e) => handleSpeechChange("right", "srt", e.target.value)}
                       />
                     </div>
                   </div>
@@ -971,8 +981,8 @@ function PureToneAudiometry() {
                         type="text"
                         className="pta-input"
                         placeholder="-"
-                        value={speechData?.right?.sds || ''}
-                        onChange={(e) => handleSpeechChange('right', 'sds', e.target.value)}
+                        value={speechData?.right?.sds || ""}
+                        onChange={(e) => handleSpeechChange("right", "sds", e.target.value)}
                       />
                     </div>
                   </div>
@@ -984,8 +994,8 @@ function PureToneAudiometry() {
                         type="text"
                         className="pta-input"
                         placeholder="Unable to Determine"
-                        value={ptaValues?.left + " " + "dBHL" || ''}
-                        onChange={(e) => handleSpeechChange('left', 'pta', e.target.value)}
+                        value={`${ptaValues?.left || ""} dBHL`}
+                        onChange={(e) => handleSpeechChange("left", "pta", e.target.value)}
                       />
                     </div>
                   </div>
@@ -997,8 +1007,8 @@ function PureToneAudiometry() {
                         type="text"
                         className="pta-input"
                         placeholder="-"
-                        value={speechData?.left?.srt || ''}
-                        onChange={(e) => handleSpeechChange('left', 'srt', e.target.value)}
+                        value={speechData?.left?.srt || ""}
+                        onChange={(e) => handleSpeechChange("left", "srt", e.target.value)}
                       />
                     </div>
                   </div>
@@ -1010,8 +1020,8 @@ function PureToneAudiometry() {
                         type="text"
                         className="pta-input"
                         placeholder="-"
-                        value={speechData?.left?.sds || ''}
-                        onChange={(e) => handleSpeechChange('left', 'sds', e.target.value)}
+                        value={speechData?.left?.sds || ""}
+                        onChange={(e) => handleSpeechChange("left", "sds", e.target.value)}
                       />
                     </div>
                   </div>
@@ -1023,7 +1033,7 @@ function PureToneAudiometry() {
                   <h3 className="pta-title">WEBER TEST</h3>
                   <div className="pta-switch-container">
                     <div
-                      className={`pta-toggle ${weberEnabled ? 'pta-active' : ''}`}
+                      className={`pta-toggle ${weberEnabled ? "pta-active" : ""}`}
                       onClick={() => setWeberEnabled(!weberEnabled)}
                     >
                       <div className="pta-toggle-handle"></div>
@@ -1031,7 +1041,7 @@ function PureToneAudiometry() {
                   </div>
                 </div>
 
-                <div className={`weber-table-container ${!weberEnabled ? 'pta-disabled' : ''}`}>
+                <div className={`weber-table-container ${!weberEnabled ? "pta-disabled" : ""}`}>
                   {[250, 500, 1000, 2000].map((freq) => (
                     <div className="diagnosis-row" key={freq}>
                       <div className="diagnosis-label">{freq} Hz</div>
@@ -1042,16 +1052,16 @@ function PureToneAudiometry() {
                             type="text"
                             className="pta-input small"
                             placeholder=""
-                            value={weberData[freq]?.right || ''}
-                            onChange={(e) => handleWeberChange(freq, 'right', e.target.value)}
+                            value={weberData[freq]?.right || ""}
+                            onChange={(e) => handleWeberChange(freq, "right", e.target.value)}
                           />
                           <span className="weber-side">L:</span>
                           <input
                             type="text"
                             className="pta-input small"
                             placeholder=""
-                            value={weberData[freq]?.left || ''}
-                            onChange={(e) => handleWeberChange(freq, 'left', e.target.value)}
+                            value={weberData[freq]?.left || ""}
+                            onChange={(e) => handleWeberChange(freq, "left", e.target.value)}
                           />
                         </div>
                       </div>
@@ -1114,7 +1124,7 @@ function PureToneAudiometry() {
                 <h3 className="pta-title">Recommendations</h3>
                 <div className="pta-switch-container">
                   <div
-                    className={`pta-toggle ${recommendationsEnabled ? 'pta-active' : ''}`}
+                    className={`pta-toggle ${recommendationsEnabled ? "pta-active" : ""}`}
                     onClick={() => setRecommendationsEnabled(!recommendationsEnabled)}
                   >
                     <div className="pta-toggle-handle"></div>
@@ -1123,7 +1133,7 @@ function PureToneAudiometry() {
                 </div>
               </div>
 
-              <div className={!recommendationsEnabled ? 'pta-disabled' : ''}>
+              <div className={!recommendationsEnabled ? "pta-disabled" : ""}>
                 <textarea
                   className="pta-recommendations-textarea"
                   value={recommendations}
@@ -1144,9 +1154,11 @@ function PureToneAudiometry() {
                   <div
                     className="symbol-preview"
                     style={{
-                      color: colorMap[col.key] || '#444',
-                      fontSize: col.key.includes('Bracket') ? '0.7rem' : '0.9rem',
-                      fontWeight: ['rightBracket', 'leftBracket', 'circle', 'triangle'].includes(col.key) ? 'bold' : 'normal'
+                      color: colorMap[col.key] || "#444",
+                      fontSize: col.key.includes("Bracket") ? "0.7rem" : "0.9rem",
+                      fontWeight: ["rightBracket", "leftBracket", "circle", "triangle"].includes(col.key)
+                        ? "bold"
+                        : "normal",
                     }}
                   >
                     {col.symbol}
@@ -1228,10 +1240,7 @@ function PureToneAudiometry() {
       )}
 
       {showPatientDetails && (
-        <PatientDetails
-          onClose={handlePatientDetailsClose}
-          sessionType="puretone"
-        />
+        <PatientDetails onClose={handlePatientDetailsClose} sessionType="puretone" />
       )}
 
       {showReport && (
@@ -1240,7 +1249,7 @@ function PureToneAudiometry() {
           rightEarData={rightEarData}
           leftEarData={leftEarData}
           options={options}
-          patientInfo={patientInfo || {}} // Ensure it's never null
+          patientInfo={patientInfo || {}}
           ptaValues={ptaValues}
           formData={formData}
           patientId={currentPatientId}
@@ -1248,7 +1257,7 @@ function PureToneAudiometry() {
           weberData={weberData}
           diagnosis={diagnosis}
           reportSections={reportSections}
-          recommendations={recommendations}        // <--- ADD THIS
+          recommendations={recommendations}
           recommendationsEnabled={recommendationsEnabled}
         />
       )}
@@ -1258,7 +1267,7 @@ function PureToneAudiometry() {
           onClose={() => setShowFormatSelector(false)}
           onSelectFormat={(sections, formatName) => {
             setReportSections(sections);
-            setCurrentFormatName(formatName || 'Custom');
+            setCurrentFormatName(formatName || "Custom");
           }}
           rightEarData={rightEarData}
           leftEarData={leftEarData}
@@ -1268,8 +1277,7 @@ function PureToneAudiometry() {
           diagnosis={diagnosis}
           speechData={speechData}
           weberData={weberData}
-          reportSections={reportSections} // current active one
-
+          reportSections={reportSections}
         />
       )}
     </div>

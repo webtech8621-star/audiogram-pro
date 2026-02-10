@@ -171,33 +171,16 @@ const MakeIaReport = ({
         } finally {
             setLoading(false);
         }
-    }, [rightEarData, leftEarData, reportData, patientInfo, audiologist, reportSections]);
+    }, []);
 
     useEffect(() => {
         generatePDF();
         return () => {
             if (pdfUrl) URL.revokeObjectURL(pdfUrl);
         };
-    }, [generatePDF]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [generatePDF, pdfUrl]);
 
-    const handleDownloadPDF = () => {
-        if (!pdfUrl) return;
-        const link = document.createElement("a");
-        link.href = pdfUrl;
-        link.download = `Impedance_Report_${patientInfo?.patient_id || "Patient"}_${new Date().toISOString().split('T')[0]}.pdf`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    };
-
-    const handlePrint = () => {
-        if (!pdfUrl) return;
-        const printWindow = window.open(pdfUrl, '_blank');
-        printWindow.onload = () => {
-            printWindow.focus();
-            printWindow.print();
-        };
-    };
 
     return (
         <div className="MR-IA-overlay" onClick={onClose}>

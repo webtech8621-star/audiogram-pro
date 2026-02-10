@@ -24,7 +24,7 @@ function HomePage() {
     };
 
     checkSession();
-  }, []); // ✅ empty deps → run once
+  }, [navigate]); // ✅ empty deps → run once
 
 
   const handleLogout = async () => {

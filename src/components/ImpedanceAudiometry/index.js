@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Line } from "react-chartjs-2";
 import Navbar from "../Navbar";
@@ -93,61 +93,7 @@ function ImpedanceAudiometry() {
 
         loadLatestReportFormat();
     }, []);
-
-    useEffect(() => {
-        const state = location.state;
-        if (state) {
-            setCurrentPatientId(state.patientId || null);
-            setCurrentSessionId(state.sessionId || null);
-            setShowPatientDetails(!state.sessionId);
-            if (state.loadExistingData && state.sessionId) {
-                loadSessionData(state.sessionId);
-            } else {
-                resetAllStates();
-            }
-        }
-    }, [location.state]);
-
-    const resetAllStates = () => {
-        setRightEar({ pressure: 0, volume: 1.0, compliance: 1.2 });
-        setLeftEar({ pressure: 0, volume: 1.0, compliance: 1.2 });
-        if (reportRef.current?.setReportData) {
-            reportRef.current.setReportData({});
-        }
-        setSessionSaved(false);
-    };
-
-    useEffect(() => {
-        const checkSession = async () => {
-            const { data: { session } } = await supabase.auth.getSession();
-            if (!session) navigate("/");
-            else setUser(session.user);
-        };
-        checkSession();
-    }, [navigate]);
-
-    useEffect(() => {
-        const fetchPatientInfo = async () => {
-            if (!currentPatientId) {
-                setPatientInfo(null);
-                return;
-            }
-            try {
-                const { data, error } = await supabase
-                    .from("patients")
-                    .select("name, age, gender, location, patient_id")
-                    .eq("id", currentPatientId)
-                    .single();
-                if (error) throw error;
-                setPatientInfo(data);
-            } catch (err) {
-                console.error("Error fetching patient:", err);
-            }
-        };
-        fetchPatientInfo();
-    }, [currentPatientId]);
-
-    const loadSessionData = async (sessionId = currentSessionId) => {
+    const loadSessionData = useCallback(async (sessionId = currentSessionId) => {
         if (!sessionId) return;
         setLoadingSession(true);
         try {
@@ -193,7 +139,62 @@ function ImpedanceAudiometry() {
         } finally {
             setLoadingSession(false);
         }
+    }, [currentSessionId, currentPatientId, navigate]);
+    useEffect(() => {
+        const state = location.state;
+        if (state) {
+            setCurrentPatientId(state.patientId || null);
+            setCurrentSessionId(state.sessionId || null);
+            setShowPatientDetails(!state.sessionId);
+
+            if (state.loadExistingData && state.sessionId) {
+                loadSessionData(state.sessionId);
+            } else {
+                resetAllStates();
+            }
+        }
+    }, [location.state, loadSessionData]);   // ← add it here
+
+    const resetAllStates = () => {
+        setRightEar({ pressure: 0, volume: 1.0, compliance: 1.2 });
+        setLeftEar({ pressure: 0, volume: 1.0, compliance: 1.2 });
+        if (reportRef.current?.setReportData) {
+            reportRef.current.setReportData({});
+        }
+        setSessionSaved(false);
     };
+
+    useEffect(() => {
+        const checkSession = async () => {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) navigate("/");
+            else setUser(session.user);
+        };
+        checkSession();
+    }, [navigate]);
+
+    useEffect(() => {
+        const fetchPatientInfo = async () => {
+            if (!currentPatientId) {
+                setPatientInfo(null);
+                return;
+            }
+            try {
+                const { data, error } = await supabase
+                    .from("patients")
+                    .select("name, age, gender, location, patient_id")
+                    .eq("id", currentPatientId)
+                    .single();
+                if (error) throw error;
+                setPatientInfo(data);
+            } catch (err) {
+                console.error("Error fetching patient:", err);
+            }
+        };
+        fetchPatientInfo();
+    }, [currentPatientId]);
+
+
 
     useEffect(() => {
         if (currentSessionId && !currentPatientId) {
@@ -441,8 +442,16 @@ function ImpedanceAudiometry() {
                 />
 
                 <div className="pta-buttons">
-                    <button className="save-button" onClick={handleSaveSession} disabled={loading || loadingSession}>
-                        {loading ? "Saving..." : "Save Session"}
+                    <button
+                        className="save-button"
+                        onClick={handleSaveSession}
+                        disabled={loading || loadingSession}
+                    >
+                        {loading
+                            ? "Saving..."
+                            : sessionSaved
+                                ? "Saved ✓"
+                                : "Save Session"}
                     </button>
                     <button className="make-report-button" onClick={() => setShowIaReport(true)} disabled={loadingSession}>
                         Make Report

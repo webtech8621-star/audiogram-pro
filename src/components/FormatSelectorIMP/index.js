@@ -153,7 +153,7 @@ const FormatSelectorIMP = ({
 
                 <div className="format-body">
                     {/* LEFT – Controls */}
-                    <div className="left-panel-imp">
+                    <div className="    ">
                         <h3>Sections</h3>
                         <div className="sections-list">
                             {Object.entries(SECTION_LABELS).map(([key, label]) => (

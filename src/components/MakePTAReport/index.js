@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useCallback } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import {
     Chart as ChartJS,
@@ -150,7 +150,7 @@ const MakePTAReport = ({
         fetchAudiologist();
     }, []);
 
-    const generatePDF = useCallback(async () => {
+    const generatePDF = (async () => {
         if (!frontPageRef.current || !audiogramPageRef.current) {
             setError("Report content not ready");
             setLoading(false);
@@ -218,19 +218,7 @@ const MakePTAReport = ({
         } finally {
             setLoading(false);
         }
-    }, [
-        reportSections,
-        rightEarData,
-        leftEarData,
-        ptaValues,
-        diagnosis,
-        speechData,
-        weberData,
-        patientInfo,
-        audiologist,
-        recommendations,
-        recommendationsEnabled,
-    ]);
+    }, []);   // ← empty deps → most practical here
 
     useEffect(() => {
         generatePDF();
@@ -241,6 +229,7 @@ const MakePTAReport = ({
             if (pdfUrl) URL.revokeObjectURL(pdfUrl);
         };
     }, [pdfUrl]);
+
     console.log("MakePTAReport received →", {
         recommendations: recommendations,
         enabled: recommendationsEnabled,
@@ -319,9 +308,6 @@ const MakePTAReport = ({
                             </div>
                         )}
 
-
-
-
                         <div className="weber-speech-fp-main-cont">
                             {reportSections.front_weber_test && (
                                 <div style={{ marginBottom: "30px", borderRadius: "10px" }}>
@@ -379,8 +365,8 @@ const MakePTAReport = ({
                                     </table>
                                 </div>
                             )}
-
                         </div>
+
                         {reportSections.front_provisional_diagnosis && (
                             <div className="fp-pvd-container">
                                 <h3 className="fp-pvd-title fp-headers">PROVISIONAL DIAGNOSIS</h3>
@@ -399,21 +385,17 @@ const MakePTAReport = ({
                             </div>
                         )}
 
-                        {/* FRONT PAGE RECOMMENDATIONS */}
-                        {/* FRONT PAGE RECOMMENDATIONS */}
                         {reportSections?.front_recommendations && recommendationsEnabled && (
                             <div className="report-section recommendations-section">
                                 <h3 className="report-section-title fp-headers">RECOMMENDATIONS</h3>
                                 <div
                                     className="report-section-content"
-                                    style={{ whiteSpace: "pre-wrap", lineHeight: "1.8", }} // ADD THIS LINE
+                                    style={{ whiteSpace: "pre-wrap", lineHeight: "1.8" }}
                                 >
                                     {recommendations?.trim() ? recommendations : "No recommendations provided."}
                                 </div>
                             </div>
                         )}
-
-
 
                         {reportSections.front_audiologist_details && (
                             <div className="audiologist-details-main-cont-pta-fp">
@@ -538,6 +520,7 @@ const MakePTAReport = ({
                             </table>
                         </div>
                     )}
+
                     {reportSections.speech_audiometry && (
                         <div className="MR-PTA-table-card">
                             <h3 className="PTA-tables-header">Speech Audiometry</h3>
@@ -567,6 +550,7 @@ const MakePTAReport = ({
                             </table>
                         </div>
                     )}
+
                     {reportSections.provisional_diagnosis && (
                         <div className="MR-PTA-table-card">
                             <h3 className="PTA-tables-header">Provisional Diagnosis</h3>
@@ -576,15 +560,9 @@ const MakePTAReport = ({
                             </div>
                         </div>
                     )}
-
-
-                    {/* MAIN PAGE RECOMMENDATIONS */}
-                    {/* MAIN PAGE RECOMMENDATIONS */}
-                    {/* Use recommendations here */}
-
                 </div>
-                <div className="recomm-audiologist-main-cont">
 
+                <div className="recomm-audiologist-main-cont">
                     {reportSections.recommendations && recommendationsEnabled && (
                         <div className="MR-PTA-table-card recommendations-card" style={{ marginTop: "0px" }}>
                             <h3 className="PTA-tables-header">RECOMMENDATIONS</h3>
@@ -601,7 +579,9 @@ const MakePTAReport = ({
                                 {recommendations || "No recommendations provided."}
                             </div>
                         </div>
-                    )} <div className="space-cont"></div>
+                    )}
+                    <div className="space-cont"></div>
+
                     {reportSections.audiologist_details && (
                         <div className="audiologist-details-main-cont-pta-main-page">
                             <div className="audiologist-details-container">
@@ -617,8 +597,8 @@ const MakePTAReport = ({
                                 {audiologist.phone_number && <p style={{ margin: "2px 0" }}><strong>{audiologist.phone_number}</strong></p>}
                             </div>
                         </div>
-                    )}</div>
-
+                    )}
+                </div>
             </div>
         </div>
     );

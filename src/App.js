@@ -14,7 +14,6 @@ import HomePage from "./components/HomePage";
 import PuretoneAudiometry from "./components/PuretoneAudiometry";
 import ImpedanceAudiometry from "./components/ImpedanceAudiometry";
 import SavedReports from "./components/SavedReports";
-import FormatSelectorIMP from "./components/FormatSelectorIMP";
 import "./App.css";
 
 // ── Protected Route ─────────────────────────────────────────────
