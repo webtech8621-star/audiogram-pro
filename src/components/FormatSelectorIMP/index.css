@@ -66,10 +66,11 @@
 
 /* ── BODY ── */
 .format-body {
-    flex: 1;
     display: flex;
-    overflow: hidden;
+    overflow-x: scroll;
     background: #ffffff;
+    padding: 30px;
+    width: auto;
 }
 
 /* ── LEFT PANEL (Controls - Ash Background) ── */
@@ -240,11 +241,12 @@
 
 /* ── RIGHT PANEL (Preview - White) ── */
 .right-panel {
-    flex: 1;
+
     padding: 28px 32px;
     overflow-y: auto;
     background: #ffffff;
-    width: 600px;
+    width: 900px;
+    height: 700px;
 }
 
 .right-panel h3 {

@@ -326,7 +326,6 @@ function ImpedanceAudiometry() {
 
             if (error) throw error;
 
-            alert("Session and report saved successfully!");
             setSessionSaved(true);
         } catch (err) {
             console.error("Save error:", err);
@@ -355,7 +354,39 @@ function ImpedanceAudiometry() {
             <Sidebar isOpen={isSidebarOpen} />
 
             <div className="imp-main">
-                <h1 className="imp-title">IMPEDANCE AUDIOMETRY</h1>
+                <div className="buttons-header-cont">
+                    <div className="space-cont"></div>
+                    <h1 className="imp-title">IMPEDANCE AUDIOMETRY</h1>
+                    <div className="IA-button-container">
+
+
+                        <button
+                            className="IA-make-report-button"
+                            onClick={() => setShowIaReport(true)}
+                            disabled={loadingSession}
+                        >
+                            Make Report
+                        </button>
+
+                        <button
+                            className="IA-format-select-button"
+                            onClick={() => setShowFormatSelector(true)}
+                        >
+                            Select Report Format
+                        </button>
+                        <button
+                            className="IA-save-button"
+                            onClick={handleSaveSession}
+                            disabled={loading || loadingSession}
+                        >
+                            {loading
+                                ? "Saving..."
+                                : sessionSaved
+                                    ? "Saved ✓"
+                                    : "Save Session"}
+                        </button>
+                    </div>
+                </div>
 
                 <div className="ear-container">
                     <div className="ear-section">
@@ -442,27 +473,8 @@ function ImpedanceAudiometry() {
                 />
 
                 <div className="pta-buttons">
-                    <button
-                        className="save-button"
-                        onClick={handleSaveSession}
-                        disabled={loading || loadingSession}
-                    >
-                        {loading
-                            ? "Saving..."
-                            : sessionSaved
-                                ? "Saved ✓"
-                                : "Save Session"}
-                    </button>
-                    <button className="make-report-button" onClick={() => setShowIaReport(true)} disabled={loadingSession}>
-                        Make Report
-                    </button>
-                    {/* Format selector button – place it where it makes sense in your UI */}
-                    <button
-                        className="format-select-btn"
-                        onClick={() => setShowFormatSelector(true)}
-                    >
-                        Select Report Format
-                    </button>
+
+
 
                     {showFormatSelector && (
                         <FormatSelectorIMP

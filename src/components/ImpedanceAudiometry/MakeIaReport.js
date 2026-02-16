@@ -29,12 +29,14 @@ const MakeIaReport = ({
     patientInfo,
     ptaValues,
     formData,
-    reportSections,           // ← From parent (ImpedanceAudiometry)
+    reportSections,           // ← From parent (
+    // Audiometry)
 }) => {
     const reportRef = useRef(null);
     const [pdfUrl, setPdfUrl] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [renderCount, setRenderCount] = useState(0);
 
     const [audiologist, setAudiologist] = useState({
         name: "",
@@ -174,12 +176,16 @@ const MakeIaReport = ({
     }, []);
 
     useEffect(() => {
-        generatePDF();
-        return () => {
-            if (pdfUrl) URL.revokeObjectURL(pdfUrl);
-        };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [generatePDF, pdfUrl]);
+        if (renderCount < 2) {
+            const timer = setTimeout(() => {
+                generatePDF();
+                setRenderCount(prev => prev + 1);
+            }, 600); // wait for charts to finish drawing
+
+            return () => clearTimeout(timer);
+        }
+    }, [renderCount, generatePDF]);
+
 
 
     return (
@@ -383,45 +389,47 @@ const MakeIaReport = ({
                     )}
 
                     {/* Recommendations */}
-                    {reportSections?.recommendations && (
-                        <div className="MR-IA-table-card">
-                            <h3 className="tables-header">Recommendations</h3>
-                            <div className="MR-IA-text-content">
-                                <p className="MR-IA-recommendations-text para-values">
-                                    {reportData?.recommendations || "-"}
-                                </p>
-                            </div>
-                        </div>
-                    )}
+
                 </div>
 
                 {/* Audiologist Details */}
-                {reportSections?.audiologist_details && (
-                    <div className="audiologist-details-main-cont">
-                        <div className="audiologist-details-container">
-                            <h3 className="audiologist-header" style={{ marginBottom: "4px", fontSize: "22px" }}>
-                                Audiologist
-                            </h3>
-                            <p style={{ margin: "2px 0", fontSize: "18px" }}>
-                                <strong>{audiologist.name || "________________"}</strong>
+                <div className="MakReport-recomm-audio-main-cont">{reportSections?.recommendations && (
+                    <div className="MR-IA-table-card" style={{ marginTop: "30px" }}>
+                        <h3 className="tables-header">Recommendations</h3>
+                        <div className="MR-IA-text-content">
+                            <p className="MR-IA-recommendations-text para-values">
+                                {reportData?.recommendations || "-"}
                             </p>
-                            <p style={{ margin: "2px 0", fontSize: "18px" }}>
-                                <strong>{audiologist.qualification || ""}</strong>{" "}
-                                <strong>{audiologist.reg_no || ""}</strong>
-                            </p>
-                            {audiologist.address && (
-                                <p style={{ margin: "2px 0", fontSize: "18px" }}>
-                                    <strong>{audiologist.address}</strong>
-                                </p>
-                            )}
-                            {audiologist.phone_number && (
-                                <p style={{ margin: "2px 0", fontSize: "18px" }}>
-                                    <strong>{audiologist.phone_number}</strong>
-                                </p>
-                            )}
                         </div>
                     </div>
                 )}
+                    {reportSections?.audiologist_details && (
+                        <div className="audiologist-details-main-cont">
+                            <div className="audiologist-details-container">
+                                <h3 className="audiologist-header" style={{ marginBottom: "4px", fontSize: "22px" }}>
+                                    Audiologist
+                                </h3>
+                                <p style={{ margin: "2px 0", fontSize: "18px" }}>
+                                    <strong>{audiologist.name || "________________"}</strong>
+                                </p>
+                                <p style={{ margin: "2px 0", fontSize: "18px" }}>
+                                    <strong>{audiologist.qualification || ""}</strong>{" "}
+                                    <strong>{audiologist.reg_no || ""}</strong>
+                                </p>
+                                {audiologist.address && (
+                                    <p style={{ margin: "2px 0", fontSize: "18px" }}>
+                                        <strong>{audiologist.address}</strong>
+                                    </p>
+                                )}
+                                {audiologist.phone_number && (
+                                    <p style={{ margin: "2px 0", fontSize: "18px" }}>
+                                        <strong>{audiologist.phone_number}</strong>
+                                    </p>
+                                )}
+                            </div>
+                        </div>
+                    )}</div>
+
             </div>
         </div>
     );

@@ -101,7 +101,6 @@ function App() {
         />
 
         {/* Report format selector is usually a modal — not a page */}
-        {/* <Route path="/reportformatselector" element={<ReportFormatSelector />} /> */}
       </Routes>
     </BrowserRouter>
   );

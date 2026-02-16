@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
 import { Line } from "react-chartjs-2";
 import {
     Chart as ChartJS,
@@ -150,7 +150,7 @@ const MakePTAReport = ({
         fetchAudiologist();
     }, []);
 
-    const generatePDF = (async () => {
+    const generatePDF = useCallback(async () => {
         if (!frontPageRef.current || !audiogramPageRef.current) {
             setError("Report content not ready");
             setLoading(false);
@@ -174,7 +174,6 @@ const MakePTAReport = ({
                 const frontCanvas = await html2canvas(frontPageRef.current, {
                     scale: 2,
                     useCORS: true,
-                    logging: false,
                     backgroundColor: "#ffffff",
                 });
 
@@ -189,7 +188,6 @@ const MakePTAReport = ({
             const audioCanvas = await html2canvas(audiogramPageRef.current, {
                 scale: 2,
                 useCORS: true,
-                logging: false,
                 backgroundColor: "#ffffff",
             });
 
@@ -212,13 +210,15 @@ const MakePTAReport = ({
 
             const pdfBlob = pdf.output("blob");
             setPdfUrl(URL.createObjectURL(pdfBlob));
+
         } catch (err) {
             console.error("PDF generation failed:", err);
             setError("Failed to generate PDF: " + err.message);
         } finally {
             setLoading(false);
         }
-    }, []);   // ← empty deps → most practical here
+    }, [reportSections.front_page]);
+    // ← empty deps → most practical here
 
     useEffect(() => {
         generatePDF();

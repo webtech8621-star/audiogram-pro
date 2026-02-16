@@ -779,506 +779,506 @@ function PureToneAudiometry() {
     }));
   };
 
-  if (initialLoading) {
-    return (
-      <div className="pta-wrapper-loader">
-        <Navbar onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} onNavigateHome={handleNavigateHome} />
-        <Sidebar isOpen={isSidebarOpen} onLogout={handleLogout} loading={loading} />
-        <div className="loader-containerpta">
-          <LuEar className="animate-spin-pt" size={30} />
-          <p className="para-loader-pta">Loading ...</p>
-        </div>
-      </div>
-    );
-  }
+
 
   return (
     <div className="pta-wrapper">
-      <Navbar onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} onNavigateHome={handleNavigateHome} />
-      <Sidebar isOpen={isSidebarOpen} onLogout={handleLogout} loading={loading} />
+      <Navbar
+        onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+        onNavigateHome={handleNavigateHome}
+      />
+      <Sidebar
+        isOpen={isSidebarOpen}
+        onLogout={handleLogout}
+        loading={loading}
+      />
 
-      <div className={`pta-main ${zoomed ? "blurred-behind" : ""}`}>
-        <div className="pta-header-row">
-          <div className="space-cont"></div>
-          <h1 className="pta-title-header">PURE TONE AUDIOMETRY</h1>
-          <div className="button-sidebar">
-            <button className="nav-button make-report-button" onClick={() => setShowReport(true)}>
-              Make Report
-            </button>
-
-            <button
-              className="nav-button"
-              onClick={() => setShowFormatSelector(true)}
-              style={{
-                position: "relative",
-                minWidth: "180px",
-                whiteSpace: "nowrap",
-                background: currentFormatName === "Default (Full)" ? "" : "#e8f5e9",
-                border: currentFormatName === "Default (Full)" ? "" : "1px solid #81c784",
-                color: currentFormatName === "Default (Full)" ? "" : "#2e7d32",
-              }}
-            >
-              {currentFormatName === "Default (Full)"
-                ? "Report Format (Default)"
-                : `Using: ${currentFormatName}`}
-            </button>
-
-            <button className="nav-button new-patient-button" onClick={handleNewPatientClick}>
-              + New Patient
-            </button>
-
-            <button
-              className={`nav-button save-session-btn ${saveStatus}`}
-              onClick={handleSaveSession}
-              disabled={saveStatus === "saving" || loadingSession}
-            >
-              {saveStatus === "saving" && <>Saving...</>}
-              {saveStatus === "success" && <>Saved! ✓</>}
-              {saveStatus === "error" && <>Failed ×</>}
-              {saveStatus === "idle" && <>Save Session</>}
-            </button>
-
-            {sessionSaved && (
-              <button className="nav-button" onClick={handleMoveToImpedance}>
-                Move to Impedance →
-              </button>
-            )}
+      {initialLoading ? (
+        <div className="loader-overlay">
+          <div className="loader-containerpta">
+            <LuEar className="animate-spin-pt" size={20} />
+            <p className="para-loader-pta">Loading ...</p>
           </div>
         </div>
+      ) : (
+        <div className={`pta-main `}>
+          <div className="pta-header-row">
+            <div className="space-cont"></div>
+            <h1 className="pta-title-header">PURE TONE AUDIOMETRY</h1>
+            <div className="button-sidebar">
+              <button className="nav-button make-report-button" onClick={() => setShowReport(true)}>
+                Make Report
+              </button>
 
-        <div className="pta-content-row">
-          <div className="pta-table-card">
-            <div className="FrequencyDataTable-total-cont">
-              <h3 className="card-heading">Frequency Data Table</h3>
+              <button
+                className="nav-button"
+                onClick={() => setShowFormatSelector(true)}
+                style={{
+                  position: "relative",
+                  minWidth: "180px",
+                  whiteSpace: "nowrap",
+                  background: currentFormatName === "Default (Full)" ? "" : "#e8f5e9",
+                  border: currentFormatName === "Default (Full)" ? "" : "1px solid #81c784",
+                  color: currentFormatName === "Default (Full)" ? "" : "#2e7d32",
+                }}
+              >
+                {currentFormatName === "Default (Full)"
+                  ? "Report Format (Default)"
+                  : `Using: ${currentFormatName}`}
+              </button>
+
+              <button className="nav-button new-patient-button" onClick={handleNewPatientClick}>
+                + New Patient
+              </button>
+
+              <button
+                className={`nav-button save-session-btn ${saveStatus}`}
+                onClick={handleSaveSession}
+                disabled={saveStatus === "saving" || loadingSession}
+              >
+                {saveStatus === "saving" && <>Saving...</>}
+                {saveStatus === "success" && <>Saved ✓</>}
+                {saveStatus === "error" && <>Failed ×</>}
+                {saveStatus === "idle" && <>Save Session</>}
+              </button>
+
+              {sessionSaved && (
+                <button className="nav-button" onClick={handleMoveToImpedance}>
+                  Move to Impedance →
+                </button>
+              )}
             </div>
-            <div className="table-wrapper">
-              <table className="pta-input-table">
-                <thead>
-                  <tr>
-                    <th>FREQ-Hz</th>
-                    {columns.map((col) => (
-                      <th key={col.key}>{col.key}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {formData.map((row, rowIndex) => (
-                    <tr key={row.freq}>
-                      <td className="freq-cell">{row.freq}</td>
-                      {columns.map((col, colIndex) => (
-                        <td key={col.key}>
-                          <input
-                            type="number"
-                            step="1"
-                            min="-10"
-                            max="120"
-                            value={row[col.key]}
-                            onChange={(e) => handleChange(rowIndex, col.key, e.target.value)}
-                            onKeyDown={(e) => handleKeyDown(e, rowIndex, colIndex)}
-                            disabled={loadingSession}
-                          />
-                        </td>
+          </div>
+
+          <div className="pta-content-row">
+            <div className="pta-table-card">
+              <div className="FrequencyDataTable-total-cont">
+                <h3 className="card-heading">Frequency Data Table</h3>
+              </div>
+              <div className="table-wrapper">
+                <table className="pta-input-table">
+                  <thead>
+                    <tr>
+                      <th>FREQ-Hz</th>
+                      {columns.map((col) => (
+                        <th key={col.key}>{col.key}</th>
                       ))}
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            <div className="pta-diagnosis-card">
-              <div className="pta-header">
-                <h3 className="pta-title">Provisional Diagnosis</h3>
-                <div className="pta-switch-container">
-                  <div
-                    className={`pta-toggle ${isEnabled ? "pta-active" : ""}`}
-                    onClick={() => setIsEnabled(!isEnabled)}
-                  >
-                    <div className="pta-toggle-handle"></div>
-                  </div>
-                  <span className="pta-switch-label">Enable Section</span>
-                </div>
+                  </thead>
+                  <tbody>
+                    {formData.map((row, rowIndex) => (
+                      <tr key={row.freq}>
+                        <td className="freq-cell">{row.freq}</td>
+                        {columns.map((col, colIndex) => (
+                          <td key={col.key}>
+                            <input
+                              type="number"
+                              step="1"
+                              min="-10"
+                              max="120"
+                              value={row[col.key]}
+                              onChange={(e) => handleChange(rowIndex, col.key, e.target.value)}
+                              onKeyDown={(e) => handleKeyDown(e, rowIndex, colIndex)}
+                              disabled={loadingSession}
+                            />
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
 
-              <div className={!isEnabled ? "pta-disabled" : ""}>
-                <div className="pta-row">
-                  <span className="pta-label">RE:</span>
-                  <input
-                    className="pta-input"
-                    name="re"
-                    type="text"
-                    value={diagnosis.re}
-                    placeholder="Unable to Determine"
-                    onChange={(e) => {
-                      setDiagnosis((prev) => ({ ...prev, re: e.target.value }));
-                      setManualDiagnosisEdit((prev) => ({ ...prev, re: true }));
-                    }}
-                    disabled={loadingSession}
-                  />
-                </div>
-                <div className="pta-row pta-row-last">
-                  <span className="pta-label">LE:</span>
-                  <input
-                    className="pta-input"
-                    name="le"
-                    type="text"
-                    value={diagnosis.le}
-                    placeholder="Unable to Determine"
-                    onChange={(e) => {
-                      setDiagnosis((prev) => ({ ...prev, le: e.target.value }));
-                      setManualDiagnosisEdit((prev) => ({ ...prev, le: true }));
-                    }}
-                    disabled={loadingSession}
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="speechaud-weber-row-cont">
-              <div className="pta-diagnosis-card-sppech-audio">
+              <div className="pta-diagnosis-card">
                 <div className="pta-header">
-                  <h3 className="pta-title">SPEECH AUDIOMETRY</h3>
+                  <h3 className="pta-title">Provisional Diagnosis</h3>
                   <div className="pta-switch-container">
                     <div
-                      className={`pta-toggle ${speechEnabled ? "pta-active" : ""}`}
-                      onClick={() => setSpeechEnabled(!speechEnabled)}
+                      className={`pta-toggle ${isEnabled ? "pta-active" : ""}`}
+                      onClick={() => setIsEnabled(!isEnabled)}
                     >
                       <div className="pta-toggle-handle"></div>
                     </div>
+                    <span className="pta-switch-label">Enable Section</span>
                   </div>
                 </div>
-
-                <div className={`speech-table-container ${!speechEnabled ? "pta-disabled" : ""}`}>
-                  <div className="diagnosis-row">
-                    <div className="diagnosis-label">RIGHT EAR</div>
-                    <div className="diagnosis-value">
-                      <input
-                        type="text"
-                        className="pta-input-su"
-                        placeholder="Unable to Determine"
-                        value={`${ptaValues?.right || ""} dBHL`}
-                        onChange={(e) => handleSpeechChange("right", "pta", e.target.value)}
-                      />
-                    </div>
+                <div className={!isEnabled ? "pta-disabled" : ""}>
+                  <div className="pta-row">
+                    <span className="pta-label">RE:</span>
+                    <input
+                      className="pta-input"
+                      name="re"
+                      type="text"
+                      value={diagnosis.re}
+                      placeholder="Unable to Determine"
+                      onChange={(e) => {
+                        setDiagnosis((prev) => ({ ...prev, re: e.target.value }));
+                        setManualDiagnosisEdit((prev) => ({ ...prev, re: true }));
+                      }}
+                      disabled={loadingSession}
+                    />
                   </div>
-
-                  <div className="diagnosis-row">
-                    <div className="diagnosis-label">SRT (RIGHT)</div>
-                    <div className="diagnosis-value">
-                      <input
-                        type="text"
-                        className="pta-input"
-                        placeholder="-"
-                        value={speechData?.right?.srt || ""}
-                        onChange={(e) => handleSpeechChange("right", "srt", e.target.value)}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="diagnosis-row">
-                    <div className="diagnosis-label">SDS (RIGHT)</div>
-                    <div className="diagnosis-value">
-                      <input
-                        type="text"
-                        className="pta-input"
-                        placeholder="-"
-                        value={speechData?.right?.sds || ""}
-                        onChange={(e) => handleSpeechChange("right", "sds", e.target.value)}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="diagnosis-row">
-                    <div className="diagnosis-label">LEFT EAR</div>
-                    <div className="diagnosis-value">
-                      <input
-                        type="text"
-                        className="pta-input"
-                        placeholder="Unable to Determine"
-                        value={`${ptaValues?.left || ""} dBHL`}
-                        onChange={(e) => handleSpeechChange("left", "pta", e.target.value)}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="diagnosis-row">
-                    <div className="diagnosis-label">SRT (LEFT)</div>
-                    <div className="diagnosis-value">
-                      <input
-                        type="text"
-                        className="pta-input"
-                        placeholder="-"
-                        value={speechData?.left?.srt || ""}
-                        onChange={(e) => handleSpeechChange("left", "srt", e.target.value)}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="diagnosis-row">
-                    <div className="diagnosis-label">SDS (LEFT)</div>
-                    <div className="diagnosis-value">
-                      <input
-                        type="text"
-                        className="pta-input"
-                        placeholder="-"
-                        value={speechData?.left?.sds || ""}
-                        onChange={(e) => handleSpeechChange("left", "sds", e.target.value)}
-                      />
-                    </div>
+                  <div className="pta-row pta-row-last">
+                    <span className="pta-label">LE:</span>
+                    <input
+                      className="pta-input"
+                      name="le"
+                      type="text"
+                      value={diagnosis.le}
+                      placeholder="Unable to Determine"
+                      onChange={(e) => {
+                        setDiagnosis((prev) => ({ ...prev, le: e.target.value }));
+                        setManualDiagnosisEdit((prev) => ({ ...prev, le: true }));
+                      }}
+                      disabled={loadingSession}
+                    />
                   </div>
                 </div>
               </div>
 
-              <div className="pta-diagnosis-card-webertest">
-                <div className="pta-header">
-                  <h3 className="pta-title">WEBER TEST</h3>
-                  <div className="pta-switch-container">
-                    <div
-                      className={`pta-toggle ${weberEnabled ? "pta-active" : ""}`}
-                      onClick={() => setWeberEnabled(!weberEnabled)}
-                    >
-                      <div className="pta-toggle-handle"></div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className={`weber-table-container ${!weberEnabled ? "pta-disabled" : ""}`}>
-                  {[250, 500, 1000, 2000].map((freq) => (
-                    <div className="diagnosis-row" key={freq}>
-                      <div className="diagnosis-label">{freq} Hz</div>
-                      <div className="diagnosis-value">
-                        <div className="weber-dual-input">
-                          <span className="weber-side">R:</span>
-                          <input
-                            type="text"
-                            className="pta-input small"
-                            placeholder=""
-                            value={weberData[freq]?.right || ""}
-                            onChange={(e) => handleWeberChange(freq, "right", e.target.value)}
-                          />
-                          <span className="weber-side">L:</span>
-                          <input
-                            type="text"
-                            className="pta-input small"
-                            placeholder=""
-                            value={weberData[freq]?.left || ""}
-                            onChange={(e) => handleWeberChange(freq, "left", e.target.value)}
-                          />
-                        </div>
+              <div className="speechaud-weber-row-cont">
+                <div className="pta-diagnosis-card-sppech-audio">
+                  <div className="pta-header">
+                    <h3 className="pta-title">SPEECH AUDIOMETRY</h3>
+                    <div className="pta-switch-container">
+                      <div
+                        className={`pta-toggle ${speechEnabled ? "pta-active" : ""}`}
+                        onClick={() => setSpeechEnabled(!speechEnabled)}
+                      >
+                        <div className="pta-toggle-handle"></div>
                       </div>
                     </div>
-                  ))}
+                  </div>
+
+                  <div className={`speech-table-container ${!speechEnabled ? "pta-disabled" : ""}`}>
+                    <div className="diagnosis-row">
+                      <div className="diagnosis-label">RIGHT EAR</div>
+                      <div className="diagnosis-value">
+                        <input
+                          type="text"
+                          className="pta-input-su"
+                          placeholder="Unable to Determine"
+                          value={`${ptaValues?.right || ""} dBHL`}
+                          onChange={(e) => handleSpeechChange("right", "pta", e.target.value)}
+                        />
+                      </div>
+                    </div>
+                    <div className="diagnosis-row">
+                      <div className="diagnosis-label">SRT (RIGHT)</div>
+                      <div className="diagnosis-value">
+                        <input
+                          type="text"
+                          className="pta-input"
+                          placeholder="-"
+                          value={speechData?.right?.srt || ""}
+                          onChange={(e) => handleSpeechChange("right", "srt", e.target.value)}
+                        />
+                      </div>
+                    </div>
+                    <div className="diagnosis-row">
+                      <div className="diagnosis-label">SDS (RIGHT)</div>
+                      <div className="diagnosis-value">
+                        <input
+                          type="text"
+                          className="pta-input"
+                          placeholder="-"
+                          value={speechData?.right?.sds || ""}
+                          onChange={(e) => handleSpeechChange("right", "sds", e.target.value)}
+                        />
+                      </div>
+                    </div>
+                    <div className="diagnosis-row">
+                      <div className="diagnosis-label">LEFT EAR</div>
+                      <div className="diagnosis-value">
+                        <input
+                          type="text"
+                          className="pta-input"
+                          placeholder="Unable to Determine"
+                          value={`${ptaValues?.left || ""} dBHL`}
+                          onChange={(e) => handleSpeechChange("left", "pta", e.target.value)}
+                        />
+                      </div>
+                    </div>
+                    <div className="diagnosis-row">
+                      <div className="diagnosis-label">SRT (LEFT)</div>
+                      <div className="diagnosis-value">
+                        <input
+                          type="text"
+                          className="pta-input"
+                          placeholder="-"
+                          value={speechData?.left?.srt || ""}
+                          onChange={(e) => handleSpeechChange("left", "srt", e.target.value)}
+                        />
+                      </div>
+                    </div>
+                    <div className="diagnosis-row">
+                      <div className="diagnosis-label">SDS (LEFT)</div>
+                      <div className="diagnosis-value">
+                        <input
+                          type="text"
+                          className="pta-input"
+                          placeholder="-"
+                          value={speechData?.left?.sds || ""}
+                          onChange={(e) => handleSpeechChange("left", "sds", e.target.value)}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pta-diagnosis-card-webertest">
+                  <div className="pta-header">
+                    <h3 className="pta-title">WEBER TEST</h3>
+                    <div className="pta-switch-container">
+                      <div
+                        className={`pta-toggle ${weberEnabled ? "pta-active" : ""}`}
+                        onClick={() => setWeberEnabled(!weberEnabled)}
+                      >
+                        <div className="pta-toggle-handle"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className={`weber-table-container ${!weberEnabled ? "pta-disabled" : ""}`}>
+                    {[250, 500, 1000, 2000].map((freq) => (
+                      <div className="diagnosis-row" key={freq}>
+                        <div className="diagnosis-label">{freq} Hz</div>
+                        <div className="diagnosis-value">
+                          <div className="weber-dual-input">
+                            <span className="weber-side">R:</span>
+                            <input
+                              type="text"
+                              className="pta-input small"
+                              placeholder=""
+                              value={weberData[freq]?.right || ""}
+                              onChange={(e) => handleWeberChange(freq, "right", e.target.value)}
+                            />
+                            <span className="weber-side">L:</span>
+                            <input
+                              type="text"
+                              className="pta-input small"
+                              placeholder=""
+                              value={weberData[freq]?.left || ""}
+                              onChange={(e) => handleWeberChange(freq, "left", e.target.value)}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div className="pta-graph-card">
-            <div className="DualEar-total-cont">
-              <h3 className="card-heading">Dual Ear Audiogram</h3>
-            </div>
-            <div
-              className={`graphs-row dual-audiogram-container ${zoomed ? "zoomed" : ""}`}
-              onClick={() => {
-                if (!zoomed) toggleZoom();
-              }}
-            >
-              <div className="graph-box">
-                <div className="graph-title" style={{ color: "red" }}>
-                  R I G H T
+            <div className="pta-graph-card">
+              <div className="DualEar-total-cont">
+                <h3 className="card-heading">Dual Ear Audiogram</h3>
+              </div>
+              <div
+                className={`graphs-row dual-audiogram-container ${zoomed ? "zoomed" : ""}`}
+                onClick={() => {
+                  if (!zoomed) toggleZoom();
+                }}
+              >
+                <div className="graph-box">
+                  <div className="graph-title" style={{ color: "red" }}>
+                    R I G H T
+                  </div>
+                  <div className="chart-container">
+                    <Line
+                      ref={rightChartRef}
+                      data={rightEarData}
+                      options={options}
+                      onDoubleClick={(evt) => handleChartDoubleClick(evt, rightChartRef.current)}
+                    />
+                  </div>
                 </div>
-                <div className="chart-container">
-                  <Line
-                    ref={rightChartRef}
-                    data={rightEarData}
-                    options={options}
-                    onDoubleClick={(evt) => handleChartDoubleClick(evt, rightChartRef.current)}
+                <div className="graph-box">
+                  <div className="graph-title" style={{ color: "blue" }}>
+                    L E F T
+                  </div>
+                  <div className="chart-container">
+                    <Line
+                      ref={leftChartRef}
+                      data={leftEarData}
+                      options={options}
+                      onDoubleClick={(evt) => handleChartDoubleClick(evt, leftChartRef.current)}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="pta-summary">
+                <div className="pta-summary-item">
+                  <div className="summary-label">PTA Right</div>
+                  <div className="summary-value">{ptaValues.right ? `${ptaValues.right} dBHL` : ""}</div>
+                </div>
+                <div className="pta-summary-item">
+                  <div className="summary-label">PTA Left</div>
+                  <div className="summary-value">{ptaValues.left ? `${ptaValues.left} dBHL` : ""}</div>
+                </div>
+              </div>
+
+              <div className="pta-diagnosis-card">
+                <div className="pta-header">
+                  <h3 className="pta-title">Recommendations</h3>
+                  <div className="pta-switch-container">
+                    <div
+                      className={`pta-toggle ${recommendationsEnabled ? "pta-active" : ""}`}
+                      onClick={() => setRecommendationsEnabled(!recommendationsEnabled)}
+                    >
+                      <div className="pta-toggle-handle"></div>
+                    </div>
+                    <span className="pta-switch-label">Enable Section</span>
+                  </div>
+                </div>
+                <div className={!recommendationsEnabled ? "pta-disabled" : ""}>
+                  <textarea
+                    className="pta-recommendations-textarea"
+                    value={recommendations}
+                    onChange={(e) => setRecommendations(e.target.value)}
+                    placeholder="Enter recommendations / advice / next steps / precautions..."
+                    rows={4}
+                    disabled={loadingSession}
                   />
                 </div>
               </div>
-              <div className="graph-box">
-                <div className="graph-title" style={{ color: "blue" }}>
-                  L E F T
-                </div>
-                <div className="chart-container">
-                  <Line
-                    ref={leftChartRef}
-                    data={leftEarData}
-                    options={options}
-                    onDoubleClick={(evt) => handleChartDoubleClick(evt, leftChartRef.current)}
-                  />
-                </div>
-              </div>
             </div>
-            <div className="pta-summary">
-              <div className="pta-summary-item">
-                <div className="summary-label">PTA Right</div>
-                <div className="summary-value">{ptaValues.right ? `${ptaValues.right} dBHL` : ""}</div>
-              </div>
-              <div className="pta-summary-item">
-                <div className="summary-label">PTA Left</div>
-                <div className="summary-value">{ptaValues.left ? `${ptaValues.left} dBHL` : ""}</div>
-              </div>
-            </div>
-            <div className="pta-diagnosis-card">
-              <div className="pta-header">
-                <h3 className="pta-title">Recommendations</h3>
-                <div className="pta-switch-container">
-                  <div
-                    className={`pta-toggle ${recommendationsEnabled ? "pta-active" : ""}`}
-                    onClick={() => setRecommendationsEnabled(!recommendationsEnabled)}
-                  >
-                    <div className="pta-toggle-handle"></div>
-                  </div>
-                  <span className="pta-switch-label">Enable Section</span>
-                </div>
-              </div>
 
-              <div className={!recommendationsEnabled ? "pta-disabled" : ""}>
-                <textarea
-                  className="pta-recommendations-textarea"
-                  value={recommendations}
-                  onChange={(e) => setRecommendations(e.target.value)}
-                  placeholder="Enter recommendations / advice / next steps / precautions..."
-                  rows={4}
-                  disabled={loadingSession}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="symbol-legend-container">
-            <div className="symbol-legend-header">Symbol Legend</div>
-            <div className="symbol-legend-list">
-              {columns.map((col) => (
-                <div key={col.key} className="symbol-legend-row">
-                  <div
-                    className="symbol-preview"
-                    style={{
-                      color: colorMap[col.key] || "#444",
-                      fontSize: col.key.includes("Bracket") ? "0.7rem" : "0.9rem",
-                      fontWeight: ["rightBracket", "leftBracket", "circle", "triangle"].includes(col.key)
-                        ? "bold"
-                        : "normal",
-                    }}
-                  >
-                    {col.symbol}
-                  </div>
-                  <div className="symbol-text-content">
-                    <span className="symbol-key">{col.key}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {zoomed && (
-        <div
-          className="pta-zoom-overlay"
-          onMouseDown={(e) => {
-            if (e.target.classList.contains("pta-zoom-overlay")) closeZoom();
-          }}
-        >
-          <div className="pta-zoomed-panel">
-            <div className="pta-zoom-header">
-              <h3 className="pta-DualEar-header">Dual Ear Audiogram</h3>
-            </div>
-            <div className="pta-zoom-graphs">
-              <div className="zoom-graph-box">
-                <div className="zoom-graph-title" style={{ color: "red" }}>
-                  R I G H T<span className="span-ear">E A R</span>
-                </div>
-                <div className="zoom-chart-wrapper">
-                  <Line
-                    ref={zoomedRightChartRef}
-                    data={rightEarData}
-                    options={options}
-                    onDoubleClick={(evt) => handleChartDoubleClick(evt, zoomedRightChartRef.current)}
-                  />
-                </div>
-              </div>
-
-              <div className="symbol-palette">
+            <div className="symbol-legend-container">
+              <div className="symbol-legend-header">Symbol Legend</div>
+              <div className="symbol-legend-list">
                 {columns.map((col) => (
-                  <button
-                    key={col.key}
-                    className={`symbol-btn ${activeSymbolKey === col.key ? "active" : ""}`}
-                    onClick={() => handleSymbolClick(col.key)}
-                    title={col.label}
-                  >
-                    <span className="symbol-char">{col.symbol}</span>
-                    <span className="symbol-text">{col.key}</span>
-                  </button>
+                  <div key={col.key} className="symbol-legend-row">
+                    <div
+                      className="symbol-preview"
+                      style={{
+                        color: colorMap[col.key] || "#444",
+                        fontSize: col.key.includes("Bracket") ? "0.7rem" : "0.9rem",
+                        fontWeight: ["rightBracket", "leftBracket", "circle", "triangle"].includes(col.key)
+                          ? "bold"
+                          : "normal",
+                      }}
+                    >
+                      {col.symbol}
+                    </div>
+                    <div className="symbol-text-content">
+                      <span className="symbol-key">{col.key}</span>
+                    </div>
+                  </div>
                 ))}
               </div>
+            </div>
+          </div>
 
-              <div className="zoom-graph-box">
-                <div className="zoom-graph-title" style={{ color: "blue" }}>
-                  L E F T <span className="span-ear">E A R</span>
+          {zoomed && (
+            <div
+              className="pta-zoom-overlay"
+              onMouseDown={(e) => {
+                if (e.target.classList.contains("pta-zoom-overlay")) closeZoom();
+              }}
+            >
+              <div className="pta-zoomed-panel">
+                <div className="pta-zoom-header">
+                  <h3 className="pta-DualEar-header">Dual Ear Audiogram</h3>
                 </div>
-                <div className="zoom-chart-wrapper">
-                  <Line
-                    ref={zoomedLeftChartRef}
-                    data={leftEarData}
-                    options={options}
-                    onDoubleClick={(evt) => handleChartDoubleClick(evt, zoomedLeftChartRef.current)}
-                  />
+                <div className="pta-zoom-graphs">
+                  <div className="zoom-graph-box">
+                    <div className="zoom-graph-title" style={{ color: "red" }}>
+                      R I G H T<span className="span-ear">E A R</span>
+                    </div>
+                    <div className="zoom-chart-wrapper">
+                      <Line
+                        ref={zoomedRightChartRef}
+                        data={rightEarData}
+                        options={options}
+                        onDoubleClick={(evt) => handleChartDoubleClick(evt, zoomedRightChartRef.current)}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="symbol-palette">
+                    {columns.map((col) => (
+                      <button
+                        key={col.key}
+                        className={`symbol-btn ${activeSymbolKey === col.key ? "active" : ""}`}
+                        onClick={() => handleSymbolClick(col.key)}
+                        title={col.label}
+                      >
+                        <span className="symbol-char">{col.symbol}</span>
+                        <span className="symbol-text">{col.key}</span>
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="zoom-graph-box">
+                    <div className="zoom-graph-title" style={{ color: "blue" }}>
+                      L E F T <span className="span-ear">E A R</span>
+                    </div>
+                    <div className="zoom-chart-wrapper">
+                      <Line
+                        ref={zoomedLeftChartRef}
+                        data={leftEarData}
+                        options={options}
+                        onDoubleClick={(evt) => handleChartDoubleClick(evt, zoomedLeftChartRef.current)}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="pta-zoom-footer">
+                  <button className="btn-secondary" onClick={() => setActiveSymbolKey(null)}>
+                    Deselect
+                  </button>
+                  <button className="btn-primary" onClick={closeZoom}>
+                    Close
+                  </button>
                 </div>
               </div>
             </div>
-            <div className="pta-zoom-footer">
-              <button className="btn-secondary" onClick={() => setActiveSymbolKey(null)}>
-                Deselect
-              </button>
-              <button className="btn-primary" onClick={closeZoom}>
-                Close
-              </button>
-            </div>
-          </div>
+          )}
+
+          {showPatientDetails && (
+            <PatientDetails onClose={handlePatientDetailsClose} sessionType="puretone" />
+          )}
+
+          {showReport && (
+            <MakePTAReport
+              onClose={() => setShowReport(false)}
+              rightEarData={rightEarData}
+              leftEarData={leftEarData}
+              options={options}
+              patientInfo={patientInfo || {}}
+              ptaValues={ptaValues}
+              formData={formData}
+              patientId={currentPatientId}
+              speechData={speechData}
+              weberData={weberData}
+              diagnosis={diagnosis}
+              reportSections={reportSections}
+              recommendations={recommendations}
+              recommendationsEnabled={recommendationsEnabled}
+            />
+          )}
+
+          {showFormatSelector && (
+            <ReportFormatSelector
+              onClose={() => setShowFormatSelector(false)}
+              onSelectFormat={(sections, formatName) => {
+                setReportSections(sections);
+                setCurrentFormatName(formatName || "Custom");
+              }}
+              rightEarData={rightEarData}
+              leftEarData={leftEarData}
+              options={options}
+              patientInfo={patientInfo}
+              ptaValues={ptaValues}
+              diagnosis={diagnosis}
+              speechData={speechData}
+              weberData={weberData}
+              reportSections={reportSections}
+            />
+          )}
         </div>
-      )}
-
-      {showPatientDetails && (
-        <PatientDetails onClose={handlePatientDetailsClose} sessionType="puretone" />
-      )}
-
-      {showReport && (
-        <MakePTAReport
-          onClose={() => setShowReport(false)}
-          rightEarData={rightEarData}
-          leftEarData={leftEarData}
-          options={options}
-          patientInfo={patientInfo || {}}
-          ptaValues={ptaValues}
-          formData={formData}
-          patientId={currentPatientId}
-          speechData={speechData}
-          weberData={weberData}
-          diagnosis={diagnosis}
-          reportSections={reportSections}
-          recommendations={recommendations}
-          recommendationsEnabled={recommendationsEnabled}
-        />
-      )}
-
-      {showFormatSelector && (
-        <ReportFormatSelector
-          onClose={() => setShowFormatSelector(false)}
-          onSelectFormat={(sections, formatName) => {
-            setReportSections(sections);
-            setCurrentFormatName(formatName || "Custom");
-          }}
-          rightEarData={rightEarData}
-          leftEarData={leftEarData}
-          options={options}
-          patientInfo={patientInfo}
-          ptaValues={ptaValues}
-          diagnosis={diagnosis}
-          speechData={speechData}
-          weberData={weberData}
-          reportSections={reportSections}
-        />
       )}
     </div>
   );

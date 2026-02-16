@@ -53,6 +53,11 @@
   gap: 15px;
 }
 
+.para-loader-pta {
+  font-size: 12px;
+  font-weight: 600;
+}
+
 .pta-logo {
   display: flex;
   font-size: 15px;
@@ -189,13 +194,12 @@
 /* === Main Content === */
 .pta-main {
   /* space for sidebar */
-  margin-top: 0px;
+  margin-top: 60px !important;
   /* space for navbar */
   padding: 20px;
-  flex: 1;
   background: #f9f9f9;
-  overflow-y: auto;
   width: 100%;
+  overflow-y: auto;
 }
 
 .pta-title {
@@ -613,10 +617,10 @@ width:100px;
 
 .pta-title-header {
   /* margin: 0px; */
-  font-size: 18px;
+  font-size: 12px;
   font-weight: bold;
   text-align: center !important;
-  color: #666565;
+  color: #3a3a3a;
 }
 
 /* .make-report-button {

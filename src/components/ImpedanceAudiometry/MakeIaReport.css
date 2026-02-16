@@ -38,6 +38,7 @@
     text-align: center;
     color: #1976d2;
     width: 100%;
+    margin-top: 250px;
 }
 
 .MR-IA-header-popup {
@@ -458,4 +459,11 @@
 .audiologist-phone {
     margin: 3px 0;
     color: #444;
+}
+
+.MakReport-recomm-audio-main-cont {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }

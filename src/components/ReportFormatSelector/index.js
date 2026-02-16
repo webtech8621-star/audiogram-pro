@@ -193,9 +193,7 @@ function ReportFormatSelector({
                                         className={`FR-toggle-btn ${sections.front_recommendations ? "FR-on" : "FR-off"}`}
                                         onClick={() => toggle('front_recommendations')}
                                     >
-                                        {sections.front_
-
-                                            ? "ON" : "OFF"}
+                                        {sections.front_recommendations ? "ON" : "OFF"}
                                     </button>
                                 </div>
                                 <div className="FR-toggle-row">
