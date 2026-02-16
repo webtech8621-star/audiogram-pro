@@ -1009,3 +1009,245 @@ width:100px;
   color: #6b7280;
   line-height: 1.25;
 }
+/* ────────────────────────────────────────────────
+   MOBILE RESPONSIVE STYLES
+   Everything below only applies on smaller screens
+───────────────────────────────────────────────── */
+
+/* Tablets & smaller laptops (≤ 1024px) */
+@media (max-width: 1024px) {
+  .pta-content-row {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .pta-table-card,
+  .pta-graph-card {
+    width: 100%;
+  }
+
+  .graphs-row {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .graph-box {
+    width: 100%;
+    max-width: 500px;
+  }
+
+  .chart-container {
+    height: 350px;
+    width: 100%;
+  }
+
+  .pta-summary {
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .pta-summary-item {
+    width: 80%;
+    max-width: 300px;
+  }
+
+  .button-sidebar {
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .nav-button {
+    padding: 10px 14px;
+    font-size: 12px;
+    min-width: 120px;
+  }
+
+  .space-cont {
+    display: none; /* hide empty space on smaller screens */
+  }
+}
+
+/* Phones – most important changes (≤ 768px) */
+@media (max-width: 768px) {
+  .pta-main {
+    padding: 12px;
+  }
+
+  .pta-header-row {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .pta-title-header {
+    font-size: 16px;
+    text-align: left;
+  }
+
+  .button-sidebar {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .nav-button {
+    font-size: 11px;
+    padding: 8px 12px;
+    min-width: auto;
+    flex: 1 1 auto;
+  }
+
+  .make-report-button,
+  .save-session-btn,
+  .new-patient-button {
+    flex: 1 1 45%;
+  }
+
+  /* Table becomes scrollable horizontally */
+  .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .pta-input-table {
+    font-size: 12px;
+    min-width: 700px; /* force horizontal scroll if needed */
+  }
+
+  .pta-input-table input[type="number"] {
+    width: 40px;
+    font-size: 13px;
+    padding: 6px 4px;
+  }
+
+  .pta-diagnosis-card,
+  .pta-diagnosis-card-sppech-audio,
+  .pta-diagnosis-card-webertest {
+    font-size: 13px;
+  }
+
+  .pta-label,
+  .diagnosis-label,
+  .pta-title {
+    font-size: 13px;
+  }
+
+  .pta-input,
+  .pta-input-su,
+  .pta-input.small {
+    font-size: 14px;
+    padding: 6px;
+  }
+
+  /* Speech & Weber cards stack vertically */
+  .speechaud-weber-row-cont {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .pta-diagnosis-card-sppech-audio,
+  .pta-diagnosis-card-webertest {
+    width: 100%;
+  }
+
+  .weber-dual-input {
+    justify-content: space-between;
+  }
+
+  /* Zoom modal becomes almost full screen on mobile */
+  .pta-zoom-overlay {
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.6);
+  }
+
+  .pta-zoomed-panel {
+    width: 100%;
+    max-width: none;
+    height: 95vh;
+    padding: 12px;
+    border-radius: 0;
+  }
+
+  .pta-zoom-graphs {
+    flex-direction: column;
+  }
+
+  .zoom-chart-wrapper {
+    height: 300px;
+    width: 100%;
+  }
+
+  .symbol-palette {
+    flex-direction: row;
+    flex-wrap: wrap;
+    height: auto;
+    margin-top: 16px;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .symbol-btn {
+    width: 60px;
+    height: 32px;
+    font-size: 11px;
+  }
+
+  .zoom-graph-title {
+    font-size: 14px;
+  }
+
+  /* Bigger touch targets */
+  .pta-toggle {
+    width: 50px;
+    height: 24px;
+  }
+
+  .pta-toggle-handle {
+    width: 20px;
+    height: 20px;
+    top: 2px;
+  }
+
+  .pta-toggle.pta-active .pta-toggle-handle {
+    transform: translateX(26px);
+  }
+}
+
+/* Very small phones (≤ 480px) – extra adjustments */
+@media (max-width: 480px) {
+  .pta-title-header {
+    font-size: 15px;
+  }
+
+  .nav-button {
+    font-size: 10px;
+    padding: 8px 10px;
+  }
+
+  .pta-input-table {
+    font-size: 11px;
+  }
+
+  .pta-input-table input[type="number"] {
+    width: 38px;
+    font-size: 12px;
+  }
+
+  .diagnosis-row {
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+
+  .chart-container {
+    height: 280px;
+  }
+
+  .zoom-chart-wrapper {
+    height: 260px;
+  }
+}
