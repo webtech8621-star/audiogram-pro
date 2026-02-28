@@ -337,7 +337,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  margin-top: 70px;
+  /* margin-top: 70px; */
 }
 
 .graph-title {
@@ -1144,6 +1144,7 @@ width:100px;
     /* force horizontal scroll if needed */
     min-width: 700px;
     /* force horizontal scroll if needed */
+
   }
 
   .pta-input-table input[type="number"] {
@@ -1225,6 +1226,7 @@ width:100px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+
   }
 
   .zoom-graph-title {
@@ -1283,19 +1285,19 @@ width:100px;
 }
 
 
+
 /* ########################### */
 /* ===== Container spacing ===== */
 .button-sidebar {
   display: flex;
-  flex-direction: row;
+  flex-direction: row !important;
   gap: 12px;
-  padding: 10px;
 }
 
 /* ===== Base button ===== */
 .nav-button {
-  border-radius: 5px;
-  font-size: 10px;
+  border-radius: 5px !important;
+  font-size: 10px !important;
   font-weight: 600;
   cursor: pointer;
   border: 1px solid #e6e6e6;
@@ -1349,20 +1351,17 @@ width:100px;
 .save-session-btn.saving {
   background: #ffffff;
   color: #15f900;
-  border-color: #6eda58;
   cursor: not-allowed;
 }
 
 /* success */
 .save-session-btn.success {
-  background: #5fc55f;
-  color: #f7f7f7;
-  border-color: #ffffff;
+  background: #5fc55f !important;
+  color: #f7f7f7 !important;
 }
 
 /* error */
 .save-session-btn.error {
   background: #fdecec;
   color: #dc2626;
-  border-color: #fca5a5;
 }
