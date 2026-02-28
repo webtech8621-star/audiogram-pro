@@ -1027,7 +1027,10 @@ width:100px;
   color: #6b7280;
   line-height: 1.25;
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2bfb5ee98164ec63499e4750e96f207b07117001
 /* ────────────────────────────────────────────────
    MOBILE RESPONSIVE STYLES
    Everything below only applies on smaller screens
@@ -1085,8 +1088,12 @@ width:100px;
   }
 
   .space-cont {
+<<<<<<< HEAD
     display: none;
     /* hide empty space on smaller screens */
+=======
+    display: none; /* hide empty space on smaller screens */
+>>>>>>> 2bfb5ee98164ec63499e4750e96f207b07117001
   }
 }
 
@@ -1104,7 +1111,10 @@ width:100px;
 
   .pta-title-header {
     font-size: 16px;
+<<<<<<< HEAD
     color: #00897B;
+=======
+>>>>>>> 2bfb5ee98164ec63499e4750e96f207b07117001
     text-align: left;
   }
 
@@ -1137,8 +1147,12 @@ width:100px;
 
   .pta-input-table {
     font-size: 12px;
+<<<<<<< HEAD
     min-width: 700px;
     /* force horizontal scroll if needed */
+=======
+    min-width: 700px; /* force horizontal scroll if needed */
+>>>>>>> 2bfb5ee98164ec63499e4750e96f207b07117001
   }
 
   .pta-input-table input[type="number"] {
@@ -1217,9 +1231,12 @@ width:100px;
     width: 60px;
     height: 32px;
     font-size: 11px;
+<<<<<<< HEAD
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+=======
+>>>>>>> 2bfb5ee98164ec63499e4750e96f207b07117001
   }
 
   .zoom-graph-title {
@@ -1276,6 +1293,7 @@ width:100px;
     height: 260px;
   }
 }
+<<<<<<< HEAD
 
 
 /* ########################### */
@@ -1361,3 +1379,5 @@ width:100px;
   color: #dc2626;
   border-color: #fca5a5;
 }
+=======
+>>>>>>> 2bfb5ee98164ec63499e4750e96f207b07117001
