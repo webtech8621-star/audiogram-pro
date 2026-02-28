@@ -37,7 +37,6 @@ function SavedReports() {
                 return;
             }
 
-            // FETCH SESSIONS
             const { data: sessionsData, error } = await supabase
                 .from("sessions")
                 .select("id, patient_id, session_type, created_at, status")
@@ -53,9 +52,10 @@ function SavedReports() {
                 return;
             }
 
-            const patientIds = [...new Set(sessionsData.map((s) => s.patient_id))];
+            const patientIds = [
+                ...new Set(sessionsData.map((s) => s.patient_id)),
+            ];
 
-            // FETCH PATIENT DETAILS INCLUDING LOCATION
             const { data: patients, error: patientError } = await supabase
                 .from("patients")
                 .select("id, name, age, patient_id, location")
@@ -90,16 +90,13 @@ function SavedReports() {
                 return acc;
             }, {});
 
-            // CONVERT TO ARRAY AND ADD LATEST DATE FOR MAIN TABLE
-            const formatted = Object.values(grouped).map((group) => {
-                return {
-                    ...group,
-                    latestDate:
-                        group.sessions.length > 0
-                            ? group.sessions[0].date
-                            : "No Sessions",
-                };
-            });
+            const formatted = Object.values(grouped).map((group) => ({
+                ...group,
+                latestDate:
+                    group.sessions.length > 0
+                        ? group.sessions[0].date
+                        : "No Sessions",
+            }));
 
             setReports(formatted);
             setFilteredReports(formatted);
@@ -109,7 +106,12 @@ function SavedReports() {
             setLoading(false);
         }
     };
-
+    const handleLogout = async () => {
+        setLoading(true);
+        await supabase.auth.signOut();
+        setLoading(false);
+        navigate("/");
+    };
     const handleSearch = (e) => {
         const value = e.target.value.toLowerCase();
         setSearchTerm(value);
@@ -139,7 +141,6 @@ function SavedReports() {
 
     const openPopup = (e, group) => {
         e.stopPropagation();
-
         setSelectedPatient(group);
         setPopupSessions(group.sessions);
         setShowPopup(true);
@@ -151,101 +152,84 @@ function SavedReports() {
         setPopupSessions([]);
     };
 
-    // LOADER SCREEN
-    if (loading) {
-        return (
-            <div className="saved-reports-main">
-                <Navbar
-                    onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
-                />
-                <div className="layout">
-                    <Sidebar isOpen={isSidebarOpen} />
-
-                    <div className="content">
-                        <div className="icon-loader-container">
-                            <LuEar className="icon-loader" />
-                            <p className="loader-text">Loading Reports...</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
     return (
         <div className="saved-reports-main">
+            {/* ✅ ALWAYS ON TOP */}
             <Navbar onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
+
             <div className="layout">
-                <Sidebar isOpen={isSidebarOpen} />
+                {/* ✅ ALWAYS LEFT */}
+                <Sidebar
+                    isOpen={isSidebarOpen}
+                    onLogout={handleLogout}
+                    loading={loading}
+                />
 
-                <div className="content">
-                    <input
-                        className="search-bar"
-                        placeholder="Search patient..."
-                        value={searchTerm}
-                        onChange={handleSearch}
-                    />
+                {/* ✅ CONTENT AREA */}
+                <div className="sr-content">
+                    {loading ? (
+                        /* 🔥 LOADER INSIDE CONTENT */
+                        <div className="icon-loader-container">
+                            <LuEar className="icon-loader animate-spin" size={22} />
+                            <p className="loader-text">Loading Reports...</p>
+                        </div>
+                    ) : (
+                        <>
+                            <input
+                                className="search-bar"
+                                placeholder="Search patient..."
+                                value={searchTerm}
+                                onChange={handleSearch}
+                            />
 
-                    <table className="reports-table">
-                        <thead>
-                            <tr>
-                                <th>S.n.o</th>
-                                <th>Name</th>
-                                <th>Age</th>
-                                <th>Patient ID</th>
-                                <th>Location</th>
-                                <th>Latest Date</th>
-                                <th>Sessions</th>
-                            </tr>
-                        </thead>
+                            <table className="reports-table">
+                                <thead>
+                                    <tr>
+                                        <th>S.n.o</th>
+                                        <th>Name</th>
+                                        <th>Age</th>
+                                        <th>Patient ID</th>
+                                        <th>Location</th>
+                                        <th>Latest Date</th>
+                                        <th>Sessions</th>
+                                    </tr>
+                                </thead>
 
-                        <tbody>
-                            {filteredReports.map((group, i) => (
-                                <tr
-                                    key={group.patientId}
-                                    className="patient-row"
-                                >
-                                    <td>{i + 1}</td>
+                                <tbody>
+                                    {filteredReports.map((group, i) => (
+                                        <tr key={group.patientId} className="patient-row">
+                                            <td>{i + 1}</td>
 
-                                    <td
-                                        className="patient-name-link"
-                                        onClick={(e) => openPopup(e, group)}
-                                    >
-                                        {group.name}
-                                    </td>
+                                            <td
+                                                className="patient-name-link"
+                                                onClick={(e) => openPopup(e, group)}
+                                            >
+                                                {group.name}
+                                            </td>
 
-                                    <td>{group.age}</td>
+                                            <td>{group.age}</td>
+                                            <td>{group.patientIdDisplay}</td>
+                                            <td className="address-cell">{group.location}</td>
+                                            <td>{group.latestDate}</td>
+                                            <td>{group.sessions.length}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </>
+                    )}
 
-                                    <td>{group.patientIdDisplay}</td>
-
-                                    <td className="address-cell">
-                                        {group.location}
-                                    </td>
-
-                                    <td>{group.latestDate}</td>
-
-                                    <td>{group.sessions.length}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-
-                    {/* POPUP SECTION */}
+                    {/* ✅ POPUP */}
                     {showPopup && (
                         <div className="popup-overlay">
                             <div className="popup-container">
                                 <div className="popup-header">
                                     <div className="icon-header-cont">
                                         <LuEar className="pt-logo-icon" />
-                                        <h1 className="pt-logo-icon">
-                                            AudiogramPro
-                                        </h1>
+                                        <h1 className="pt-logo-icon">AudiogramPro</h1>
                                     </div>
 
-                                    <button
-                                        className="close-btn"
-                                        onClick={closePopup}
-                                    >
+                                    <button className="close-btn-sr" onClick={closePopup}>
                                         X
                                     </button>
                                 </div>
@@ -265,23 +249,16 @@ function SavedReports() {
 
                                             <tbody>
                                                 {popupSessions.map((s) => (
-                                                    <tr
+                                                    <tr style={{ cursor: "pointer" }}
                                                         key={s.sessionId}
                                                         onClick={() =>
-                                                            handleSessionClick(
-                                                                selectedPatient,
-                                                                s
-                                                            )
+                                                            handleSessionClick(selectedPatient, s)
                                                         }
                                                     >
                                                         <td>{s.testType}</td>
-
                                                         <td>{s.date}</td>
-
                                                         <td>
-                                                            <span
-                                                                className={`session-status ${s.status}`}
-                                                            >
+                                                            <span className={`session-status ${s.status}`}>
                                                                 {s.status}
                                                             </span>
                                                         </td>

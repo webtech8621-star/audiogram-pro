@@ -5,71 +5,88 @@
   left: -240px;
   width: 240px;
   height: calc(100% - 60px);
-  background: #d7d7d7;
-  /* white background */
-  border-right: 1px solid #e5e5e5;
+  background: #ffffff;
+  /* White base */
+  border-right: 1px solid #f5e6ca;
+  /* Sand border */
   padding: 15px 0;
   transition: left 0.3s ease;
   overflow-y: auto;
   z-index: 100;
-  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.08);
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.08);
 }
 
 .hp-sidebar.open {
   left: 0;
 }
 
+/* Menu item */
 .hp-menu-item {
   display: flex;
   align-items: center;
-  padding: 12px 10px;
+  padding: 12px 14px;
   font-size: 13px;
   font-weight: 500;
-  color: #000000;
-  /* black text */
+  color: #004d40;
+  /* Teal dark */
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+  transition: background 0.2s ease, color 0.2s ease;
+  border-radius: 8px;
+  margin: 4px 10px;
 }
 
+/* Hover effect */
 .hp-menu-item:hover {
-  background: #f5f5f5;
-  color: #333333;
+  background: #f5e6ca;
+  /* Sand */
+  color: #00695c;
 }
 
+/* Active state (optional if you add class) */
+.hp-menu-item.active {
+  background: #00897b;
+  color: #ffffff;
+}
+
+/* Icon */
 .hp-menu-icon {
   margin-right: 10px;
   font-size: 18px;
-  color: #444;
-  /* darker icons */
+  color: #00897b;
+  /* Teal */
 }
 
+/* Dropdown row */
 .hp-dropdown {
   justify-content: space-between;
 }
 
+/* Arrow icon */
 .hp-dropdown-icon {
   font-size: 14px;
   margin-left: auto;
-  color: #666;
+  color: #00695c;
 }
 
+/* Submenu */
 .hp-submenu {
-  padding-left: 40px;
+  padding-left: 42px;
   margin-top: 5px;
 }
 
 .hp-submenu p {
   padding: 8px 0;
-  font-size: 14px;
-  color: #444;
+  font-size: 13px;
+  color: #444444;
   cursor: pointer;
-  transition: color 0.2s;
+  transition: color 0.2s ease;
 }
 
 .hp-submenu p:hover {
-  color: #000000;
+  color: #00897b;
 }
 
+/* Spin animation */
 .animate-spin {
   animation: spin 1s linear infinite;
 }

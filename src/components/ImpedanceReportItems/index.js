@@ -16,18 +16,12 @@ function getTympType({ mep, comp, ecv }) {
 }
 
 function Section({ title, children, initialEnabled = true }) {
-  const [enabled, setEnabled] = useState(initialEnabled);
+  const [enabled] = useState(initialEnabled);
   return (
     <div className={`report-section ${enabled ? "" : "disabled"}`}>
       <div className="report-header">
         <h3>{title}</h3>
-        <div className="header-controls">
-          <label className="switch">
-            <input type="checkbox" checked={enabled} onChange={() => setEnabled(!enabled)} />
-            <span className="slider round"></span>
-          </label>
-          <span className="enable-text">Enable Section</span>
-        </div>
+
       </div>
       {enabled && <div className="report-body">{children}</div>}
     </div>
@@ -273,7 +267,7 @@ const ImpedanceReportItems = forwardRef(({ rightEar, leftEar, formData, ptaValue
         </table>
       </Section>
 
-      <Section title="RECOMMENDATIONS">
+      <Section title="RECOMMENDATIONS" style={{ marginBottom: "100px" }}>
         <textarea
           rows="3"
           value={data.recommendations ?? ""}

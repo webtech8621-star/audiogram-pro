@@ -192,3 +192,116 @@
   background: #f0f0f0;
   border-radius: 8px;
 }
+
+/* ------------------------ */
+/* Main */
+.hp-main {
+  flex: 1;
+  padding: 40px;
+  background: linear-gradient(180deg, #ffffff, #f5e6ca);
+}
+
+/* Hero */
+.hp-hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  margin-bottom: 40px;
+  border-left: 6px solid #00897b;
+}
+
+.hp-hero-text {
+  max-width: 55%;
+}
+
+.hp-hero-text h1 {
+  font-size: 34px;
+  font-weight: 700;
+  color: #00695c;
+  margin-bottom: 16px;
+}
+
+.hp-hero-text p {
+  font-size: 16px;
+  line-height: 1.7;
+  color: #3b3b3b;
+  margin-bottom: 24px;
+}
+
+/* Buttons */
+.hp-hero-buttons button {
+  padding: 12px 22px;
+  border-radius: 8px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+/* Primary Button */
+.hp-btn-start {
+  background: #00897b;
+  color: #ffffff;
+}
+
+.hp-btn-start:hover {
+  background: #00695c;
+  transform: translateY(-2px);
+}
+
+/* Secondary Button */
+.hp-btn-learn {
+  background: #f5e6ca;
+  color: #2e2e2e;
+  margin-left: 12px;
+}
+
+.hp-btn-learn:hover {
+  background: #edd9b0;
+}
+
+/* Hero Image */
+.hp-hero-image {
+  width: 35%;
+  height: 240px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #000;
+}
+
+
+/* Features */
+.hp-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.hp-feature-card {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.07);
+  transition: 0.3s;
+  border-top: 4px solid #26a69a;
+}
+
+.hp-feature-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.hp-feature-card h3 {
+  margin-bottom: 10px;
+  color: #00695c;
+}
+
+.hp-feature-card p {
+  font-size: 14px;
+  color: #444444;
+  line-height: 1.6;
+}

@@ -8,7 +8,7 @@ const DEFAULT_SECTIONS = {
     front_provisional_diagnosis: true,
     front_speech_audiometry: false,
     front_weber_test: false,
-    front_recommendations: true,          // ← added for front page
+    front_recommendations: true,
     front_audiologist_details: true,
     patient_info: true,
     right_ear_graph: true,
@@ -18,7 +18,7 @@ const DEFAULT_SECTIONS = {
     provisional_diagnosis: true,
     speech_audiometry: true,
     weber_test: true,
-    recommendations: true,                // ← for main/back page
+    recommendations: true,
     audiologist_details: true,
 };
 
@@ -35,86 +35,158 @@ function ReportFormatSelector({
     const [formatName, setFormatName] = useState('');
     const [savedFormats, setSavedFormats] = useState([]);
     const [error, setError] = useState(null);
-    const [applyStatus, setApplyStatus] = useState('idle');
+    const [applyStatus, setApplyStatus] = useState('idle');     // idle | applied
+    const [saveStatus, setSaveStatus] = useState("idle");       // idle | saved
+    const [selectedFormatId, setSelectedFormatId] = useState(null);
+    const [currentAppliedId, setCurrentAppliedId] = useState(null);
 
-    useEffect(() => {
-        loadSavedFormats();
-    }, []);
 
-    const loadSavedFormats = async () => {
+    const isCurrentlyApplied =
+        currentAppliedId === selectedFormatId &&
+        selectedFormatId !== null;
+
+    const loadSavedFormats = React.useCallback(async () => {
         try {
             const { data: { session } } = await supabase.auth.getSession();
             if (!session?.user) return;
 
             const { data, error } = await supabase
-                .from('report_formats')
-                .select('id, name, sections')
-                .eq('user_id', session.user.id)
-                .order('name');
+                .from("puretone_report_format")
+                .select("*")
+                .eq("user_id", session.user.id)
+                .order("created_at", { ascending: false });
 
             if (error) throw error;
+
             setSavedFormats(data || []);
+
+            const applied = data.find(f => f.is_applied === true);
+            if (applied) {
+                setCurrentAppliedId(applied.id);
+                // Only auto-apply if user hasn't selected/edited anything yet
+                if (!selectedFormatId) {
+                    setSections(applied.sections);
+                    setFormatName(applied.format_name || "");
+                    setSelectedFormatId(applied.id);
+                    onSelectFormat(applied.sections, applied.format_name);
+                }
+            } else {
+                setCurrentAppliedId(null);
+            }
         } catch (err) {
             console.error(err);
-            setError('Could not load saved formats');
+            setError("Could not load formats");
         }
-    };
+    }, [onSelectFormat, selectedFormatId, setError]);
+
+    useEffect(() => {
+        loadSavedFormats();
+    }, [loadSavedFormats]);
 
     const toggle = (key) => {
         setSections(prev => ({ ...prev, [key]: !prev[key] }));
     };
 
-    const handleApply = () => {
-        onSelectFormat(sections, 'Custom Applied');
-        setApplyStatus('applied');
-        setTimeout(() => setApplyStatus('idle'), 1800);
-        onClose();
+    const handleApply = async () => {
+        setApplyStatus('applying');
+        setError(null);
+        console.log(error)
+
+        try {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session?.user) return;
+
+            // Reset all applied flags
+            await supabase
+                .from("puretone_report_format")
+                .update({ is_applied: false })
+                .eq("user_id", session.user.id);
+
+            // Insert current as the new applied format
+            const { data: newApplied, error } = await supabase
+                .from("puretone_report_format")
+                .insert({
+                    user_id: session.user.id,
+                    format_name: formatName.trim() || "Custom Applied",
+                    sections,
+                    is_applied: true
+                })
+                .select()
+                .single();
+
+            if (error) throw error;
+
+            setCurrentAppliedId(newApplied.id);
+            setApplyStatus('applied');
+            setTimeout(() => setApplyStatus('idle'), 1800); // brief flash
+
+            onSelectFormat(sections, formatName.trim() || "Custom Applied");
+
+            loadSavedFormats();
+
+        } catch (err) {
+            console.error(err);
+            setError("Apply failed");
+            setApplyStatus('idle');
+        }
     };
 
     const saveFormat = async () => {
-        if (!formatName.trim()) {
-            setError('Enter format name');
+        if (!formatName || !formatName.trim()) {
+            setError("Enter format name");
             return;
         }
 
         try {
             const { data: { session } } = await supabase.auth.getSession();
-            if (!session?.user) throw new Error('Not authenticated');
+            if (!session?.user) throw new Error("Not authenticated");
 
             const { error } = await supabase
-                .from('report_formats')
+                .from("puretone_report_format")
                 .insert({
                     user_id: session.user.id,
-                    name: formatName.trim(),
+                    format_name: formatName.trim(),
                     sections,
+                    is_applied: false
                 });
 
             if (error) throw error;
 
-            alert('Format saved!');
-            onSelectFormat(sections, formatName.trim());
-            setFormatName('');
+            setSaveStatus("saved");
+            setTimeout(() => setSaveStatus("idle"), 1500);
+
             loadSavedFormats();
+
         } catch (err) {
             console.error(err);
-            setError('Save failed');
+            setError("Save failed");
         }
     };
 
     const deleteFormat = async (id) => {
-        if (!window.confirm('Delete?')) return;
+        if (!window.confirm("Delete this format?")) return;
+
         try {
-            await supabase.from('report_formats').delete().eq('id', id);
-            setSavedFormats(prev => prev.filter(f => f.id !== id));
+            await supabase
+                .from("puretone_report_format")
+                .delete()
+                .eq("id", id);
+
+            loadSavedFormats();
+
+            if (selectedFormatId === id) {
+                setSelectedFormatId(null);
+            }
         } catch (err) {
-            alert('Delete failed');
+            console.error(err);
         }
     };
 
     const loadSaved = (saved) => {
         setSections(saved.sections);
-        onSelectFormat(saved.sections, saved.name);
-        setFormatName(saved.name);
+        setFormatName(saved.format_name || "");
+        setSelectedFormatId(saved.id);
+        onSelectFormat(saved.sections, saved.format_name);
     };
 
     return (
@@ -124,7 +196,6 @@ function ReportFormatSelector({
                 <div className="FR-left-panel">
                     <h2 className="FR-title">FORMAT SELECTOR</h2>
 
-                    {error && <div className="FR-error">{error}</div>}
 
                     <input
                         type="text"
@@ -186,7 +257,6 @@ function ReportFormatSelector({
                                         {sections.front_weber_test ? "ON" : "OFF"}
                                     </button>
                                 </div>
-                                {/* Front page Recommendations toggle */}
                                 <div className="FR-toggle-row highlight-toggle">
                                     <span className="FR-toggle-label">Recommendations</span>
                                     <button
@@ -212,7 +282,6 @@ function ReportFormatSelector({
                     {/* Main Report (Back) Sections */}
                     <h4 className="FR-section-title">Main Report Sections</h4>
                     <div className="FR-toggle-grid">
-
                         <div className="FR-toggle-row">
                             <span className="FR-toggle-label">Patient Info</span>
                             <button
@@ -293,7 +362,6 @@ function ReportFormatSelector({
                             </button>
                         </div>
 
-                        {/* Main page Recommendations toggle */}
                         <div className="FR-toggle-row highlight-toggle">
                             <span className="FR-toggle-label">Recommendations</span>
                             <button
@@ -317,19 +385,28 @@ function ReportFormatSelector({
 
                     <div className="FR-action-buttons">
                         <button
-                            className={`FR-apply-btn ${applyStatus === 'applied' ? 'FR-applied' : ''}`}
+                            className={`FR-apply-btn ${applyStatus === 'applied' || applyStatus === 'applying'
+                                ? 'FR-applied'
+                                : ''
+                                }`}
                             onClick={handleApply}
+                            disabled={applyStatus === 'applying' || isCurrentlyApplied}
                         >
-                            {applyStatus === 'applied' ? 'Applied!' : 'Apply'}
-                        </button>     v
+                            {applyStatus === 'applying'
+                                ? 'Applying...'
+                                : applyStatus === 'applied' || isCurrentlyApplied
+                                    ? 'Applied'
+                                    : 'Apply'}
+                        </button>
 
                         <button
-                            className="FR-save-btn"
+                            className={`FR-save-btn ${saveStatus === "saved" ? "FR-saved" : ""}`}
                             disabled={!formatName.trim()}
                             onClick={saveFormat}
                         >
-                            Save Format
+                            {saveStatus === "saved" ? "Saved!" : "Save Format"}
                         </button>
+
                         <button className="FR-cancel-btn" onClick={onClose}>
                             Cancel
                         </button>
@@ -342,10 +419,10 @@ function ReportFormatSelector({
                                 {savedFormats.map((f) => (
                                     <div
                                         key={f.id}
-                                        className={`FR-saved-item ${formatName === f.name ? 'FR-active' : ''}`}
+                                        className={`FR-saved-item ${selectedFormatId === f.id ? 'FR-active' : ''}`}
                                         onClick={() => loadSaved(f)}
                                     >
-                                        <span className="FR-format-name">{f.name}</span>
+                                        <span className="FR-format-name">{f.format_name}</span>
                                         <button
                                             className="FR-delete-btn"
                                             onClick={(e) => {
@@ -392,8 +469,6 @@ function ReportFormatSelector({
                             )}
 
                             <div className="FR-front-compact-grid">
-
-
                                 {sections.front_speech_audiometry && (
                                     <div className="FR-panel FR-speech-panel">
                                         <h4 className="FR-panel-title">Speech Audiometry (Front)</h4>
@@ -438,6 +513,7 @@ function ReportFormatSelector({
                                     </div>
                                 )}
                             </div>
+
                             {sections.front_provisional_diagnosis && (
                                 <div className="FR-panel FR-provisional-panel">
                                     <h4 className="FR-panel-title">Provisional Diagnosis (Front)</h4>
@@ -473,14 +549,12 @@ function ReportFormatSelector({
                         </div>
                     )}
 
-                    {/* Separator when both pages are shown */}
                     {sections.front_page && (
                         <div className="FR-page-separator">
                             ─────────────── Page Break ───────────────
                         </div>
                     )}
 
-                    {/* Patient Info Preview */}
                     <div className={`FR-patient-info-preview ${sections.patient_info ? '' : 'FR-blurred'}`}>
                         <h4 className="FR-panel-title">PATIENT INFORMATION</h4>
                         <div className="FR-patient-details">
@@ -493,7 +567,6 @@ function ReportFormatSelector({
                         </div>
                     </div>
 
-                    {/* Ears - Side by Side */}
                     <div className="FR-ears-container">
                         <div className={`FR-ear-box ${sections.right_ear_graph ? '' : 'FR-blurred'} FR-right-ear`}>
                             <h4 className="FR-ear-title">RIGHT EAR</h4>
@@ -516,7 +589,6 @@ function ReportFormatSelector({
                         </div>
                     </div>
 
-                    {/* Bottom Panels - Main Report */}
                     <div className="FR-bottom-panels">
                         <div className={`FR-panel FR-provisional-panel ${sections.provisional_diagnosis ? '' : 'FR-blurred'}`}>
                             <h4 className="FR-panel-title">Provisional Diagnosis</h4>
@@ -581,9 +653,8 @@ function ReportFormatSelector({
                                 </tbody>
                             </table>
                         </div>
-
-
                     </div>
+
                     <div className='recomm-audiolo-main-rf'>
                         <div className={`FR-panel FR-recommendations-panel ${sections.recommendations ? '' : 'FR-blurred'}`}>
                             <h4 className="FR-panel-title">RECOMMENDATIONS (Main Page)</h4>
@@ -591,7 +662,6 @@ function ReportFormatSelector({
                                 ..........................
                             </div>
                         </div>
-                        {/* Audiologist */}
                         <div className={`FR-audiologist ${sections.audiologist_details ? '' : 'FR-blurred'}`}>
                             <h4 className="FR-panel-title">AUDIOLOGIST</h4>
                             <div className="FR-audiologist-content">
@@ -600,11 +670,8 @@ function ReportFormatSelector({
                                 Koram ENT Hospital<br />
                                 8096868398
                             </div>
-                        </div></div>
-
-
-                    {/* Front Page Recommendations Preview (small version) */}
-
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./index.css";
+import { useRef, useEffect } from "react";
 import {
   FaCog,
   FaFileAlt,
@@ -12,10 +13,11 @@ import { LuEar } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 import AudiologistDetailsSettings from "../AudiologistDetailsSettings";
 
-function Sidebar({ isOpen, onLogout, loading }) {
+function Sidebar({ isOpen, onLogout, loading, onClose }) {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [navLoading, setNavLoading] = useState(false);
+  const sidebarRef = useRef(null);
 
   const handleNavigateWithLoader = (path) => {
     setNavLoading(true);
@@ -26,7 +28,23 @@ function Sidebar({ isOpen, onLogout, loading }) {
       setNavLoading(false);
     }, 400);
   };
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        isOpen &&
+        sidebarRef.current &&
+        !sidebarRef.current.contains(event.target)
+      ) {
+        onClose && onClose();
+      }
+    };
 
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen, onClose]);
   return (
     <>
       <div className={`hp-sidebar ${isOpen ? "open" : ""}`}>

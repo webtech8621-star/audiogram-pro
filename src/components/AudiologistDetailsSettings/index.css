@@ -1,46 +1,65 @@
-/* Reuse the exact same styles as PatientDetails */
+/* Overlay */
 .patient-details-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 77, 64, 0.45);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
 }
 
-.patient-details-container {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    width: 300px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+.animate-spin-audiologist {
+    color: #ffffff !important;
+    animation: spin 1s linear infinite;
 }
 
+.animate-spin-audiologist-header {
+    color: #00897b !important;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Container */
+.patient-details-container {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    width: 300px;
+    border: 1px solid #f5e6ca;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* Logo */
 .pt-logo {
     width: 100%;
     height: 40px;
     font-size: 12px;
     text-align: center;
     margin-bottom: 15px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }
 
 .pt-logo-icon {
-    color: #8B4513;
+    color: #00897b;
     font-weight: bold;
     vertical-align: middle;
 }
 
 .logo-text {
-    color: #8B4513;
+    background: linear-gradient(180deg, #ffffff, #f5e6ca);
     font-weight: bold;
     vertical-align: middle;
     margin-left: 6px;
 }
 
+/* Form */
 .form-group {
     margin-bottom: 15px;
 }
@@ -48,7 +67,7 @@
 .form-group label {
     display: block;
     margin-bottom: 5px;
-    color: #232222;
+    color: #004d40;
     font-size: 10px;
     font-weight: bold;
 }
@@ -57,57 +76,68 @@
 .form-group select {
     width: 100%;
     padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    border: 1px solid #e6d3aa;
+    border-radius: 6px;
     box-sizing: border-box;
     outline: none;
+    background-color: #fbf6ec;
+    color: #004d40;
 }
 
-.form-group input {
-    background-color: #e4e4e4;
-    color: #171616;
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #00897b;
+    box-shadow: 0 0 0 2px rgba(0, 137, 123, 0.2);
 }
 
-.save-button {
-    background-color: #8B4513;
+/* Button */
+.lp-btn-signin {
+    background-color: #00897b;
     color: white;
     padding: 10px 20px;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
     width: 100%;
     margin-top: 10px;
+    font-weight: 600;
+    transition: 0.2s;
 }
 
-.save-button:hover {
-    background-color: #704214;
+.lp-btn-signin:hover {
+    background-color: #00897b;
 }
 
-.save-button:disabled {
-    background-color: #a07a52;
+.lp-btn-signin:disabled {
+    background-color: #b2dfdb;
     cursor: not-allowed;
 }
 
+/* Inputs */
 .ptd-inputs {
     border: solid 0px black !important;
-    background-color: #e4e4e4 !important;
+    background-color: #fbf6ec !important;
     text-align: center !important;
     font-size: 10px !important;
+    color: #004d40;
 }
 
+/* Error */
 .error-message {
-    color: red;
+    color: #c0392b;
     font-size: 12px;
     text-align: center;
     margin-bottom: 15px;
 }
 
+/* Success */
 .para-successfull {
-    color: #5b974c !important;
+    color: #00897b !important;
     text-align: center;
     font-size: 14px;
 }
 
+/* Success box */
 .success-box {
     display: flex;
     flex-direction: column;
@@ -120,36 +150,37 @@
     padding: 35px 20px;
 }
 
+/* Success circle */
 .success-circle {
     width: 70px;
     height: 70px;
-    background: #dcfce7;
+    background: #e0f2f1;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 0 auto 16px;
-    box-shadow: 0 2px 8px rgba(22, 163, 74, 0.15);
+    box-shadow: 0 2px 8px rgba(0, 137, 123, 0.15);
 }
 
 .success-circle svg {
-    color: #16a34a;
+    color: #00897b;
     font-size: 42px;
 }
 
 .success-container p {
     margin: 0;
-    color: #1e293b;
+    color: #004d40;
     font-size: 15px;
     font-weight: 600;
 }
 
+/* Success content */
 .success-box {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 70%;
-    /* or min-height: 200px */
     padding: 2rem;
 }
 
@@ -157,16 +188,16 @@
     display: flex;
     align-items: center;
     gap: 1rem;
-    background: rgba(240, 255, 240, 0.9);
+    background: #fbf6ec;
     padding: 1.5rem 2.5rem;
     border-radius: 16px;
-    border: 1px solid #d4f4d4;
-    box-shadow: 0 4px 15px rgba(0, 128, 0, 0.1);
+    border: 1px solid #f5e6ca;
+    box-shadow: 0 4px 15px rgba(0, 137, 123, 0.12);
     flex-direction: column;
 }
 
 .success-icon {
-    color: #22c55e;
+    color: #56dc47;
     width: 48px;
     height: 48px;
     flex-shrink: 0;
@@ -179,12 +210,12 @@
 .success-text strong {
     display: block;
     font-size: 15px;
-    color: #166534;
+    color: #00695c;
     margin-bottom: 0.35rem;
 }
 
 .success-text p {
     margin: 0;
-    font-size: 15;
+    font-size: 15px;
     color: #374151;
 }

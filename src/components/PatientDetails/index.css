@@ -5,6 +5,7 @@
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
+  /* teal overlay */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -12,26 +13,30 @@
 }
 
 .patient-details-container {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
+  background: #ffffff;
+  padding: 22px;
+  border-radius: 10px;
   width: 300px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 18px rgba(0, 105, 92, 0.25);
 }
 
+/* Title */
 .patient-details-container h2 {
   margin: 0 0 10px;
   font-size: 15px;
-  color: #333;
+  color: #00695C;
   text-align: center;
+  font-weight: 700;
 }
 
 .patient-details-container p {
   margin: 0 0 20px;
   color: #666;
   font-size: 0.9em;
+  text-align: center;
 }
 
+/* Form */
 .form-group {
   margin-bottom: 15px;
 }
@@ -39,68 +44,84 @@
 .form-group label {
   display: block;
   margin-bottom: 5px;
-  color: #232222;
+  color: #000000;
   font-size: 10px;
   font-weight: bold;
 }
 
+/* Inputs */
 .form-group input,
 .form-group select {
   width: 100%;
   padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  border: 1px solid #434343;
+  border-radius: 6px;
   box-sizing: border-box;
   outline: none;
-  /* Remove default outline */
-  border-bottom: none;
-  /* Remove underdotted line */
+  background-color: #ffffff;
+  color: #000000;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
 }
 
-.form-group input {
-  background-color: #e4e4e4;
-  color: #171616;
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #00897B;
+  box-shadow: 0 0 0 2px rgba(0, 137, 123, 0.15);
 }
 
+/* Save button */
 .save-button {
-  background-color: #8B4513;
-  color: white;
+  background: linear-gradient(135deg, #00897B, #00695C);
+  color: #ffffff;
   padding: 10px 20px;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
   width: 100%;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  transition: all 0.2s ease;
 }
 
 .save-button:hover {
-  background-color: #704214;
+  background: linear-gradient(135deg, #00695C, #004D40);
+  box-shadow: 0 4px 10px rgba(0, 137, 123, 0.3);
+  color: #ffffff;
 }
 
+/* Inputs small style */
 .ptd-inputs {
-  border: solid 0px black !important;
-  background-color: #e4e4e4 !important;
+  border: solid 1px rgb(142, 142, 142) !important;
+  background-color: #ffffff !important;
   text-align: center !important;
   font-size: 10px !important;
+  color: #004d40;
+  font-weight: 600;
 }
 
+/* Logo */
 .pt-logo {
   width: 100%;
   height: 40px;
   font-size: 12px;
+  color: #ffffff;
 }
 
-.pt-logo-icon {
-  color: #8B4513;
-  font-weight: bold;
-}
+
 
 .pt-logo-text {
-  color: #8B4513;
+  color: #000000;
   font-weight: bold;
 }
 
+.logo-text {
+  background: transparent !important;
+  color: #00695C;
+}
+
+/* Success text */
 .para-successfull {
-  color: #5b974c !important;
+  color: #4CAF50 !important;
 }
 
 /* ===============================
@@ -113,14 +134,14 @@
 
 .existing-patient-view h3 {
   font-size: 13px;
-  color: #333;
+  color: #4CAF50;
   margin-bottom: 4px;
   text-align: center;
 }
 
 .existing-patient-view p {
-  font-size: 10px;
-  color: #666;
+  font-size: 11px;
+  color: #0a0a0a;
   text-align: center;
   margin-bottom: 10px;
 }
@@ -128,43 +149,43 @@
 .existing-patient-view h4 {
   font-size: 11px;
   margin: 8px 0 6px;
-  color: #8B4513;
-  border-bottom: 1px solid #e0e0e0;
+  color: #141414;
+  border-bottom: 1px solid #e0f2ef;
   padding-bottom: 4px;
 }
 
-/* Session list container */
+/* Session list */
 .session-list {
   max-height: 180px;
   overflow-y: auto;
   padding-right: 4px;
 }
 
-/* Individual session card */
+/* Session card */
 .session-item {
-  background: #f7f7f7;
-  border-left: 4px solid #8B4513;
+  background: #f7fcfb;
+  border-left: 4px solid #00897B;
   padding: 8px 10px;
   margin-bottom: 6px;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
 }
 
-/* Hover effect */
+/* Hover */
 .session-item:hover {
-  background: #fff;
-  transform: translateX(2px);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  transform: translateX(3px);
+  box-shadow: 0 4px 10px rgba(0, 137, 123, 0.2);
 }
 
 /* Session title */
 .session-item strong {
   font-size: 11px;
-  color: #333;
+  color: #101010;
 }
 
-/* Meta text */
+/* Meta */
 .session-item small {
   font-size: 9px;
   color: #666;
@@ -173,13 +194,13 @@
   margin-top: 2px;
 }
 
-/* Scrollbar styling (optional but nice) */
+/* Scrollbar */
 .session-list::-webkit-scrollbar {
   width: 4px;
 }
 
 .session-list::-webkit-scrollbar-thumb {
-  background-color: #c4a484;
+  background-color: #00897B;
   border-radius: 4px;
 }
 
@@ -187,7 +208,15 @@
   background: transparent;
 }
 
+/* Spinner icon */
 .save-ear-icon {
   animation: spin 1s linear infinite;
-  font-size: 18px;
+  font-size: 15px;
+  color: #ffffff;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
 }

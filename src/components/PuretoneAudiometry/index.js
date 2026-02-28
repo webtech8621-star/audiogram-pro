@@ -134,8 +134,9 @@ function PureToneAudiometry() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loadingSession, setLoadingSession] = useState(false);
-  const [speechEnabled, setSpeechEnabled] = useState(true);
-  const [weberEnabled, setWeberEnabled] = useState(true);
+  const [speechEnabled] = useState(true);
+  const [weberEnabled] = useState(true);
+
 
   const [speechData, setSpeechData] = useState({
     right: { pta: "", srt: "", sds: "" },
@@ -179,7 +180,7 @@ function PureToneAudiometry() {
   const zoomedLeftChartRef = useRef(null);
   const [currentPatientId, setCurrentPatientId] = useState(null);
   const [currentSessionId, setCurrentSessionId] = useState(null);
-  const [isEnabled, setIsEnabled] = useState(true);
+  const [isEnabled,] = useState(true);
   const [diagnosis, setDiagnosis] = useState({ re: "", le: "" });
 
   const [manualDiagnosisEdit, setManualDiagnosisEdit] = useState({
@@ -802,54 +803,51 @@ function PureToneAudiometry() {
         </div>
       ) : (
         <div className={`pta-main `}>
-          <div className="pta-header-row">
-            <div className="space-cont"></div>
-            <h1 className="pta-title-header">PURE TONE AUDIOMETRY</h1>
-            <div className="button-sidebar">
-              <button className="nav-button make-report-button" onClick={() => setShowReport(true)}>
-                Make Report
-              </button>
+          <h1 className="pta-title-header">PURE TONE AUDIOMETRY</h1>
 
-              <button
-                className="nav-button"
-                onClick={() => setShowFormatSelector(true)}
-                style={{
-                  position: "relative",
-                  minWidth: "180px",
-                  whiteSpace: "nowrap",
-                  background: currentFormatName === "Default (Full)" ? "" : "#e8f5e9",
-                  border: currentFormatName === "Default (Full)" ? "" : "1px solid #81c784",
-                  color: currentFormatName === "Default (Full)" ? "" : "#2e7d32",
-                }}
-              >
-                {currentFormatName === "Default (Full)"
-                  ? "Report Format (Default)"
-                  : `Using: ${currentFormatName}`}
-              </button>
+          <div className="button-sidebar">
+            <button className="nav-button make-report-button" onClick={() => setShowReport(true)}>
+              Make Report
+            </button>
 
-              <button className="nav-button new-patient-button" onClick={handleNewPatientClick}>
-                + New Patient
-              </button>
+            <button
+              className="nav-button"
+              onClick={() => setShowFormatSelector(true)}
+              style={{
+                position: "relative",
+                minWidth: "180px",
+                whiteSpace: "nowrap",
+                background: currentFormatName === "Default (Full)" ? "" : "#e8f5e9",
+                border: currentFormatName === "Default (Full)" ? "" : "1px solid #81c784",
+                color: currentFormatName === "Default (Full)" ? "" : "#2e7d32",
+              }}
+            >
+              {currentFormatName === "Default (Full)"
+                ? "Report Format (Default)"
+                : `Using: ${currentFormatName}`}
+            </button>
 
-              <button
-                className={`nav-button save-session-btn ${saveStatus}`}
-                onClick={handleSaveSession}
-                disabled={saveStatus === "saving" || loadingSession}
-              >
-                {saveStatus === "saving" && <>Saving...</>}
-                {saveStatus === "success" && <>Saved ✓</>}
-                {saveStatus === "error" && <>Failed ×</>}
-                {saveStatus === "idle" && <>Save Session</>}
-              </button>
+            <button className="nav-button new-patient-button" onClick={handleNewPatientClick}>
+              + New Patient
+            </button>
 
-              {sessionSaved && (
-                <button className="nav-button" onClick={handleMoveToImpedance}>
-                  Move to Impedance →
-                </button>
-              )}
-            </div>
+            <button
+              className={`nav-button save-session-btn ${saveStatus}`}
+              onClick={handleSaveSession}
+              disabled={saveStatus === "saving" || loadingSession}
+            >
+              {saveStatus === "saving" && <>Saving...</>}
+              {saveStatus === "success" && <>Saved ✓</>}
+              {saveStatus === "error" && <>Failed ×</>}
+              {saveStatus === "idle" && <>Save Session</>}
+            </button>
+
+            {sessionSaved && (
+              <button className="nav-button" onClick={handleMoveToImpedance}>
+                Move to Impedance →
+              </button>
+            )}
           </div>
-
           <div className="pta-content-row">
             <div className="pta-table-card">
               <div className="FrequencyDataTable-total-cont">
@@ -893,13 +891,7 @@ function PureToneAudiometry() {
                 <div className="pta-header">
                   <h3 className="pta-title">Provisional Diagnosis</h3>
                   <div className="pta-switch-container">
-                    <div
-                      className={`pta-toggle ${isEnabled ? "pta-active" : ""}`}
-                      onClick={() => setIsEnabled(!isEnabled)}
-                    >
-                      <div className="pta-toggle-handle"></div>
-                    </div>
-                    <span className="pta-switch-label">Enable Section</span>
+
                   </div>
                 </div>
                 <div className={!isEnabled ? "pta-disabled" : ""}>
@@ -941,12 +933,7 @@ function PureToneAudiometry() {
                   <div className="pta-header">
                     <h3 className="pta-title">SPEECH AUDIOMETRY</h3>
                     <div className="pta-switch-container">
-                      <div
-                        className={`pta-toggle ${speechEnabled ? "pta-active" : ""}`}
-                        onClick={() => setSpeechEnabled(!speechEnabled)}
-                      >
-                        <div className="pta-toggle-handle"></div>
-                      </div>
+
                     </div>
                   </div>
 
@@ -1028,14 +1015,9 @@ function PureToneAudiometry() {
 
                 <div className="pta-diagnosis-card-webertest">
                   <div className="pta-header">
-                    <h3 className="pta-title">WEBER TEST</h3>
+                    <h3 className="pta-title" style={{ textAlign: "center" }}>WEBER TEST</h3>
                     <div className="pta-switch-container">
-                      <div
-                        className={`pta-toggle ${weberEnabled ? "pta-active" : ""}`}
-                        onClick={() => setWeberEnabled(!weberEnabled)}
-                      >
-                        <div className="pta-toggle-handle"></div>
-                      </div>
+
                     </div>
                   </div>
 
@@ -1123,13 +1105,9 @@ function PureToneAudiometry() {
                 <div className="pta-header">
                   <h3 className="pta-title">Recommendations</h3>
                   <div className="pta-switch-container">
-                    <div
-                      className={`pta-toggle ${recommendationsEnabled ? "pta-active" : ""}`}
-                      onClick={() => setRecommendationsEnabled(!recommendationsEnabled)}
-                    >
-                      <div className="pta-toggle-handle"></div>
-                    </div>
-                    <span className="pta-switch-label">Enable Section</span>
+
+
+
                   </div>
                 </div>
                 <div className={!recommendationsEnabled ? "pta-disabled" : ""}>

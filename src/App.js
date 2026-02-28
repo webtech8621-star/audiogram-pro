@@ -14,6 +14,7 @@ import HomePage from "./components/HomePage";
 import PuretoneAudiometry from "./components/PuretoneAudiometry";
 import ImpedanceAudiometry from "./components/ImpedanceAudiometry";
 import SavedReports from "./components/SavedReports";
+import Settings from "./components/Settings"
 import "./App.css";
 
 // ── Protected Route ─────────────────────────────────────────────
@@ -99,7 +100,14 @@ function App() {
             </ProtectedRoute>
           }
         />
-
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <Settings />
+            </ProtectedRoute>
+          }
+        />
         {/* Report format selector is usually a modal — not a page */}
       </Routes>
     </BrowserRouter>

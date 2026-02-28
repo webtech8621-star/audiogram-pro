@@ -37,6 +37,7 @@ const MakeIaReport = ({
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [renderCount, setRenderCount] = useState(0);
+    const [impMarginTop, setImpMarginTop] = useState(0);
 
     const [audiologist, setAudiologist] = useState({
         name: "",
@@ -51,7 +52,26 @@ const MakeIaReport = ({
         month: "long",
         year: "numeric",
     });
+    useEffect(() => {
+        const fetchImpMarginTop = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
 
+            if (!user) return;
+
+            const { data, error } = await supabase
+                .from("report_layout_settings")
+                .select("margin_top")
+                .eq("user_id", user.id)
+                .eq("report_type", "impedance")
+                .single();
+
+            if (!error && data) {
+                setImpMarginTop(data.margin_top);
+            }
+        };
+
+        fetchImpMarginTop();
+    }, []);
     useEffect(() => {
         const fetchAudiologist = async () => {
             try {
@@ -195,6 +215,7 @@ const MakeIaReport = ({
                     <div className="MR-logo-header-cont">
                         <LuEar className="MR-logo-icon" />
                         <span className="MR-logo-text">AudiogramPro</span>
+
                     </div>
                     <button className="MR-IA-close-btn" onClick={onClose}>×</button>
                 </div>
@@ -202,9 +223,10 @@ const MakeIaReport = ({
                 <div className="MR-IA-pdf-content">
                     {loading && (
                         <div className="MR-IA-loading">
-                            <div>🎯 Here Is Your Report...</div>
-                            <div style={{ fontSize: "12px", marginTop: "10px", color: "#666" }}>
-                                Charts rendering in progress...
+
+                            <div style={{ fontSize: "12px", marginTop: "10px", color: "#666", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+                                <span className="loadmakeIa" style={{ gap: "5px" }}><LuEar className="animate-spin" size={14} />Loading...</span>
+
                             </div>
                         </div>
                     )}
@@ -231,20 +253,23 @@ const MakeIaReport = ({
             </div>
 
             {/* ── HIDDEN CONTENT FOR PDF CAPTURE ── */}
-            <div
+            <div className="IMP-PDF-Container"
                 ref={reportRef}
                 style={{
                     position: "absolute",
                     left: "-9999px",
-                    top: 0,
-                    width: "100vw",
-                    background: "white",
-                    padding: "20px 30px",
+                    paddingTop: `${impMarginTop}px `,
+                    width: "1300px",
+
+                    paddingRight: "80px",
+                    paddingLeft: "80px",
+                    background: "transparent",
                     fontFamily: "Arial, sans-serif",
                     boxSizing: "border-box",
                 }}
             >
                 <div className="MR-IA-header">
+                    <div style={{ width: "300px" }}></div>
                     <h1>IMPEDANCE AUDIOMETRY REPORT</h1>
                     <p style={{ textAlign: "right", fontSize: "14px", color: "#555" }}>
                         Date: {currentDate}
@@ -262,6 +287,7 @@ const MakeIaReport = ({
                             <p><strong>Location:</strong> {patientInfo.location}</p>
                         )}
                     </div>
+
                 )}
 
                 {/* Graphs */}
@@ -359,39 +385,40 @@ const MakeIaReport = ({
                     )}
 
                     {/* Interpretation */}
-                    {reportSections?.interpretation && (
-                        <div className="MR-IA-table-card">
-                            <h3 className="tables-header">Interpretation</h3>
-                            <div className="MR-IA-text-content changeSizeCont">
-                                <p className="para-values">
-                                    <strong>RIGHT :</strong> {reportData?.interpretation?.re || "-"}
-                                </p>
-                                <p className="para-values">
-                                    <strong>LEFT :</strong> {reportData?.interpretation?.le || "-"}
-                                </p>
-                            </div>
-                        </div>
-                    )}
+
 
                     {/* Provisional Diagnosis */}
-                    {reportSections?.provisional_diagnosis && (
-                        <div className="MR-IA-table-card">
-                            <h3 className="tables-header">Provisional Diagnosis</h3>
-                            <div className="MR-IA-text-content">
-                                <p className="para-values">
-                                    <strong>RIGHT :</strong> {reportData?.diagnosis?.re || "No data available"}
-                                </p>
-                                <p className="para-values">
-                                    <strong>LEFT :</strong> {reportData?.diagnosis?.le || "No data available"}
-                                </p>
-                            </div>
-                        </div>
-                    )}
+
 
                     {/* Recommendations */}
 
                 </div>
-
+                {reportSections?.interpretation && (
+                    <div className="MR-IA-table-card" style={{ marginTop: "15px" }}>
+                        <h3 className="tables-header">Interpretation</h3>
+                        <div className="MR-IA-text-content changeSizeCont">
+                            <p className="para-values">
+                                <strong>RIGHT :</strong> {reportData?.interpretation?.re || "-"}
+                            </p>
+                            <p className="para-values">
+                                <strong>LEFT :</strong> {reportData?.interpretation?.le || "-"}
+                            </p>
+                        </div>
+                    </div>
+                )}
+                {reportSections?.provisional_diagnosis && (
+                    <div className="MR-IA-table-card" style={{ marginTop: "15px" }}>
+                        <h3 className="tables-header">Provisional Diagnosis</h3>
+                        <div className="MR-IA-text-content">
+                            <p className="para-values">
+                                <strong>RIGHT :</strong> {reportData?.diagnosis?.re || "No data available"}
+                            </p>
+                            <p className="para-values">
+                                <strong>LEFT :</strong> {reportData?.diagnosis?.le || "No data available"}
+                            </p>
+                        </div>
+                    </div>
+                )}
                 {/* Audiologist Details */}
                 <div className="MakReport-recomm-audio-main-cont">{reportSections?.recommendations && (
                     <div className="MR-IA-table-card" style={{ marginTop: "30px" }}>

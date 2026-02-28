@@ -37,7 +37,7 @@ function Navbar({ onToggleSidebar, onProfileClick, profilePicture }) {
           <span className="hp-icon-label">About</span>
         </div>
 
-        <div className="hp-icon-wrapper" onClick={onProfileClick}>
+        {/* <div className="hp-icon-wrapper" onClick={onProfileClick}>
           <img
             src={profilePicture}
             alt="Profile"
@@ -45,7 +45,7 @@ function Navbar({ onToggleSidebar, onProfileClick, profilePicture }) {
             onError={(e) => (e.target.src = "https://i.pravatar.cc/40")}
           />
           <span className="hp-icon-label">Profile</span>
-        </div>
+        </div> */}
       </div>
     </div>
   );

@@ -22,9 +22,9 @@
 }
 
 .MR-PTA-header-popup {
-    background-color: #8b5e3c;
+    background-color: #ffffff;
     /* Brown Header matching IA */
-    padding: 15px 25px;
+    padding: 15px 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -37,21 +37,21 @@
 }
 
 .MR-PTA-logo-icon {
-    color: white;
-    font-size: 22px;
+    color: #00897B;
+    font-size: 14px;
 }
 
 .MR-PTA-logo-text {
-    color: white;
+    color: #00897B;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 13px;
 }
 
 .MR-PTA-close-btn {
     background: none;
     border: none;
-    color: white;
-    font-size: 30px;
+    color: #00897B;
+    font-size: 20px;
     cursor: pointer;
 }
 

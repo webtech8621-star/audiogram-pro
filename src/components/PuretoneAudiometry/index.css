@@ -197,7 +197,6 @@
   margin-top: 60px !important;
   /* space for navbar */
   padding: 20px;
-  background: #f9f9f9;
   width: 100%;
   overflow-y: auto;
 }
@@ -428,7 +427,7 @@ width:100px;
   border-radius: 8px;
   width: 900px;
   max-width: 900px;
-  height: 600px;
+  height: 650px;
   display: flex;
   flex-direction: column;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
@@ -459,7 +458,8 @@ width:100px;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  border: 0px solid #ddd;
+  border: 0px solid #00897B;
+  color: #081312;
   background: #fff;
   padding: 4px;
   border-radius: 6px;
@@ -475,6 +475,12 @@ width:100px;
 
 .symbol-btn .symbol-char {
   font-size: 18px;
+  font-weight: 600;
+}
+
+.symbol-text {
+  font-size: 10px;
+  font-weight: 600;
 }
 
 .symbol-btn.active {
@@ -520,11 +526,13 @@ width:100px;
 
 .btn-primary {
   padding: 8px 12px;
-  background: #8b5e3c;
+  background: #00897B;
   color: #fff;
   border-radius: 6px;
-  border: none;
   cursor: pointer;
+  font-size: 10px;
+  border: #000000 0px solid;
+  font-weight: 700;
 }
 
 .btn-secondary {
@@ -532,8 +540,10 @@ width:100px;
   background: #f2f2f2;
   color: #333;
   border-radius: 6px;
-  border: none;
+  border: #000000 1px solid;
   cursor: pointer;
+  font-size: 10px;
+  font-weight: 700;
 }
 
 /* subtle blurred-behind effect for page when zoom open */
@@ -609,18 +619,21 @@ width:100px;
 .pta-header-row {
   display: flex;
   flex-direction: row;
+  align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
-  width: 100%;
-  background-color: #ffffff;
+  width: 95%;
+  background-color: transparent;
 }
 
 .pta-title-header {
   /* margin: 0px; */
-  font-size: 12px;
+  font-size: 13px;
   font-weight: bold;
   text-align: center !important;
   color: #3a3a3a;
+  font-family: Montserrat;
+  width: 100%;
 }
 
 /* .make-report-button {
@@ -759,38 +772,43 @@ width:100px;
   /*8008783587 */
   gap: 12px;
   /* Space between buttons */
-  width: 680px;
   /* Adjust as needed */
-  padding: 5px;
-  margin: 0px;
+  width: 700px;
+
+  margin-left: auto !important;
+  background-color: transparent;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 /* Base style for all buttons */
 .nav-button {
-  background: rgb(225, 226, 225);
+  background: rgb(255, 255, 255);
   /* Remove background */
-  border: none;
+  border: solid 1px #00897B;
   /* Remove border */
-  padding: 10px 15px;
+  padding: 8px 15px;
   text-align: left;
   /* Align text to the left */
   font-size: 11px;
   font-family: 'Segoe UI', sans-serif;
-  color: #784e2e;
+  color: #00897B;
   /* Professional dark grey */
   cursor: pointer;
   font-weight: 500;
   border-radius: 6px;
+  height: 31px;
+  width: auto;
   /* Smooth corners for the hover effect */
   transition: all 0.2s ease-in-out;
 }
 
 /* Hover effect: Subtle background and text color change */
 .nav-button:hover {
-  background-color: #f0f4f8;
-  color: #000000;
+  background-color: #00897B;
+  color: #ffffff;
+  height: 31px;
   /* Modern blue highlight */
-  padding-left: 13.5px;
   /* Slight shift effect */
 }
 
@@ -812,15 +830,15 @@ width:100px;
 
 /* Default / idle state */
 .save-session-btn.idle {
-  background-color: rgb(225, 226, 225);
+  background-color: white;
   /* indigo */
-  color: #784e2e;
-  border: none;
+  color: #00897B;
+  border: solid 1px #00897B;
 }
 
 .save-session-btn.idle:hover {
-  background-color: #f0f4f8;
-  color: #000000;
+  background-color: #00897B;
+  color: white;
 }
 
 /* Saving */
@@ -1008,4 +1026,338 @@ width:100px;
   font-size: 12px;
   color: #6b7280;
   line-height: 1.25;
+}
+
+/* ────────────────────────────────────────────────
+   MOBILE RESPONSIVE STYLES
+   Everything below only applies on smaller screens
+───────────────────────────────────────────────── */
+
+/* Tablets & smaller laptops (≤ 1024px) */
+@media (max-width: 1024px) {
+  .pta-content-row {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .pta-table-card,
+  .pta-graph-card {
+    width: 100%;
+  }
+
+  .graphs-row {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .graph-box {
+    width: 100%;
+    max-width: 500px;
+  }
+
+  .chart-container {
+    height: 350px;
+    width: 100%;
+  }
+
+  .pta-summary {
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .pta-summary-item {
+    width: 80%;
+    max-width: 300px;
+  }
+
+  .button-sidebar {
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .nav-button {
+    padding: 10px 14px;
+    font-size: 12px;
+    min-width: 120px;
+  }
+
+  .space-cont {
+    display: none;
+    /* hide empty space on smaller screens */
+  }
+}
+
+/* Phones – most important changes (≤ 768px) */
+@media (max-width: 768px) {
+  .pta-main {
+    padding: 12px;
+  }
+
+  .pta-header-row {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .pta-title-header {
+    font-size: 16px;
+    color: #00897B;
+    text-align: left;
+  }
+
+  .button-sidebar {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .nav-button {
+    font-size: 11px;
+    padding: 8px 12px;
+    min-width: auto;
+    flex: 1 1 auto;
+  }
+
+  .make-report-button,
+  .save-session-btn,
+  .new-patient-button {
+    flex: 1 1 45%;
+  }
+
+  /* Table becomes scrollable horizontally */
+  .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .pta-input-table {
+    font-size: 12px;
+    min-width: 700px;
+    /* force horizontal scroll if needed */
+  }
+
+  .pta-input-table input[type="number"] {
+    width: 40px;
+    font-size: 13px;
+    padding: 6px 4px;
+  }
+
+  .pta-diagnosis-card,
+  .pta-diagnosis-card-sppech-audio,
+  .pta-diagnosis-card-webertest {
+    font-size: 13px;
+  }
+
+  .pta-label,
+  .diagnosis-label,
+  .pta-title {
+    font-size: 13px;
+  }
+
+  .pta-input,
+  .pta-input-su,
+  .pta-input.small {
+    font-size: 14px;
+    padding: 6px;
+  }
+
+  /* Speech & Weber cards stack vertically */
+  .speechaud-weber-row-cont {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .pta-diagnosis-card-sppech-audio,
+  .pta-diagnosis-card-webertest {
+    width: 100%;
+  }
+
+  .weber-dual-input {
+    justify-content: space-between;
+  }
+
+  /* Zoom modal becomes almost full screen on mobile */
+  .pta-zoom-overlay {
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.6);
+  }
+
+  .pta-zoomed-panel {
+    width: 100%;
+    max-width: none;
+    height: 95vh;
+    padding: 12px;
+    border-radius: 0;
+  }
+
+  .pta-zoom-graphs {
+    flex-direction: column;
+  }
+
+  .zoom-chart-wrapper {
+    height: 300px;
+    width: 100%;
+  }
+
+  .symbol-palette {
+    flex-direction: row;
+    flex-wrap: wrap;
+    height: auto;
+    margin-top: 16px;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .symbol-btn {
+    width: 60px;
+    height: 32px;
+    font-size: 11px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .zoom-graph-title {
+    font-size: 14px;
+  }
+
+  /* Bigger touch targets */
+  .pta-toggle {
+    width: 50px;
+    height: 24px;
+  }
+
+  .pta-toggle-handle {
+    width: 20px;
+    height: 20px;
+    top: 2px;
+  }
+
+  .pta-toggle.pta-active .pta-toggle-handle {
+    transform: translateX(26px);
+  }
+}
+
+/* Very small phones (≤ 480px) – extra adjustments */
+@media (max-width: 480px) {
+  .pta-title-header {
+    font-size: 15px;
+  }
+
+  .nav-button {
+    font-size: 10px;
+    padding: 8px 10px;
+  }
+
+  .pta-input-table {
+    font-size: 11px;
+  }
+
+  .pta-input-table input[type="number"] {
+    width: 38px;
+    font-size: 12px;
+  }
+
+  .diagnosis-row {
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+
+  .chart-container {
+    height: 280px;
+  }
+
+  .zoom-chart-wrapper {
+    height: 260px;
+  }
+}
+
+
+/* ########################### */
+/* ===== Container spacing ===== */
+.button-sidebar {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  padding: 10px;
+}
+
+/* ===== Base button ===== */
+.nav-button {
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid #e6e6e6;
+  background: #ffffff;
+  color: #0d9488;
+  /* transition: all 0.25s ease; */
+}
+
+/* ===== Hover ===== */
+.nav-button:hover {
+  background: #f5efe6;
+  /* sand */
+  color: #00897B;
+  border-color: #d9cfbf;
+  /* transform: translateY(-1px); */
+}
+
+/* ===== Primary action — Make Report ===== */
+.make-report-button {
+  background: #0d9488;
+  color: #ffffff;
+  border: none;
+  /* box-shadow: 0 6px 16px rgba(13, 148, 136, 0.25); */
+}
+
+.make-report-button:hover {
+  background: #0f766e;
+}
+
+/* ===== New Patient — soft sand ===== */
+.new-patient-button {
+  background: #F5E6CA;
+  color: #00897B;
+  border: 1px solid #00897B;
+}
+
+.new-patient-button:hover {
+  background: #ffffff;
+  color: #0d9488;
+}
+
+/* ===== Save Session states ===== */
+
+/* idle */
+.save-session-btn.idle {
+  background: #ffffff;
+  color: #0d9488;
+}
+
+/* saving */
+.save-session-btn.saving {
+  background: #ffffff;
+  color: #15f900;
+  border-color: #6eda58;
+  cursor: not-allowed;
+}
+
+/* success */
+.save-session-btn.success {
+  background: #5fc55f;
+  color: #f7f7f7;
+  border-color: #ffffff;
+}
+
+/* error */
+.save-session-btn.error {
+  background: #fdecec;
+  color: #dc2626;
+  border-color: #fca5a5;
 }

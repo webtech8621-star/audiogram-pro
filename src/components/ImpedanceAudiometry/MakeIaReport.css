@@ -39,15 +39,29 @@
     color: #1976d2;
     width: 100%;
     margin-top: 250px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .MR-IA-header-popup {
     display: flex;
     margin-bottom: 8px;
-    background-color: #8b5e3c;
+    background-color: #ffffff;
     border-radius: 3px;
     justify-content: space-between;
     padding: 15px !important;
+}
+
+.animate-spin {
+    animation: spin 1s linear infinite !important;
+    color: #ffffff;
+}
+
+.loadmakeIa {
+    color: #ffffff;
+
 }
 
 .MR-IA-close-btn {
@@ -57,7 +71,7 @@
     width: 20px;
     height: 20px;
     cursor: pointer;
-    color: #ffffff;
+    color: #0d9488;
     transition: all 0.3s;
     display: flex;
     align-items: center;
@@ -72,7 +86,7 @@
 /* Patient Info */
 .MR-IA-patient-info {
     text-align: center;
-    margin: 28px 0 40px;
+    margin: 10px 0 40px;
     font-size: 17px;
     color: #333;
     background: #f0f7ff;
@@ -83,6 +97,8 @@
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+    margin-top: 0px !important;
+
 }
 
 /* Graphs Row */
@@ -90,7 +106,9 @@
     display: flex;
     justify-content: space-between;
     gap: 40px;
-    margin-bottom: 50px;
+    margin-bottom: 30px;
+    width: 90%;
+    margin-top: 10px;
 }
 
 .MR-IA-graph-box {
@@ -118,7 +136,7 @@
 }
 
 .MR-IA-chart-container {
-    width: 500px !important;
+    width: 457px !important;
     height: 280px;
     max-width: none !important;
     margin: 0 auto;
@@ -136,13 +154,14 @@
     gap: 32px;
     background-color: transparent;
     height: auto;
-    margin-top: 20px;
-    flex-wrap: wrap;
+    margin-top: -30px;
+    width: 1120px;
+    justify-content: space-between;
 }
 
 /* Individual section cards */
 .MR-IA-table-card {
-    width: 570px;
+    width: 520px;
     height: auto;
     background: transparent;
     padding: 5px;
@@ -367,14 +386,14 @@
 }
 
 .MR-logo-text {
-    color: #ffff;
+    color: #0d9488;
     font-weight: bold;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 .MR-logo-icon {
-    color: #ffff;
-    font-size: 12px;
+    color: #0d9488;
+    font-size: 14px;
     font-weight: bold;
 }
 
@@ -462,7 +481,7 @@
 }
 
 .MakReport-recomm-audio-main-cont {
-    width: 100%;
+    width: 1120px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;

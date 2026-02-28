@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Line } from "react-chartjs-2";
+import { Line } from "react-chartjs-2"; import { LuEar } from "react-icons/lu";
 import Navbar from "../Navbar";
 import Sidebar from "../Sidebar";
 import ImpedanceReportItems from "../ImpedanceReportItems";
@@ -135,7 +135,6 @@ function ImpedanceAudiometry() {
             }
         } catch (err) {
             console.error("Failed to load session:", err);
-            alert("Could not load saved impedance data.");
         } finally {
             setLoadingSession(false);
         }
@@ -243,7 +242,12 @@ function ImpedanceAudiometry() {
             }],
         });
     }, [leftEar]);
-
+    const handleLogout = async () => {
+        setLoading(true);
+        await supabase.auth.signOut();
+        setLoading(false);
+        navigate("/");
+    };
     const handleChange = (setter) => (e) => {
         const { name, value } = e.target;
         setter((prev) => ({ ...prev, [name]: value }));
@@ -289,7 +293,6 @@ function ImpedanceAudiometry() {
 
     const handleSaveSession = async () => {
         if (!currentSessionId) {
-            alert("No active session.");
             return;
         }
 
@@ -329,7 +332,6 @@ function ImpedanceAudiometry() {
             setSessionSaved(true);
         } catch (err) {
             console.error("Save error:", err);
-            alert("Failed to save: " + (err.message || "Unknown error"));
         } finally {
             setLoading(false);
         }
@@ -342,8 +344,11 @@ function ImpedanceAudiometry() {
     if (loadingSession) {
         return (
             <div className="loading-overlay">
+                <Navbar onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
+                <Sidebar isOpen={isSidebarOpen} onLogout={handleLogout} loading={loading} />
                 <div className="spinner"></div>
-                <p>Loading session data...</p>
+                <LuEar className="icon-loader animate-spin" size={20} />
+                <p className="loader-text">Loading....</p>
             </div>
         );
     }
@@ -351,7 +356,7 @@ function ImpedanceAudiometry() {
     return (
         <div className="imp-wrapper">
             <Navbar onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
-            <Sidebar isOpen={isSidebarOpen} />
+            <Sidebar isOpen={isSidebarOpen} onLogout={handleLogout} loading={loading} />
 
             <div className="imp-main">
                 <div className="buttons-header-cont">
@@ -390,7 +395,7 @@ function ImpedanceAudiometry() {
 
                 <div className="ear-container">
                     <div className="ear-section">
-                        <h2 className="imp-title">RIGHT EAR</h2>
+                        <h2 className="imp-title-right-ear">RIGHT EAR</h2>
                         <div className="ear-card brown-card">
                             <div className="chart-box">
                                 <Line data={rightEarData} options={options} />
@@ -427,7 +432,7 @@ function ImpedanceAudiometry() {
                     </div>
 
                     <div className="ear-section">
-                        <h2 className="imp-title">LEFT EAR</h2>
+                        <h2 className="imp-title-left-ear">LEFT EAR</h2>
                         <div className="ear-card brown-card">
                             <div className="chart-box">
                                 <Line data={leftEarData} options={options} />

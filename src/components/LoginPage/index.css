@@ -4,8 +4,7 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: #dadada;
-
+  background: linear-gradient(180deg, #ffffff, #f5e6ca);
 }
 
 /* Card container */
@@ -14,11 +13,12 @@
   flex-direction: column;
   align-items: center;
   background: #ffffff;
-  padding: 40px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  padding: 42px 40px;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(15, 118, 110, 0.15);
   width: 400px;
   text-align: center;
+  border: 1px solid #e6d9c3;
 }
 
 /* Title with logo */
@@ -26,22 +26,22 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 700;
-  margin-bottom: 30px;
-  color: #2c2c2c;
-  text-align: center;
+  margin-bottom: 28px;
+  color: #0f766e;
 }
 
 .lp-logo-icon {
-  font-size: 20px;
-  margin-right: 8px;
+  font-size: 18px;
+  margin-right: 10px;
+  color: #0f766e;
 }
 
 /* Form groups */
 .lp-form-group {
   text-align: left;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
   width: 300px;
 }
 
@@ -49,21 +49,30 @@
   display: block;
   font-size: 12px;
   margin-bottom: 6px;
-  color: #333;
+  color: #374151;
+  font-weight: 600;
 }
 
 /* Input fields */
 .lp-input-box {
   display: flex;
   align-items: center;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 8px 10px;
+  border: 1px solid #e6d9c3;
+  border-radius: 8px;
+  padding: 8px 14px;
+  background: #fbf7ef;
+  transition: all 0.25s ease;
+  font-size: 12px
+}
+
+.lp-input-box:focus-within {
+  border-color: #0f766e;
+  box-shadow: 0 0 0 2px rgba(15, 118, 110, 0.15);
 }
 
 .lp-input-icon {
   margin-right: 8px;
-  color: #666;
+  color: #0f766e;
 }
 
 .lp-input-box input {
@@ -71,40 +80,61 @@
   outline: none;
   flex: 1;
   font-size: 12px;
+  background: transparent;
+  color: #1f2933;
 }
 
 /* Sign In button */
 .lp-btn-signin {
   width: 100%;
-  background: #8b5e3c; /* brown color from wireframe */
-  color: #fdfdfd !important;
+  background: linear-gradient(135deg, #0f766e, #0d9488);
+  color: #ffffff !important;
   border: none;
-  padding: 8px;
-  border-radius: 4px;
-  font-size: 12px;
+  padding: 11px;
+  border-radius: 8px;
+  font-size: 11px;
   font-weight: 600;
   cursor: pointer;
-  margin-top: 10px;
+  margin-top: 12px;
+  transition: all 0.3s ease;
 }
 
 .lp-btn-signin:hover {
-  background: #7a5030;
-
+  background: linear-gradient(135deg, #0d9488, #0f766e);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(15, 118, 110, 0.25);
 }
 
 /* Links */
 .lp-extra-links {
-  margin-top: 15px;
-  font-size: 11px;
-  color: #555;
+  margin-top: 16px;
+  font-size: 09px;
+  color: #475569;
 }
 
 .lp-extra-links a {
-  color: #8b5e3c;
+  color: #0f766e;
   font-weight: 600;
   text-decoration: none;
 }
 
 .lp-extra-links a:hover {
   text-decoration: underline;
+}
+
+/* Optional subtle animation */
+.lp-card {
+  animation: fadeInUp 0.4s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

@@ -104,7 +104,7 @@ const AudiologistDetailsSettings = ({ onClose }) => {
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="pt-logo">
-                    <LuEar className="pt-logo-icon" />
+                    <LuEar className="animate-spin-audiologist-header" />
                     <span className="logo-text">AudiogramPro</span>
                 </div>
 
@@ -167,10 +167,9 @@ const AudiologistDetailsSettings = ({ onClose }) => {
                             type="submit"
                             className="lp-btn-signin"
                             style={{ color: "black" }}
-                            disabled={loading}
                         >
                             {loading ? (
-                                <LuEar className="animate-spin" size={20} />
+                                <LuEar className="animate-spin-audiologist" size={20} />
                             ) : (
                                 "Save"
                             )}

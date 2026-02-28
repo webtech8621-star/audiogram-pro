@@ -57,6 +57,7 @@ function SignUpPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                className="emial-input-su"
               />
             </div>
           </div>
@@ -72,6 +73,7 @@ function SignUpPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                className="emial-input-su"
               />
             </div>
           </div>

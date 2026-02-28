@@ -2,80 +2,121 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #8b5e3c;
-  /* white background */
-  padding: 0 20px;
-  color: #f9f9f9;
-  /* black text */
-  height: 60px;
+  background: linear-gradient(90deg, #00796B, #00897B);
+  padding: 0 28px;
+  color: #ffffff;
+  height: 64px;
   width: 100%;
   position: fixed;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+  font-family: "Segoe UI", sans-serif;
 }
 
+/* Left section */
 .hp-left {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 16px;
 }
 
 .hp-menu-toggle {
-  font-size: 22px;
+  font-size: 20px;
   cursor: pointer;
-  color: #f9f9f9;
+  color: #ffffff;
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
+.hp-menu-toggle:hover {
+  transform: scale(1.1);
+  opacity: 0.9;
+}
+
+/* Logo */
 .hp-logo {
   display: flex;
   align-items: center;
-  font-size: 16px;
-  font-weight: bold;
-  color: #f9f9f9;
-  margin-left: 20px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 0.5px;
 }
 
 .hp-logo-icon {
-  margin-right: 6px;
-  font-size: 17px;
-  color: #f9f9f9;
+  margin-right: 8px;
+  font-size: 16px;
+  color: #F5E6CA;
+  /* Sand */
 }
 
+/* Right section */
 .hp-right {
   display: flex;
   align-items: center;
-  gap: 30px;
+  gap: 14px;
+  padding-right: 50px;
 }
 
-.hp-icon {
-  font-size: 14px;
-  cursor: pointer;
-  color: #f9f9f9;
-  transition: transform 0.2s;
-}
-
-.hp-icon-label {
-  font-size: 12px;
-  margin-top: 2px;
-  color: #ffffff;
-  font-weight: 600;
-}
-
-.hp-icon:hover {
-  transform: scale(1.1);
-}
-
-.hp-profile-avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  cursor: pointer;
-  border: 2px solid #ddd;
-  object-fit: cover;
-}
-
+/* Icon + label pill buttons */
 .hp-icon-wrapper {
   display: flex;
-  flex-direction: row;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+  cursor: pointer;
+  padding: 6px 14px;
+  border-radius: 999px;
+  /* background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18); */
+  transition: all 0.25s ease;
+}
+
+.hp-icon-wrapper:hover {
+  background: rgba(245, 230, 202, 0.25);
+  box-shadow: 0 4px 10px rgba(245, 230, 202, 0.35);
+  transform: translateY(-1px);
+}
+
+/* Icon */
+.hp-icon {
+  font-size: 13px;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Label */
+.hp-icon-label {
+  font-size: 11px;
+  color: #F5E6CA;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  transition: opacity 0.2s ease;
+}
+
+/* Divider between icon groups */
+.hp-right>.hp-icon-wrapper:not(:last-child)::after {
+  content: "";
+  width: 1px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.25);
+  margin-left: 14px;
+}
+
+/* Profile Avatar */
+.hp-profile-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid #F5E6CA;
+  object-fit: cover;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hp-profile-avatar:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 0 3px rgba(245, 230, 202, 0.4);
 }

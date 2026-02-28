@@ -237,7 +237,7 @@
 /* Format name text */
 .FR-format-name {
     font-weight: 600;
-    color: #3a2a1a;
+    color: #101010 !important;
     letter-spacing: 0.3px;
 }
 
@@ -495,4 +495,112 @@
     font-size: 11px;
     color: #8b5e3c;
     margin-top: 20px;
+}
+
+/* =========================
+   SAND + TEAL THEME (Buttons & Headers only)
+========================= */
+
+/* -------- HEADERS -------- */
+
+.FR-title,
+.FR-report-title,
+.FR-page-heading,
+.FR-panel-title,
+.FR-panel-title-R,
+.FR-section-title,
+.pt-header-details {
+    color: #0F766E;
+    /* Teal */
+    font-weight: 700;
+}
+
+/* Ear titles */
+.FR-right-ear .FR-ear-title {
+    color: #0F766E;
+}
+
+.FR-left-ear .FR-ear-title {
+    color: #0F766E;
+}
+
+/* -------- BUTTONS -------- */
+
+.FR-toggle-btn {
+    background: #D8B58A;
+    /* Sand */
+    color: #0F766E;
+    /* Teal text */
+    box-shadow: 0 2px 6px rgba(15, 118, 110, 0.25);
+}
+
+.FR-on {
+    background: #0F766E;
+    /* Teal */
+    color: #FFFFFF;
+}
+
+.FR-off {
+    background: #FFFFFF;
+    color: #0F766E;
+    border: 1px solid #D8B58A;
+}
+
+/* Action buttons */
+.FR-apply-btn {
+    background: #0F766E;
+    color: #FFFFFF;
+    box-shadow: 0 3px 10px rgba(15, 118, 110, 0.35);
+}
+
+.FR-save-btn {
+    background: #FFFFFF;
+    color: #0F766E;
+    border: 2px solid #D8B58A;
+}
+
+.FR-cancel-btn {
+    background: #D8B58A;
+    color: #0F766E;
+    border: none;
+}
+
+/* Hover effects */
+.FR-apply-btn:hover,
+.FR-save-btn:hover,
+.FR-toggle-btn:hover {
+    background: #115E59;
+    /* darker teal */
+    color: #FFFFFF;
+    transform: translateY(-2px);
+}
+
+/* Delete button */
+.FR-delete-btn {
+    color: #0F766E;
+}
+
+.FR-delete-btn:hover {
+    background: rgba(15, 118, 110, 0.12);
+    color: #115E59;
+}
+
+/* -------- HEADER DIVIDERS -------- */
+
+.FR-section-title {
+    border-bottom: 2px solid #D8B58A;
+}
+
+/* -------- REPORT TITLES -------- */
+
+.FR-report-title,
+.FR-page-heading {
+    letter-spacing: 0.6px;
+}
+
+/* -------- ERROR (optional theme match) -------- */
+.FR-error {
+    background: rgba(216, 181, 138, 0.25);
+    color: #0F766E;
+    border: 1px solid #D8B58A;
 }

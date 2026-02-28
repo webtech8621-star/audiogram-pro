@@ -54,8 +54,8 @@ const MakePTAReport = ({
         patient_info: true,
         right_ear_graph: true,
         left_ear_graph: true,
-        symbols_legend_right: true,
-        symbols_legend_left: true,
+        // symbols_legend_right: true,
+        // symbols_legend_left: true,
         provisional_diagnosis: true,
         speech_audiometry: true,
         weber_test: true,
@@ -68,7 +68,7 @@ const MakePTAReport = ({
     const [pdfUrl, setPdfUrl] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
+    const [puretoneMargin, setPuretoneMargin] = useState(0);
     const [patientInfo, setPatientInfo] = useState(initialPatientInfo || null);
     const [audiologist, setAudiologist] = useState({
         name: "",
@@ -88,7 +88,7 @@ const MakePTAReport = ({
             x: {
                 type: "category",
                 offset: false,
-                grid: { color: "#ccc", drawBorder: true },
+                grid: { color: "#b0b0b0", drawBorder: true },
                 ticks: { align: "center" },
                 title: { display: true, text: "Frequency (Hz)", font: { weight: "bold" } },
             },
@@ -98,24 +98,42 @@ const MakePTAReport = ({
                 max: 120,
                 offset: false,
                 ticks: { stepSize: 10, padding: 10 },
-                grid: { color: "#ccc", drawBorder: true },
+                grid: { color: "#a1a0a0", drawBorder: true },
                 title: { display: true, text: "Hearing Level (dB HL)", font: { weight: "bold" } },
             },
         },
         plugins: { legend: { display: false } },
     };
 
-    const symbols = [
-        { label: "ACR", symbol: "○", color: "red", desc: "Air Unmasked (R)", size: "26px" },
-        { label: "ACR_M", symbol: "△", color: "brown", desc: "Air Masked (R)" },
-        { label: "BCR", symbol: "<", color: "red", desc: "Bone Unmasked (R)", size: "20px" },
-        { label: "BCR_M", symbol: "⊏", color: "brown", desc: "Bone Masked (R)" },
-        { label: "ACL", symbol: "×", color: "blue", desc: "Air Unmasked (L)", size: "26px" },
-        { label: "ACL_M", symbol: "□", color: "navy", desc: "Air Masked (L)", size: "27px" },
-        { label: "BCL", symbol: ">", color: "blue", desc: "Bone Unmasked (L)" },
-        { label: "BCL_M", symbol: "⊐", color: "navy", desc: "Bone Masked (L)" },
-    ];
+    // const symbols = [
+    //     { label: "ACR", symbol: "○", color: "red", desc: "Air Unmasked (R)", size: "26px" },
+    //     { label: "ACR_M", symbol: "△", color: "brown", desc: "Air Masked (R)" },
+    //     { label: "BCR", symbol: "<", color: "red", desc: "Bone Unmasked (R)", size: "20px" },
+    //     { label: "BCR_M", symbol: "⊏", color: "brown", desc: "Bone Masked (R)" },
+    //     { label: "ACL", symbol: "×", color: "blue", desc: "Air Unmasked (L)", size: "26px" },
+    //     { label: "ACL_M", symbol: "□", color: "navy", desc: "Air Masked (L)", size: "27px" },
+    //     { label: "BCL", symbol: ">", color: "blue", desc: "Bone Unmasked (L)" },
+    //     { label: "BCL_M", symbol: "⊐", color: "navy", desc: "Bone Masked (L)" },
+    // ];
+    useEffect(() => {
+        fetchPuretoneMargin();
+    }, []);
 
+    const fetchPuretoneMargin = async () => {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+
+        const { data, error } = await supabase
+            .from("report_layout_settings")
+            .select("margin_top")
+            .eq("user_id", user.id)
+            .eq("report_type", "puretone")
+            .single();
+
+        if (!error && data) {
+            setPuretoneMargin(data.margin_top || 0);
+        }
+    };
     useEffect(() => {
         const fetchPatient = async () => {
             if (!patientId) return;
@@ -282,6 +300,7 @@ const MakePTAReport = ({
                     fontFamily: "Arial, sans-serif",
                     display: "flex",
                     height: "1200px",
+                    marginTop: "200px ",
                     flexDirection: "column",
                 }}
             >
@@ -292,7 +311,7 @@ const MakePTAReport = ({
                                 textAlign: "center",
                                 color: "#1976d2",
                                 marginBottom: "50px",
-                                marginTop: "100px",
+                                marginTop: "200px",
                                 fontSize: "18px",
                             }}
                         >
@@ -434,11 +453,12 @@ const MakePTAReport = ({
                     left: "-9999px",
                     width: "800px",
                     padding: "40px",
+                    paddingTop: `${puretoneMargin}px`,
                     fontFamily: "Arial, sans-serif",
                 }}
             >
                 <h1 style={{ textAlign: "center", color: "#1976d2", marginBottom: "15px", fontSize: "18px" }}>
-                    DUAL EAR AUDIOGRAM
+                    PURE TONE AUDIOGRAM
                 </h1>
 
                 {reportSections.patient_info && patientInfo && (
@@ -451,9 +471,11 @@ const MakePTAReport = ({
                 )}
 
                 <div className="MR-PTA-graphs-row">
+                    {/* <p>ACR ○ BCR {`<`} ACL × BCL {`>`} BCLM ⊐ ACLM □ ACRM △ BCRM ⊏  </p> */}
+
                     <div className="MR-PTA-graph-box" style={{ display: reportSections.right_ear_graph ? "block" : "none" }}>
                         <h2 className="MR-PTA-ear-title red">RIGHT EAR</h2>
-                        <div className="PTA-symbols-legend-container" style={{ display: reportSections.symbols_legend_right ? "block" : "none" }}>
+                        {/* <div className="PTA-symbols-legend-container" style={{ display: reportSections.symbols_legend_right ? "block" : "none" }}>
                             <div className="symbols-grid">
                                 {symbols
                                     .filter(s => s.label.startsWith("ACR") || s.label.startsWith("BCR"))
@@ -466,7 +488,7 @@ const MakePTAReport = ({
                                         </div>
                                     ))}
                             </div>
-                        </div>
+                        </div> */}
                         <div className="MR-PTA-chart-container">
                             <Line data={rightEarData} options={audiogramOptions} />
                         </div>
@@ -475,7 +497,7 @@ const MakePTAReport = ({
 
                     <div className="MR-PTA-graph-box" style={{ display: reportSections.left_ear_graph ? "block" : "none" }}>
                         <h2 className="MR-PTA-ear-title blue">LEFT EAR</h2>
-                        <div className="PTA-symbols-legend-container" style={{ display: reportSections.symbols_legend_left ? "block" : "none" }}>
+                        {/* <div className="PTA-symbols-legend-container" style={{ display: reportSections.symbols_legend_left ? "block" : "none" }}>
                             <div className="symbols-grid">
                                 {symbols
                                     .filter(s => s.label.startsWith("ACL") || s.label.startsWith("BCL"))
@@ -488,7 +510,7 @@ const MakePTAReport = ({
                                         </div>
                                     ))}
                             </div>
-                        </div>
+                        </div> */}
                         <div className="MR-PTA-chart-container">
                             <Line data={leftEarData} options={audiogramOptions} />
                         </div>
@@ -584,7 +606,7 @@ const MakePTAReport = ({
 
                     {reportSections.audiologist_details && (
                         <div className="audiologist-details-main-cont-pta-main-page">
-                            <div className="audiologist-details-container">
+                            <div className="audiologist-details-container" style={{ marginTop: "100px " }}>
                                 <h3 className="audiologist-header">Audiologist</h3>
                                 <p style={{ margin: "2px 0" }}>
                                     <strong>{audiologist.name || "—"}</strong>
