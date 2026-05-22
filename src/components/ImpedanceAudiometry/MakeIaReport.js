@@ -32,12 +32,23 @@ const MakeIaReport = ({
     reportSections,           // ← From parent (
     // Audiometry)
 }) => {
+
     const reportRef = useRef(null);
     const [pdfUrl, setPdfUrl] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [renderCount, setRenderCount] = useState(0);
     const [impMarginTop, setImpMarginTop] = useState(0);
+    const today = new Date();
+    const formattedDateTime = today.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+    }) + " | " + today.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+    });
+    const formattedDate = today.toLocaleDateString("en-GB");
 
     const [audiologist, setAudiologist] = useState({
         name: "",
@@ -104,14 +115,69 @@ const MakeIaReport = ({
                 type: "linear",
                 min: -300,
                 max: 200,
-                ticks: { stepSize: 100 },
-                title: { display: true, text: "Middle ear pressure (daPa)", font: { size: 14 } },
+
+                ticks: {
+                    stepSize: 100,
+                    color: "#000",
+                    font: {
+                        size: 12,
+                        weight: "600"
+                    }
+                },
+
+                title: {
+                    display: true,
+                    text: "Middle ear pressure (daPa)",
+                    color: "#000",
+                    font: {
+                        size: 14,
+                        weight: "bold"
+                    }
+                },
+
+                grid: {
+                    color: "#b8b8b8", // vertical grid lines black
+                    lineWidth: 1,
+                },
+
+                border: {
+                    color: "#000", // X-axis line black
+                    width: 2,
+                },
             },
+
             y: {
                 min: 0,
                 max: 2.5,
-                ticks: { stepSize: 0.5 },
-                title: { display: true, text: "Compliance (ml)", font: { size: 14 } },
+
+                ticks: {
+                    stepSize: 0.5,
+                    color: "#000",
+                    font: {
+                        size: 12,
+                        weight: "600"
+                    }
+                },
+
+                title: {
+                    display: true,
+                    text: "Compliance (ml)",
+                    color: "#000",
+                    font: {
+                        size: 14,
+                        weight: "bold"
+                    }
+                },
+
+                grid: {
+                    color: "#b8b8b8", // horizontal grid lines black
+                    lineWidth: 1,
+                },
+
+                border: {
+                    color: "#000", // Y-axis line black
+                    width: 2,
+                },
             },
         },
         plugins: {
@@ -124,10 +190,11 @@ const MakeIaReport = ({
                         xMax: 100,
                         yMin: 0.12,
                         yMax: 1.50,
-                        borderColor: "rgba(0,0,0,0.8)",
+                        borderColor: "rgba(0, 0, 0, 0.8)",
                         borderWidth: 2,
                         borderDash: [6, 6],
                         backgroundColor: "rgba(0,0,0,0)",
+                        style: { color: "black" }
                     },
                 },
             },
@@ -267,18 +334,27 @@ const MakeIaReport = ({
                     fontFamily: "Arial, sans-serif",
                     boxSizing: "border-box",
                 }}
-            >
-                <div className="MR-IA-header">
-                    <div style={{ width: "300px" }}></div>
-                    <h1>IMPEDANCE AUDIOMETRY REPORT</h1>
-                    <p style={{ textAlign: "right", fontSize: "14px", color: "#555" }}>
-                        Date: {currentDate}
-                    </p>
+            >{reportSections?.patient_info && patientInfo && (
+                <div className="report-main-header" style={{ marginTop: "250px" }}>
+                    <div className="header-content">
+                        <h1>IMPEDANCE AUDIOMETRY</h1>
+                        <p>HEARING EVALUATION REPORT</p>
+                    </div>
+                    <div className="header-date">{formattedDateTime}</div>
                 </div>
-
+            )}
+                <div className="patient-details-box">
+                    <div className="patient-details-header">PATIENT DETAILS</div>
+                    <div className="patient-grid">
+                        <div style={{ fontSize: "18px" }}><strong >Patient Name:</strong> {patientInfo?.name || "N/A"}</div>
+                        <div style={{ fontSize: "18px" }}><strong>Patient ID:</strong> {patientInfo?.patient_id || "N/A"}</div>
+                        <div style={{ fontSize: "18px" }}><strong >Age:</strong> {patientInfo?.age + " " + "Years" || "N/A"}</div>                                    <div style={{ fontSize: "18px" }}><strong>Date of Test:</strong> {formattedDate}</div>
+                        <div style={{ fontSize: "18px" }}><strong >Address:</strong> {patientInfo?.location || "N/A"}</div>                                    <div style={{ fontSize: "18px" }}><strong>Gender:</strong> {patientInfo?.gender || "N/A"}</div>
+                    </div>
+                </div>
                 {/* Patient Information */}
-                {reportSections?.patient_info && patientInfo && (
-                    <div className="MR-IA-patient-info">
+
+                {/* <div className="MR-IA-patient-info">
                         <p><strong>Patient Name:</strong> {patientInfo.name}</p>
                         <p><strong>ID:</strong> {patientInfo.patient_id}</p>
                         <p><strong>Age:</strong> {patientInfo.age} Years</p>
@@ -286,28 +362,29 @@ const MakeIaReport = ({
                         {patientInfo.location && (
                             <p><strong>Location:</strong> {patientInfo.location}</p>
                         )}
-                    </div>
+                    </div> */}
 
-                )}
 
                 {/* Graphs */}
                 {(reportSections?.right_tympanogram || reportSections?.left_tympanogram) && (
                     <div className="MR-IA-graphs-row">
                         {reportSections?.right_tympanogram && (
                             <div className="MR-IA-graph-box">
-                                <h2 className="MR-IA-ear-title red">RIGHT EAR</h2>
+
                                 <div className="MR-IA-chart-container" style={{ height: "280px" }}>
                                     <Line data={rightEarData} options={options} />
                                 </div>
+                                <h2 className="MR-IA-ear-title red">R I G H T E A R</h2>
                             </div>
                         )}
 
                         {reportSections?.left_tympanogram && (
                             <div className="MR-IA-graph-box">
-                                <h2 className="MR-IA-ear-title blue">LEFT EAR</h2>
+
                                 <div className="MR-IA-chart-container" style={{ height: "280px" }}>
                                     <Line data={leftEarData} options={options} />
                                 </div>
+                                <h2 className="MR-IA-ear-title blue">L E F T E A R</h2>
                             </div>
                         )}
                     </div>
@@ -322,9 +399,9 @@ const MakeIaReport = ({
                             <table className="MR-IA-report-table">
                                 <thead>
                                     <tr>
-                                        <th className="th-header">PARAMETER</th>
-                                        <th className="th-header">RIGHT EAR</th>
-                                        <th className="th-header">LEFT EAR</th>
+                                        <th className="th-header" style={{ fontSize: "16px" }}>PARAMETER</th>
+                                        <th className="th-header" style={{ fontSize: "16px" }}>RIGHT EAR</th>
+                                        <th className="th-header" style={{ fontSize: "16px" }}>LEFT EAR</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -361,9 +438,9 @@ const MakeIaReport = ({
                                 <thead>
                                     <tr>
                                         <th></th>
-                                        <th>500 Hz</th>
-                                        <th>1000 Hz</th>
-                                        <th>2000 Hz</th>
+                                        <th style={{ fontSize: "17px" }}>500 Hz</th>
+                                        <th style={{ fontSize: "17px" }}>1000 Hz</th>
+                                        <th style={{ fontSize: "17px" }}>2000 Hz</th>
                                     </tr>
                                 </thead>
                                 <tbody>

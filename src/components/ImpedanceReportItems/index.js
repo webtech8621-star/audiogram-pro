@@ -66,8 +66,17 @@ const ImpedanceReportItems = forwardRef(({ rightEar, leftEar, formData, ptaValue
         reflex: { ...prev.reflex, ...(saved.reflex || {}) },
         interpretation: { ...prev.interpretation, ...(saved.interpretation || {}) },
         diagnosis: { ...prev.diagnosis, ...(saved.diagnosis || {}) },
+
         recommendations: saved.recommendations || prev.recommendations,
       }));
+      // IF SAVED DIAGNOSIS EXISTS → STOP AUTO OVERWRITE
+      if (saved?.diagnosis?.re) {
+        setManualDiagnosisEdit((prev) => ({ ...prev, re: true }));
+      }
+
+      if (saved?.diagnosis?.le) {
+        setManualDiagnosisEdit((prev) => ({ ...prev, le: true }));
+      }
     },
     getReportData: () => data,
   }));
@@ -86,13 +95,28 @@ const ImpedanceReportItems = forwardRef(({ rightEar, leftEar, formData, ptaValue
       ...prev,
       tymp: {
         ...prev.tymp,
-        comp_re: rightEar.compliance ?? "",
+
+        comp_re:
+          type === "B"
+            ? "NP"
+            : rightEar.compliance ?? "",
+
         ecv_re: rightEar.volume ?? "",
-        mep_re: rightEar.pressure ?? "",
+
+        mep_re:
+          type === "B"
+            ? "NP"
+            : rightEar.pressure ?? "",
+
         type_re: type,
       },
     }));
-  }, [rightEar?.pressure, rightEar?.compliance, rightEar?.volume, rightEar]);
+  }, [
+    rightEar?.pressure,
+    rightEar?.compliance,
+    rightEar?.volume,
+    rightEar,
+  ]);
 
   // ALWAYS sync Left Ear from top inputs
   useEffect(() => {
@@ -108,13 +132,28 @@ const ImpedanceReportItems = forwardRef(({ rightEar, leftEar, formData, ptaValue
       ...prev,
       tymp: {
         ...prev.tymp,
-        comp_le: leftEar.compliance ?? "",
+
+        comp_le:
+          type === "B"
+            ? "NP"
+            : leftEar.compliance ?? "",
+
         ecv_le: leftEar.volume ?? "",
-        mep_le: leftEar.pressure ?? "",
+
+        mep_le:
+          type === "B"
+            ? "NP"
+            : leftEar.pressure ?? "",
+
         type_le: type,
       },
     }));
-  }, [leftEar?.pressure, leftEar?.compliance, leftEar?.volume, leftEar]);
+  }, [
+    leftEar?.pressure,
+    leftEar?.compliance,
+    leftEar?.volume,
+    leftEar,
+  ]);
 
   // Auto-update Interpretation from Type
   useEffect(() => {
@@ -134,43 +173,82 @@ const ImpedanceReportItems = forwardRef(({ rightEar, leftEar, formData, ptaValue
   }, [data.tymp.type_re, data.tymp.type_le]);
 
   // Auto-update Reflex from Type
+  // Auto-update Reflex from Diagnosis + Tymp Type
   useEffect(() => {
-    const getReflex = (type) => {
-      if (type === "A") return "Present";
-      if (["As", "Ad", "B", "C"].includes(type)) return "Absent";
-      return "Al";
+    const getReflex = (diagnosis, type) => {
+      const diag = diagnosis?.toLowerCase() || "";
+
+      // EXTRA CONDITION
+      if (diag.includes("normal hearing sensitivity")) {
+        return "Present";
+      }
+
+      // ALL OTHER HEARING LOSSES
+      return "Absent";
     };
 
     setData((prev) => ({
       ...prev,
       reflex: {
         ...prev.reflex,
-        re_500: getReflex(prev.tymp.type_re),
-        re_1000: getReflex(prev.tymp.type_re),
-        re_2000: getReflex(prev.tymp.type_re),
-        le_500: getReflex(prev.tymp.type_le),
-        le_1000: getReflex(prev.tymp.type_le),
-        le_2000: getReflex(prev.tymp.type_le),
+
+        re_500: getReflex(prev.diagnosis.re, prev.tymp.type_re),
+        re_1000: getReflex(prev.diagnosis.re, prev.tymp.type_re),
+        re_2000: getReflex(prev.diagnosis.re, prev.tymp.type_re),
+
+        le_500: getReflex(prev.diagnosis.le, prev.tymp.type_le),
+        le_1000: getReflex(prev.diagnosis.le, prev.tymp.type_le),
+        le_2000: getReflex(prev.diagnosis.le, prev.tymp.type_le),
       },
     }));
-  }, [data.tymp.type_re, data.tymp.type_le]);
+  }, [
+    data.diagnosis.re,
+    data.diagnosis.le,
+    data.tymp.type_re,
+    data.tymp.type_le,
+  ]);
 
   // Provisional Diagnosis (only blocked if manually edited)
+  // AUTO + MANUAL PROVISIONAL DIAGNOSIS
   useEffect(() => {
     if (!formData || !ptaValues) return;
 
     const diag = calculateProvisionalDiagnosis(formData, ptaValues);
-    const rightSev = diag.right?.severity || "No data available";
-    const leftSev = diag.left?.severity || "No data available";
+
+    const rightSeverity = diag?.right?.severity || "";
+    const leftSeverity = diag?.left?.severity || "";
+
+    // Tympanogram Types
+    const rightType = data.tymp.type_re || "";
+    const leftType = data.tymp.type_le || "";
+
+    // FINAL AUTO GENERATED RESULT
+    const autoRightDiagnosis =
+      `${rightSeverity}${rightType ? ` ` : ""}`.trim();
+
+    const autoLeftDiagnosis =
+      `${leftSeverity}${leftType ? ` ` : ""}`.trim();
 
     setData((prev) => ({
       ...prev,
       diagnosis: {
-        re: manualDiagnosisEdit.re ? prev.diagnosis.re : rightSev,
-        le: manualDiagnosisEdit.le ? prev.diagnosis.le : leftSev,
+        re: manualDiagnosisEdit.re
+          ? prev.diagnosis.re
+          : autoRightDiagnosis || "No data available",
+
+        le: manualDiagnosisEdit.le
+          ? prev.diagnosis.le
+          : autoLeftDiagnosis || "No data available",
       },
     }));
-  }, [formData, ptaValues, manualDiagnosisEdit.re, manualDiagnosisEdit.le]);
+  }, [
+    formData,
+    ptaValues,
+    data.tymp.type_re,
+    data.tymp.type_le,
+    manualDiagnosisEdit.re,
+    manualDiagnosisEdit.le,
+  ]);
 
   return (
     <div className="report-wrapper">
@@ -267,12 +345,14 @@ const ImpedanceReportItems = forwardRef(({ rightEar, leftEar, formData, ptaValue
         </table>
       </Section>
 
-      <Section title="RECOMMENDATIONS" style={{ marginBottom: "100px" }}>
-        <textarea
+      <Section title="RECOMMENDATIONS" >
+        <div style={{ marginBottom: "50px" }}><textarea
           rows="3"
           value={data.recommendations ?? ""}
           onChange={(e) => setData(p => ({ ...p, recommendations: e.target.value }))}
-        />
+
+        /></div>
+
       </Section>
     </div>
   );

@@ -29,7 +29,7 @@ export const calculateProvisionalDiagnosis = (formData, ptaValues) => {
         if (abgOver15 && bcOver15) type = "Mixed";
         else if (abgOver15) type = "Conductive";
 
-        let severityText = "Unable to Determine";
+        let severityText = "Normal Hearing Sensitivity.";
         if (typeof pta === "number") {
             if (pta <= 15) severityText = "Normal Hearing Sensitivity";
             else if (pta <= 25) severityText = "Minimal Hearing Loss";

@@ -306,3 +306,105 @@ body {
   cursor: not-allowed;
   box-shadow: none;
 }
+
+/* ################################ */
+/* TOP ACTION BUTTONS */
+/* ################################ */
+
+.IA-button-container {
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 18px;
+
+  margin-top: 6px;
+}
+
+/* ALL BUTTONS */
+
+.IA-button-container button {
+
+  background: transparent !important;
+
+  border: none !important;
+
+  outline: none !important;
+
+  box-shadow: none !important;
+
+  color: #00897B;
+
+  padding: 4px 2px;
+
+  font-size: 11px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.18s ease;
+
+  white-space: nowrap;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  letter-spacing: 0.2px;
+}
+
+/* HOVER */
+
+.IA-button-container button:hover {
+
+  background: transparent !important;
+
+  color: #000000;
+
+  transform: translateY(-1px);
+}
+
+/* ACTIVE */
+
+.IA-button-container button:active {
+
+  background: transparent !important;
+
+  color: #000000;
+
+  transform: scale(0.96);
+}
+
+/* FOCUS */
+
+.IA-button-container button:focus,
+.IA-button-container button:focus-visible {
+
+  background: transparent !important;
+
+  outline: none !important;
+
+  box-shadow: none !important;
+
+  color: #000000;
+}
+
+/* DISABLED */
+
+.IA-button-container button:disabled {
+
+  opacity: 0.55;
+
+  cursor: not-allowed;
+}
+
+/* SAVE STATES */
+
+.IA-save-button {
+
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}

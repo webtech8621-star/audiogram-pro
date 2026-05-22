@@ -1,3 +1,232 @@
+/* LARGE CHART + EXTERNAL LABELS */
+.chart-with-labels {
+    display: flex;
+    gap: 8px;
+    align-items: stretch;
+}
+
+.chart-wrapper-advanced {
+    flex: 1;
+    height: 620px;
+    /* Increased Size */
+    padding: 0px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+}
+
+.severity-labels {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 8px 6px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #374151;
+    min-width: 110px;
+    text-align: right;
+    line-height: 1.8;
+}
+
+.severity-labels div:nth-child(1) {
+    color: #166534;
+}
+
+.severity-labels div:nth-child(2) {
+    color: #854d0e;
+}
+
+.severity-labels div:nth-child(3) {
+    color: #9c4221;
+}
+
+.severity-labels div:nth-child(4) {
+    color: #9f1239;
+}
+
+.severity-labels div:nth-child(5) {
+    color: #6b21a8;
+}
+
+.severity-labels div:nth-child(6) {
+    color: #1f2937;
+}
+
+.advanced-audiogram {
+    margin: 25px 0;
+}
+
+.audiogram-header {
+    background: linear-gradient(90deg, #1e40af, #3b82f6);
+    color: white;
+    padding: 12px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 6px 6px 0 0;
+    margin-bottom: 0;
+}
+
+.graphs-advanced-row {
+    display: flex;
+    gap: 03px;
+    flex-direction: row;
+}
+
+.graph-box-advanced {
+    flex: 1;
+    border: 2px solid #1e40af;
+    border-radius: 8px;
+    overflow: hidden;
+    background: rgb(255, 255, 255);
+    padding-bottom: 10px;
+}
+
+.ear-title {
+    text-align: center;
+    padding: 5px;
+    margin: 0;
+    font-size: 12px !important;
+    font-weight: bold;
+}
+
+.red {
+    color: #dc2626;
+    background: transparent;
+}
+
+.blue {
+    color: #1e40af;
+    background: #ffffff;
+}
+
+.chart-wrapper-advanced {
+    height: 520px !important;
+    padding: 10px;
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.symbols-legend-advanced {
+    padding: 12px;
+    background: #f1f5f9;
+    font-size: 12.5px;
+    line-height: 1.6;
+    text-align: center;
+    border-top: 1px solid #e2e8f0;
+}
+
+.report-main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 3px solid #1976d2;
+}
+
+.header-content {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.header-ear-icon {
+    font-size: 52px;
+}
+
+.header-content h1 {
+    margin: 0;
+    font-size: 26px;
+    color: #1e4a7c;
+    font-weight: bold;
+}
+
+.header-content p {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.header-date {
+    font-size: 14px;
+    color: #444;
+}
+
+/* Patient Details */
+.patient-details-box {
+    margin-bottom: 30px;
+}
+
+.patient-details-header {
+    background: #1e4a7c;
+    color: white;
+    padding: 10px 15px;
+    font-weight: bold;
+    font-size: 15px;
+    border-radius: 4px 4px 0 0;
+}
+
+.patient-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 14px 40px;
+    background: #f0f7ff;
+    border: 2px solid #1e4a7c;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    padding: 20px 25px;
+    font-size: 13.5px;
+}
+
+.patient-grid strong {
+    color: #1e4a7c;
+}
+
+/* Graphs */
+.graphs-row {
+    display: flex;
+    gap: 20px;
+}
+
+.graph-container {
+    flex: 1;
+    border: 2px solid #333;
+    border-radius: 8px;
+    padding: 12px;
+}
+
+.ear-title {
+    text-align: center;
+    font-size: 17px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.red {
+    color: #d32f2f;
+}
+
+.blue {
+    color: #1976d2;
+}
+
+.chart-wrapper {
+    height: 480px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+}
+
+.symbols-box {
+    font-size: 12.5px;
+    text-align: center;
+    line-height: 1.5;
+    background: #f9f9f9;
+    padding: 8px;
+    border-radius: 4px;
+}
+
 .MR-PTA-overlay {
     position: fixed;
     top: 0;
@@ -504,8 +733,269 @@
     justify-content: space-between;
     height: 300px;
     margin-top: -30px;
+    width: 300px;
 }
 
 .space-cont {
     width: 100px;
+}
+
+/* ================== WEBER TEST + SIGNATURE SECTION ================== */
+
+.MAIN-CONT-pvd-sa-weber {
+    display: flex;
+    gap: 25px;
+    margin-top: 0px;
+    flex-wrap: wrap;
+}
+
+/* Weber Test */
+.weber-test-box {
+    min-width: 320px;
+    width: 400px !important;
+    border: 2px solid #0052cc;
+    border-radius: 6px;
+    background: #fff;
+    height: 180px;
+}
+
+.weber-test-box .section-header {
+    background-color: #1e4a7c;
+    color: white;
+    padding: 10px 15px;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.weber-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11.5px;
+    margin-top: -13px;
+}
+
+.weber-table th,
+.weber-table td {
+    border: 1px solid #888;
+    /* padding: 10px 8px; */
+    text-align: center;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.weber-table th {
+    background-color: #f0f4f8;
+    font-weight: 600;
+    color: #1e4a7c;
+    font-size: 10px;
+}
+
+/* Signature Section */
+.recomm-audiologist-main-cont {
+    min-width: 320px;
+    width: 330px;
+    max-width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    justify-content: end;
+    border: 0px solid #1e4a7c;
+    border-radius: 6px;
+    padding: 25px 20px;
+    background: #fff;
+    margin-top: 0;
+    height: 120px;
+}
+
+.signature-left {
+    text-align: left;
+}
+
+.signature-label {
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #1e4a7c;
+    font-size: 12px;
+}
+
+.signature-line {
+    width: 240px;
+    height: 2px;
+    background-color: #000;
+    margin: 8px 0 12px 0;
+}
+
+.audiologist-info {
+    line-height: 1.65;
+    font-size: 11px;
+}
+
+/* Date on the right */
+.date-section {
+    text-align: right;
+    font-size: 11px;
+    color: #000;
+}
+
+/* If you want both sections always in one row */
+.MAIN-CONT-pvd-sa-weber .weber-test-box,
+.recomm-audiologist-main-cont {
+    margin-bottom: 0;
+}
+
+/* ################################ */
+/* ================== LEVEL GUIDE (Matching Screenshot) ================== */
+.level-guide {
+    width: 55px;
+    background: white;
+    /* border: 2px solid #0052cc; */
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    font-family: Arial, sans-serif;
+    height: 100%;
+}
+
+.guide-title {
+    background-color: #003087;
+    color: white;
+    text-align: center;
+    padding: 8px 10px;
+    font-weight: bold;
+    font-size: 08px;
+    letter-spacing: 0.5px;
+    margin-top: 28px;
+}
+
+.guide-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    padding: 3px 3px;
+    font-size: 07px;
+    height: 50px;
+    border-bottom: 1px solid #eee;
+
+}
+
+.guide-item:last-child {
+    border-bottom: none;
+}
+
+.guide-item span:first-child {
+    font-weight: 600;
+    color: #000;
+}
+
+.guide-item span:last-child {
+    font-weight: bold;
+    text-align: right;
+}
+
+/* Background Colors */
+.guide-item.normal {
+    background-color: #d4f4d4;
+    color: #006400;
+    height: 62px;
+}
+
+.guide-item.mild {
+    background-color: #fff9c4;
+    color: #b36b00;
+    height: 30px;
+}
+
+.guide-item.moderate {
+    background-color: #ffe0b2;
+    color: #c76a00;
+    height: 48px;
+}
+
+.guide-item.mod-severe {
+    background-color: #ffc1c1;
+    color: #c8102e;
+    height: 48px;
+}
+
+.guide-item.severe {
+    background-color: #f3d4ff;
+    color: #9c27b0;
+    height: 48px;
+}
+
+.guide-item.profound {
+    background-color: #e2e2e2;
+    color: #444444;
+    height: 105px;
+}
+
+/* ############## */
+/* ====================== PROVISIONAL DIAGNOSIS ====================== */
+.provisional-diagnosis-box {
+    margin-top: 25px;
+    margin-bottom: 30px;
+    border: 2px solid #1e4a7c;
+    border-radius: 4px;
+    overflow: hidden;
+    width: 450px;
+
+}
+
+.provisional-diagnosis-box .section-header {
+    background-color: #1e4a7c;
+    color: white;
+    padding: 10px 15px;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.provisional-diagnosis-box .diagnosis-content {
+    padding: 18px 20px;
+
+    background-color: #ffffff;
+    border: solid 1px #1e4a7c;
+}
+
+.provisional-diagnosis-box .diagnosis-row {
+    margin-bottom: 12px;
+    font-size: 15px;
+}
+
+.provisional-diagnosis-box .diagnosis-row:last-child {
+    margin-bottom: 0;
+}
+
+.provisional-diagnosis-box strong {
+    color: #1e2937;
+    font-weight: 600;
+    display: inline-block;
+    width: 110px;
+}
+
+/* ################# */
+/* ====================== RECOMMENDATIONS (Front Page) ====================== */
+.recommendations-front-box {
+    margin: 25px 0 30px 0;
+    border: 1px solid #1e3a8a;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.recommendations-front-box .section-header {
+    background-color: #1e3a8a;
+    /* Dark Blue - Matching Image */
+    color: white;
+    padding: 11px 18px;
+    font-weight: 700;
+    font-size: 15px;
+    border-bottom: 1px solid #1e3a8a;
+}
+
+.recommendations-front-box .recommendations-content {
+    padding: 18px 20px;
+    background-color: #ffffff;
+    line-height: 1.7;
+    font-size: 14.5px;
+    color: #1f2937;
 }

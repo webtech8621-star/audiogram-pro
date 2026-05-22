@@ -84,7 +84,7 @@ function SavedReports() {
                     sessionId: session.id,
                     testType: session.session_type || "Unknown",
                     date: new Date(session.created_at).toLocaleString(),
-                    status: session.status,
+                    status: session.status || "draft",
                 });
 
                 return acc;
@@ -106,12 +106,14 @@ function SavedReports() {
             setLoading(false);
         }
     };
+
     const handleLogout = async () => {
         setLoading(true);
         await supabase.auth.signOut();
         setLoading(false);
         navigate("/");
     };
+
     const handleSearch = (e) => {
         const value = e.target.value.toLowerCase();
         setSearchTerm(value);
@@ -123,17 +125,41 @@ function SavedReports() {
         setFilteredReports(filtered);
     };
 
-    const handleSessionClick = (group, session) => {
-        let path = "/puretoneaudiometry";
+    // ✅ REDIRECT BASED ON TEST TYPE
+    const handleSessionClick = (group) => {
+        // FIND PURETONE SESSION
+        const puretoneSession = group.sessions.find((s) => {
+            const type = s.testType?.toLowerCase();
 
-        if (session.testType.toLowerCase().includes("impedance")) {
-            path = "/impedanceaudiometry";
-        }
+            return (
+                type.includes("pure") ||
+                type.includes("pta") ||
+                type.includes("tone")
+            );
+        });
 
-        navigate(path, {
+        // FIND IMPEDANCE SESSION
+        const impedanceSession = group.sessions.find((s) => {
+            const type = s.testType?.toLowerCase();
+
+            return (
+                type.includes("impedance") ||
+                type.includes("tymp") ||
+                type.includes("immitance")
+            );
+        });
+
+        // ALWAYS OPEN PURETONE FIRST
+        navigate("/puretoneaudiometry", {
             state: {
                 patientId: group.patientId,
-                sessionId: session.sessionId,
+
+                // PURETONE SESSION
+                puretoneSessionId: puretoneSession?.sessionId || null,
+
+                // IMPEDANCE SESSION
+                impedanceSessionId: impedanceSession?.sessionId || null,
+
                 loadExistingData: true,
             },
         });
@@ -154,27 +180,27 @@ function SavedReports() {
 
     return (
         <div className="saved-reports-main">
-            {/* ✅ ALWAYS ON TOP */}
+            {/* NAVBAR */}
             <Navbar onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
 
             <div className="layout">
-                {/* ✅ ALWAYS LEFT */}
+                {/* SIDEBAR */}
                 <Sidebar
                     isOpen={isSidebarOpen}
                     onLogout={handleLogout}
                     loading={loading}
                 />
 
-                {/* ✅ CONTENT AREA */}
+                {/* CONTENT */}
                 <div className="sr-content">
                     {loading ? (
-                        /* 🔥 LOADER INSIDE CONTENT */
                         <div className="icon-loader-container">
                             <LuEar className="icon-loader animate-spin" size={22} />
                             <p className="loader-text">Loading Reports...</p>
                         </div>
                     ) : (
                         <>
+                            {/* SEARCH */}
                             <input
                                 className="search-bar"
                                 placeholder="Search patient..."
@@ -182,10 +208,11 @@ function SavedReports() {
                                 onChange={handleSearch}
                             />
 
+                            {/* TABLE */}
                             <table className="reports-table">
                                 <thead>
                                     <tr>
-                                        <th>S.n.o</th>
+                                        <th>S.No</th>
                                         <th>Name</th>
                                         <th>Age</th>
                                         <th>Patient ID</th>
@@ -196,44 +223,71 @@ function SavedReports() {
                                 </thead>
 
                                 <tbody>
-                                    {filteredReports.map((group, i) => (
-                                        <tr key={group.patientId} className="patient-row">
-                                            <td>{i + 1}</td>
-
-                                            <td
-                                                className="patient-name-link"
-                                                onClick={(e) => openPopup(e, group)}
+                                    {filteredReports.length > 0 ? (
+                                        filteredReports.map((group, i) => (
+                                            <tr
+                                                key={group.patientId}
+                                                className="patient-row"
                                             >
-                                                {group.name}
-                                            </td>
+                                                <td>{i + 1}</td>
 
-                                            <td>{group.age}</td>
-                                            <td>{group.patientIdDisplay}</td>
-                                            <td className="address-cell">{group.location}</td>
-                                            <td>{group.latestDate}</td>
-                                            <td>{group.sessions.length}</td>
+                                                <td
+                                                    className="patient-name-link"
+                                                    onClick={(e) =>
+                                                        openPopup(e, group)
+                                                    }
+                                                >
+                                                    {group.name}
+                                                </td>
+
+                                                <td>{group.age}</td>
+
+                                                <td>{group.patientIdDisplay}</td>
+
+                                                <td className="address-cell">
+                                                    {group.location}
+                                                </td>
+
+                                                <td>{group.latestDate}</td>
+
+                                                <td>{group.sessions.length}</td>
+                                            </tr>
+                                        ))
+                                    ) : (
+                                        <tr>
+                                            <td colSpan="7">
+                                                No reports found
+                                            </td>
                                         </tr>
-                                    ))}
+                                    )}
                                 </tbody>
                             </table>
                         </>
                     )}
 
-                    {/* ✅ POPUP */}
+                    {/* POPUP */}
                     {showPopup && (
                         <div className="popup-overlay">
                             <div className="popup-container">
+                                {/* HEADER */}
                                 <div className="popup-header">
                                     <div className="icon-header-cont">
                                         <LuEar className="pt-logo-icon" />
-                                        <h1 className="pt-logo-icon">AudiogramPro</h1>
+
+                                        <h1 className="pt-logo-icon">
+                                            AudiogramPro
+                                        </h1>
                                     </div>
 
-                                    <button className="close-btn-sr" onClick={closePopup}>
+                                    <button
+                                        className="close-btn-sr"
+                                        onClick={closePopup}
+                                    >
                                         X
                                     </button>
                                 </div>
 
+                                {/* BODY */}
                                 {popupSessions.length === 0 ? (
                                     <p>No sessions available</p>
                                 ) : (
@@ -249,16 +303,21 @@ function SavedReports() {
 
                                             <tbody>
                                                 {popupSessions.map((s) => (
-                                                    <tr style={{ cursor: "pointer" }}
+                                                    <tr
                                                         key={s.sessionId}
-                                                        onClick={() =>
-                                                            handleSessionClick(selectedPatient, s)
-                                                        }
+                                                        style={{
+                                                            cursor: "pointer",
+                                                        }}
+                                                        onClick={() => handleSessionClick(selectedPatient)}
                                                     >
                                                         <td>{s.testType}</td>
+
                                                         <td>{s.date}</td>
+
                                                         <td>
-                                                            <span className={`session-status ${s.status}`}>
+                                                            <span
+                                                                className={`session-status ${s.status}`}
+                                                            >
                                                                 {s.status}
                                                             </span>
                                                         </td>

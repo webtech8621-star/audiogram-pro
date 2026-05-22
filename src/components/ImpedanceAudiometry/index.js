@@ -37,12 +37,75 @@ function ImpedanceAudiometry() {
     const [patientInfo, setPatientInfo] = useState(null);
     const [sessionSaved, setSessionSaved] = useState(false);
 
-    const [rightEar, setRightEar] = useState({ pressure: 0, volume: 1.0, compliance: 1.2 });
-    const [leftEar, setLeftEar] = useState({ pressure: 0, volume: 1.0, compliance: 1.2 });
+    const [rightEar, setRightEar] = useState({
+        pressure: 0,
+        volume: 0,
+        compliance: 0,
+    });
+
+    const [leftEar, setLeftEar] = useState({
+        pressure: 0,
+        volume: 0,
+        compliance: 0,
+    });
 
     const [rightEarData, setRightEarData] = useState({ datasets: [] });
     const [leftEarData, setLeftEarData] = useState({ datasets: [] });
+    useEffect(() => {
+        // ONLY AUTO-FILL FIRST TIME
+        if (!location.state?.ptaValues) return;
 
+        const rightPTA = location.state.ptaValues?.right;
+        const leftPTA = location.state.ptaValues?.left;
+
+        // ONLY IF SESSION NOT ALREADY SAVED
+        if (!location.state?.loadExistingData) return;
+
+        // RIGHT EAR
+        setRightEar((prev) => ({
+            ...prev,
+
+            pressure:
+                rightPTA > 40
+                    ? -120
+                    : rightPTA > 25
+                        ? -70
+                        : 0,
+
+            compliance:
+                rightPTA > 40
+                    ? 0.3
+                    : rightPTA > 25
+                        ? 0.6
+                        : 1.2,
+
+            volume: 1.1,
+        }));
+
+        // LEFT EAR
+        setLeftEar((prev) => ({
+            ...prev,
+
+            pressure:
+                leftPTA > 40
+                    ? -120
+                    : leftPTA > 25
+                        ? -70
+                        : 0,
+
+            compliance:
+                leftPTA > 40
+                    ? 0.3
+                    : leftPTA > 25
+                        ? 0.6
+                        : 1.2,
+
+            volume: 1.1,
+        }));
+    }, [
+        location.state?.ptaValues,
+        location.state?.loadExistingData
+    ]);
     const reportRef = useRef(null);
     const [showIaReport, setShowIaReport] = useState(false);
     const [showFormatSelector, setShowFormatSelector] = useState(false);
@@ -112,12 +175,7 @@ function ImpedanceAudiometry() {
 
             if (error) throw error;
 
-            if (data.session_type === "puretone" || !data.session_type?.includes("impedance")) {
-                navigate("/puretoneaudiometry", {
-                    state: { patientId: currentPatientId, sessionId, loadExistingData: true }
-                });
-                return;
-            }
+
 
             setRightEar({
                 pressure: data.pressure_right ?? 0,
@@ -138,16 +196,24 @@ function ImpedanceAudiometry() {
         } finally {
             setLoadingSession(false);
         }
-    }, [currentSessionId, currentPatientId, navigate]);
+    }, [currentSessionId]);
     useEffect(() => {
         const state = location.state;
         if (state) {
-            setCurrentPatientId(state.patientId || null);
-            setCurrentSessionId(state.sessionId || null);
-            setShowPatientDetails(!state.sessionId);
+            const impedanceSessionId =
+                state.impedanceSessionId || state.sessionId || null;
 
-            if (state.loadExistingData && state.sessionId) {
-                loadSessionData(state.sessionId);
+            // const puretoneSessionId =
+            //     state.puretoneSessionId || null;
+
+            setCurrentPatientId(state.patientId || null);
+
+            setCurrentSessionId(impedanceSessionId);
+
+            setShowPatientDetails(!state.patientId);
+
+            if (state.loadExistingData && impedanceSessionId) {
+                loadSessionData(impedanceSessionId);
             } else {
                 resetAllStates();
             }
@@ -155,8 +221,8 @@ function ImpedanceAudiometry() {
     }, [location.state, loadSessionData]);   // ← add it here
 
     const resetAllStates = () => {
-        setRightEar({ pressure: 0, volume: 1.0, compliance: 1.2 });
-        setLeftEar({ pressure: 0, volume: 1.0, compliance: 1.2 });
+        setRightEar({ pressure: 0, volume: 0, compliance: 0 });
+        setLeftEar({ pressure: 0, volume: 0, compliance: 0 });
         if (reportRef.current?.setReportData) {
             reportRef.current.setReportData({});
         }
@@ -206,14 +272,29 @@ function ImpedanceAudiometry() {
     }, [currentSessionId, currentPatientId]);
 
     const generateTympanogram = ({ pressure, compliance }) => {
-        const peakPressure = parseFloat(pressure) || 0;
-        const peakCompliance = parseFloat(compliance) || 1.2;
-        const stdDev = 40;
+        const peakPressure = Number(pressure);
+        const peakCompliance = Number(compliance);
+
         const points = [];
+
+        // If compliance is 0 or invalid → draw flat line
+        if (!peakCompliance || peakCompliance <= 0) {
+            for (let p = -300; p <= 200; p += 5) {
+                points.push({ x: p, y: 0 });
+            }
+            return points;
+        }
+
+        const stdDev = 40;
+
         for (let p = -300; p <= 200; p += 5) {
-            const y = peakCompliance * Math.exp(-(Math.pow(p - peakPressure, 2) / (2 * stdDev ** 2)));
+            const y =
+                peakCompliance *
+                Math.exp(-(Math.pow(p - peakPressure, 2) / (2 * stdDev ** 2)));
+
             points.push({ x: p, y: Math.max(0, y) });
         }
+
         return points;
     };
 
@@ -263,12 +344,15 @@ function ImpedanceAudiometry() {
                 max: 200,
                 ticks: { stepSize: 100 },
                 title: { display: true, text: "Middle ear pressure (daPa)" },
+                style: { color: "black" },
             },
             y: {
                 min: 0,
                 max: 2.5,
                 ticks: { stepSize: 0.5 },
-                title: { display: true, text: "Compliance (ml)" },
+                title: { display: true, text: "Compliance (ml)", color: "black" },
+                style: { color: "black" },
+
             },
         },
         plugins: {
@@ -285,6 +369,7 @@ function ImpedanceAudiometry() {
                         borderWidth: 1,
                         borderDash: [5, 5],
                         backgroundColor: "rgba(0,0,0,0)",
+                        style: { color: "black" },
                     },
                 },
             },
@@ -313,11 +398,8 @@ function ImpedanceAudiometry() {
                 updated_at: new Date().toISOString(),
             };
 
-            if (location.state?.formData?.length > 0) {
-                updateData.session_type = "puretone+impedance";
-                updateData.audiometry_data = location.state.formData;
-                updateData.pta_right = location.state.ptaValues?.right ? parseFloat(location.state.ptaValues.right) : null;
-                updateData.pta_left = location.state.ptaValues?.left ? parseFloat(location.state.ptaValues.left) : null;
+            if (location.state?.puretoneSessionId) {
+                updateData.session_type = "impedance";
             } else {
                 updateData.session_type = "impedance";
             }
@@ -364,7 +446,6 @@ function ImpedanceAudiometry() {
                     <h1 className="imp-title">IMPEDANCE AUDIOMETRY</h1>
                     <div className="IA-button-container">
 
-
                         <button
                             className="IA-make-report-button"
                             onClick={() => setShowIaReport(true)}
@@ -377,8 +458,11 @@ function ImpedanceAudiometry() {
                             className="IA-format-select-button"
                             onClick={() => setShowFormatSelector(true)}
                         >
-                            Select Report Format
+                            {currentFormatName
+                                ? `Format : ${currentFormatName}`
+                                : "Select Report Format"}
                         </button>
+
                         <button
                             className="IA-save-button"
                             onClick={handleSaveSession}
@@ -390,6 +474,24 @@ function ImpedanceAudiometry() {
                                     ? "Saved ✓"
                                     : "Save Session"}
                         </button>
+
+                        <button
+                            className="IA-save-button"
+                            onClick={() =>
+                                navigate("/puretoneaudiometry", {
+                                    state: {
+                                        patientId: currentPatientId,
+                                        puretoneSessionId:
+                                            location.state?.puretoneSessionId,
+                                        impedanceSessionId: currentSessionId,
+                                        loadExistingData: true,
+                                    },
+                                })
+                            }
+                        >
+                            ← Back To Puretone
+                        </button>
+
                     </div>
                 </div>
 

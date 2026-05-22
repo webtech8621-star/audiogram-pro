@@ -27,12 +27,12 @@ const customSymbols = {
   id: "customSymbols",
   afterDatasetsDraw: (chart) => {
     const ctx = chart.ctx;
-    const normalSymbolSize = 23;
-    const bracketSymbolSize = 17;
-    const rightBracketSymbolSize = 19;
-    const leftBracketSymbolSize = 19;
-    const triangleSymbolSize = 19;
-    const lineWidth = 2;
+    const normalSymbolSize = 30;
+    const bracketSymbolSize = 23;
+    const rightBracketSymbolSize = 23;
+    const leftBracketSymbolSize = 23;
+    const triangleSymbolSize = 23;
+    const lineWidth = 3;
     const arrowMargin = -2.8;
     const crossMargin = -2.2;
     const boldSymbols = new Set(["rightBracket", "leftBracket", "circle", "triangle"]);
@@ -154,7 +154,6 @@ function PureToneAudiometry() {
   const [saveStatus, setSaveStatus] = useState("idle");
   const [activeSymbolKey, setActiveSymbolKey] = useState(null);
   const [showPatientDetails, setShowPatientDetails] = useState(true);
-  const [sessionSaved, setSessionSaved] = useState(false);
   const [showReport, setShowReport] = useState(false);
   const [showFormatSelector, setShowFormatSelector] = useState(false);
 
@@ -208,34 +207,57 @@ function PureToneAudiometry() {
 
   // Load latest report format on mount
   useEffect(() => {
-    const loadLatestReportFormat = async () => {
+    const loadAppliedReportFormat = async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+
         if (!session?.user?.id) return;
 
+        // LOAD APPLIED FORMAT
         const { data, error } = await supabase
-          .from("report_formats")
-          .select("name, sections")
+          .from("puretone_report_format")
+          .select("*")
           .eq("user_id", session.user.id)
-          .order("created_at", { ascending: false })
-          .limit(1)
+          .eq("is_applied", true)
           .single();
 
         if (error && error.code !== "PGRST116") {
-          console.error("Error loading report format:", error);
+          console.error("Error loading applied format:", error);
           return;
         }
 
         if (data) {
-          setReportSections(data.sections);
-          setCurrentFormatName(data.name);
+          // MERGE SAFELY
+          const mergedSections = {
+            patient_info: true,
+            right_ear_graph: true,
+            left_ear_graph: true,
+            symbols_legend_right: true,
+            symbols_legend_left: true,
+            provisional_diagnosis: true,
+            speech_audiometry: true,
+            weber_test: true,
+            audiologist_details: true,
+            front_recommendations: true,
+            recommendations: true,
+            front_audiologist_details: true,
+            ...(data.sections || {}),
+          };
+
+          setReportSections(mergedSections);
+
+          setCurrentFormatName(
+            data.format_name || "Default (Full)"
+          );
         }
       } catch (err) {
-        console.error("Cannot load latest format", err);
+        console.error("Cannot load applied format", err);
       }
     };
 
-    loadLatestReportFormat();
+    loadAppliedReportFormat();
   }, []);
 
   // Handle location state changes (new/existing session)
@@ -243,11 +265,18 @@ function PureToneAudiometry() {
     const state = location.state;
     if (!state) return;
 
-    setCurrentPatientId(state.patientId || null);
-    setCurrentSessionId(state.sessionId || null);
-    setShowPatientDetails(!state.sessionId);
+    const puretoneSessionId =
+      state.puretoneSessionId || state.sessionId || null;
 
-    if (state.loadExistingData && state.sessionId) {
+
+
+    setCurrentPatientId(state.patientId || null);
+
+    setCurrentSessionId(puretoneSessionId);
+
+    setShowPatientDetails(!puretoneSessionId);
+
+    if (state.loadExistingData && puretoneSessionId) {
       const loadSession = async () => {
         setLoadingSession(true);
         try {
@@ -265,17 +294,12 @@ function PureToneAudiometry() {
               recommendations,
               recommendations_enabled
             `)
-            .eq("id", state.sessionId)
+            .eq("id", puretoneSessionId)
             .single();
 
           if (error) throw error;
 
-          if (data.session_type?.includes("impedance") && !data.session_type?.includes("puretone")) {
-            navigate("/impedanceaudiometry", {
-              state: { patientId: state.patientId, sessionId: state.sessionId, loadExistingData: true },
-            });
-            return;
-          }
+
 
           if (data?.audiometry_data) {
             setFormData(data.audiometry_data);
@@ -308,7 +332,10 @@ function PureToneAudiometry() {
           }
 
           if (data?.report_sections) {
-            setReportSections(data.report_sections);
+            setReportSections((prev) => ({
+              ...prev,
+              ...data.report_sections,
+            }));
           }
 
           if (data?.recommendations) {
@@ -355,7 +382,6 @@ function PureToneAudiometry() {
       1000: { right: "", left: "" },
       2000: { right: "", left: "" },
     });
-    setSessionSaved(false);
     setActiveSymbolKey(null);
     setZoomed(false);
   };
@@ -491,7 +517,7 @@ function PureToneAudiometry() {
       pointStyle,
       pointRadius: 0,
       pointBorderWidth: 2,
-      borderWidth: 1,
+      borderWidth: 1.5,
       spanGaps: true,
     }),
     [formData]
@@ -532,7 +558,7 @@ function PureToneAudiometry() {
         type: "category",
         labels: frequencies,
         title: { display: true, text: "Frequency (Hz)", font: { size: 12 }, color: "black" },
-        grid: { lineWidth: 0.7, color: "#e0e0e0", drawOnChartArea: true },
+        grid: { lineWidth: 0.7, color: "#888888", drawOnChartArea: true },
         ticks: { padding: 5, font: { size: 10 }, color: "black" },
       },
       y: {
@@ -541,7 +567,7 @@ function PureToneAudiometry() {
         max: 120,
         ticks: { stepSize: 10, padding: 3, font: { size: 10 }, color: "black" },
         title: { display: true, text: "dB HL", font: { size: 12 }, color: "black" },
-        grid: { lineWidth: 0.7, color: "#e0e0e0", drawOnChartArea: true },
+        grid: { lineWidth: 0.7, color: "#676767", drawOnChartArea: true },
       },
     },
     elements: { line: { tension: 0 } },
@@ -732,7 +758,6 @@ function PureToneAudiometry() {
       if (error) throw error;
 
       setSaveStatus("success");
-      setSessionSaved(true);
       setTimeout(() => setSaveStatus("idle"), 2800);
     } catch (err) {
       console.error("Error saving session:", err);
@@ -749,15 +774,55 @@ function PureToneAudiometry() {
     resetAllStates();
     setCurrentPatientId(null);
     setCurrentSessionId(null);
-    setSessionSaved(false);
     setShowPatientDetails(true);
     navigate("/");
   };
 
-  const handleMoveToImpedance = () => {
-    navigate("/impedanceaudiometry", {
-      state: { patientId: currentPatientId, sessionId: currentSessionId, formData, ptaValues },
-    });
+  const handleMoveToImpedance = async () => {
+    try {
+      let impedanceSessionId =
+        location.state?.impedanceSessionId || null;
+
+      // CREATE IMPEDANCE SESSION FIRST TIME
+      if (!impedanceSessionId) {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+
+        const { data, error } = await supabase
+          .from("sessions")
+          .insert({
+            user_id: session.user.id,
+            patient_id: currentPatientId,
+            session_type: "impedance",
+            status: "draft",
+          })
+          .select()
+          .single();
+
+        if (error) throw error;
+
+        impedanceSessionId = data.id;
+      }
+
+      navigate("/impedanceaudiometry", {
+        state: {
+          patientId: currentPatientId,
+          puretoneSessionId: currentSessionId,
+          impedanceSessionId,
+          loadExistingData: true,
+
+          // PASS PURETONE DATA
+          formData,
+          ptaValues,
+          diagnosis,
+          speechData,
+          weberData,
+        },
+      });
+    } catch (err) {
+      console.error("Failed to move to impedance:", err);
+    }
   };
 
   const handleSpeechChange = (ear, field, value) => {
@@ -804,49 +869,51 @@ function PureToneAudiometry() {
       ) : (
         <div className={`pta-main `}>
           <h1 className="pta-title-header">PURE TONE AUDIOMETRY</h1>
-
           <div className="button-sidebar">
-            <button className="nav-button make-report-button" onClick={() => setShowReport(true)}>
+            <button
+              className="nav-button"
+              onClick={() => setShowReport(true)}
+            >
               Make Report
             </button>
 
             <button
               className="nav-button"
               onClick={() => setShowFormatSelector(true)}
-              style={{
-                position: "relative",
-                minWidth: "180px",
-                whiteSpace: "nowrap",
-                background: currentFormatName === "Default (Full)" ? "" : "#e8f5e9",
-                border: currentFormatName === "Default (Full)" ? "" : "1px solid #81c784",
-                color: currentFormatName === "Default (Full)" ? "" : "#2e7d32",
-              }}
             >
               {currentFormatName === "Default (Full)"
-                ? "Report Format (Default)"
+                ? "Report Format"
                 : `Using: ${currentFormatName}`}
             </button>
 
-            <button className="nav-button new-patient-button" onClick={handleNewPatientClick}>
+            <button
+              className="nav-button"
+              onClick={handleNewPatientClick}
+            >
               + New Patient
             </button>
 
             <button
               className={`nav-button save-session-btn ${saveStatus}`}
               onClick={handleSaveSession}
-              disabled={saveStatus === "saving" || loadingSession}
+              disabled={
+                saveStatus === "saving" ||
+                loadingSession
+              }
             >
-              {saveStatus === "saving" && <>Saving...</>}
-              {saveStatus === "success" && <>Saved ✓</>}
-              {saveStatus === "error" && <>Failed ×</>}
-              {saveStatus === "idle" && <>Save Session</>}
+              {saveStatus === "saving" && "Saving..."}
+              {saveStatus === "success" && "Saved ✓"}
+              {saveStatus === "error" && "Failed ×"}
+              {saveStatus === "idle" && "Save Session"}
             </button>
 
-            {sessionSaved && (
-              <button className="nav-button" onClick={handleMoveToImpedance}>
-                Move to Impedance →
-              </button>
-            )}
+            <button
+              className="nav-button"
+              onClick={handleMoveToImpedance}
+            >
+              Move to Impedance →
+            </button>
+
           </div>
           <div className="pta-content-row">
             <div className="pta-table-card">

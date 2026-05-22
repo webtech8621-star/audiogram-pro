@@ -628,7 +628,7 @@ width:100px;
 
 .pta-title-header {
   /* margin: 0px; */
-  font-size: 13px;
+  font-size: 16px;
   font-weight: bold;
   text-align: center !important;
   color: #3a3a3a;
@@ -768,14 +768,10 @@ width:100px;
 /* The container holding the buttons */
 .button-sidebar {
   display: flex;
-  flex-direction: row;
-  /*8008783587 */
-  gap: 12px;
-  /* Space between buttons */
-  /* Adjust as needed */
-  width: 700px;
-
-  margin-left: auto !important;
+  flex-direction: row !important;
+  gap: 15px;
+  width: 1900px;
+  margin-left: 45% !important;
   background-color: transparent;
   margin-top: 20px;
   margin-bottom: 20px;
@@ -790,7 +786,7 @@ width:100px;
   padding: 8px 15px;
   text-align: left;
   /* Align text to the left */
-  font-size: 11px;
+  font-size: 9px;
   font-family: 'Segoe UI', sans-serif;
   color: #00897B;
   /* Professional dark grey */
@@ -837,8 +833,8 @@ width:100px;
 }
 
 .save-session-btn.idle:hover {
-  background-color: #00897B;
-  color: white;
+  background-color: transparent;
+  color: rgb(82, 134, 63);
 }
 
 /* Saving */
@@ -1071,16 +1067,11 @@ width:100px;
     max-width: 300px;
   }
 
-  .button-sidebar {
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-    width: 100%;
-  }
+
 
   .nav-button {
     padding: 10px 14px;
-    font-size: 12px;
+    font-size: 9px;
     min-width: 120px;
   }
 
@@ -1111,16 +1102,10 @@ width:100px;
     text-align: left;
   }
 
-  .button-sidebar {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: 8px;
-    width: 100%;
-  }
 
   .nav-button {
-    font-size: 11px;
+    font-size: 9px;
+
     padding: 8px 12px;
     min-width: auto;
     flex: 1 1 auto;
@@ -1257,7 +1242,7 @@ width:100px;
   }
 
   .nav-button {
-    font-size: 10px;
+    font-size: 9px;
     padding: 8px 10px;
   }
 
@@ -1288,80 +1273,93 @@ width:100px;
 
 /* ########################### */
 /* ===== Container spacing ===== */
-.button-sidebar {
-  display: flex;
-  flex-direction: row !important;
-  gap: 12px;
-}
+/* =========================================
+   CLEAN TRANSPARENT TOP BUTTONS
+========================================= */
 
-/* ===== Base button ===== */
+
+/* ALL BUTTONS */
+
 .nav-button {
-  border-radius: 5px !important;
-  font-size: 10px !important;
+
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  color: #00897B !important;
+  font-size: 11px !important;
+  font-family: 'Segoe UI', sans-serif;
   font-weight: 600;
   cursor: pointer;
-  border: 1px solid #e6e6e6;
-  background: #ffffff;
-  color: #0d9488;
-  /* transition: all 0.25s ease; */
+  padding: 4px 2px;
+  transition: all 0.18s ease;
+  border-radius: 6px;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* ===== Hover ===== */
+/* HOVER */
+
 .nav-button:hover {
-  background: #f5efe6;
-  /* sand */
-  color: #00897B;
-  border-color: #d9cfbf;
-  /* transform: translateY(-1px); */
+  background: transparent !important;
+  color: #000000 !important;
+  transform: translateY(-1px);
 }
 
-/* ===== Primary action — Make Report ===== */
-.make-report-button {
-  background: #0d9488;
-  color: #ffffff;
-  border: none;
-  /* box-shadow: 0 6px 16px rgba(13, 148, 136, 0.25); */
+/* CLICK */
+
+.nav-button:active {
+
+  background: transparent !important;
+  color: #000000;
+  transform: scale(0.96);
 }
 
-.make-report-button:hover {
-  background: #0f766e;
+/* FOCUS */
+
+.nav-button:focus,
+.nav-button:focus-visible {
+
+  background: transparent !important;
+  outline: none !important;
+  box-shadow: none !important;
+  color: #000000;
 }
 
-/* ===== New Patient — soft sand ===== */
-.new-patient-button {
-  background: #F5E6CA;
-  color: #00897B;
-  border: 1px solid #00897B;
-}
+/* DISABLED */
 
-.new-patient-button:hover {
-  background: #ffffff;
-  color: #0d9488;
-}
-
-/* ===== Save Session states ===== */
-
-/* idle */
-.save-session-btn.idle {
-  background: #ffffff;
-  color: #0d9488;
-}
-
-/* saving */
-.save-session-btn.saving {
-  background: #ffffff;
-  color: #15f900;
+.nav-button:disabled {
+  opacity: 0.55;
   cursor: not-allowed;
 }
 
-/* success */
-.save-session-btn.success {
-  background: #5fc55f !important;
-  color: #f7f7f7 !important;
+/* SAVE BUTTON STATES */
+
+.save-session-btn.idle,
+.save-session-btn.saving,
+.save-session-btn.success,
+.save-session-btn.error {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
-/* error */
+/* SAVING */
+
+.save-session-btn.saving {
+  color: #555;
+}
+
+/* SUCCESS */
+
+.save-session-btn.success {
+  color: #059669;
+}
+
+/* ERROR */
+
 .save-session-btn.error {
-  background: #fdecec;
   color: #dc2626;
 }
