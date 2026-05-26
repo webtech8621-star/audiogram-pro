@@ -16,6 +16,7 @@ import ImpedanceAudiometry from "./components/ImpedanceAudiometry";
 import SavedReports from "./components/SavedReports";
 import Settings from "./components/Settings"
 import "./App.css";
+import SubscriptionPricingPage from "./components/SubscriptionPricingPage";
 
 // ── Protected Route ─────────────────────────────────────────────
 function ProtectedRoute({ children }) {
@@ -108,8 +109,12 @@ function App() {
             </ProtectedRoute>
           }
         />
-        {/* Report format selector is usually a modal — not a page */}
+        {/* Report format selector is usually a modal — not a page */}<Route
+          path="/subscription"
+          element={<SubscriptionPricingPage />}
+        />
       </Routes>
+
     </BrowserRouter>
   );
 }

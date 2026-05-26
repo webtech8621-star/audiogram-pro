@@ -54,6 +54,7 @@ const MakePTAReport = ({
     leftEarData,
     recommendations,
     diagnosis,
+    ptaValues,
     speechData = { right: { pta: '', srt: '', sds: '' }, left: { pta: '', srt: '', sds: '' } },
     weberData = {
         250: { right: '', left: '' },
@@ -377,8 +378,22 @@ const MakePTAReport = ({
                         {reportSections.right_ear_graph && (
                             <div className="graph-box-advanced">
                                 <h3 className="ear-title red">R I G H T   E A R</h3>
+
                                 <div className="chart-wrapper-advanced">
                                     <Line data={rightEarData} options={audiogramOptions} />
+                                </div>
+
+                                {/* ADD THIS */}
+                                <div
+                                    style={{
+                                        marginTop: "10px",
+                                        textAlign: "center",
+                                        fontWeight: "bold",
+                                        fontSize: "16px",
+                                        color: "red",
+                                    }}
+                                >
+                                    Right : {ptaValues?.right ? `${ptaValues.right} dBHL` : "-"}
                                 </div>
                             </div>
                         )}
@@ -386,8 +401,22 @@ const MakePTAReport = ({
                         {reportSections.left_ear_graph && (
                             <div className="graph-box-advanced">
                                 <h3 className="ear-title blue">L E F T   E A R</h3>
+
                                 <div className="chart-wrapper-advanced">
                                     <Line data={leftEarData} options={audiogramOptions} />
+                                </div>
+
+                                {/* ADD THIS */}
+                                <div
+                                    style={{
+                                        marginTop: "10px",
+                                        textAlign: "center",
+                                        fontWeight: "bold",
+                                        fontSize: "16px",
+                                        color: "blue",
+                                    }}
+                                >
+                                    Left : {ptaValues?.left ? `${ptaValues.left} dBHL` : "-"}
                                 </div>
                             </div>
                         )}
