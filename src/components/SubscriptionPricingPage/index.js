@@ -62,15 +62,44 @@ export default function SubscriptionPricingPage() {
 
             const options = {
                 key: process.env.REACT_APP_RAZORPAY_KEY_ID,
+
                 amount: order.amount,
+
                 currency: "INR",
+
                 name: "Your Website Name",
+
                 description: `${plan.name} Subscription`,
+
                 order_id: order.id,
 
                 handler: async function (response) {
-                    alert("Payment Successful");
-                    console.log(response);
+
+                    const verifyResponse = await fetch(
+                        "/api/verify-payment",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+
+                            body: JSON.stringify(response),
+                        }
+                    );
+
+                    const data = await verifyResponse.json();
+
+                    if (data.success) {
+
+                        alert("Payment Successful ✅");
+
+                        console.log(response);
+
+                    } else {
+
+                        alert("Payment Verification Failed ❌");
+                    }
                 },
 
                 theme: {
