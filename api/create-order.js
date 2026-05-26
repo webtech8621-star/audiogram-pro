@@ -1,11 +1,11 @@
-import Razorpay from "razorpay";
+const Razorpay = require("razorpay");
 
 const razorpay = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
     key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
 
     if (req.method !== "POST") {
         return res.status(405).json({
@@ -15,6 +15,7 @@ export default async function handler(req, res) {
     }
 
     try {
+
         const { amount } = req.body;
 
         const order = await razorpay.orders.create({
@@ -27,9 +28,11 @@ export default async function handler(req, res) {
 
     } catch (error) {
 
+        console.log("RAZORPAY ERROR:", error);
+
         return res.status(500).json({
             success: false,
             error: error.message,
         });
     }
-}
+};
